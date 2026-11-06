@@ -1,0 +1,1356 @@
+<title>Enzyme Virtual Lab</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: a lab bench (apparatus + controls) beside a squared lab notebook (results, graphs, questions); three stations as tabs. */
+:root{
+  --paper:#EAF0EF; --surface:#FFFFFF; --sunk:#F3F7F6; --ink:#1B2A2D; --muted:#566A6C; --line:#C9D6D4;
+  --accent:#0D7480; --accent-soft:#D7EDEE; --amber:#B86E0C; --amber-soft:#FBEBD2;
+  --good:#2E7D4F; --good-soft:#DDF1E4; --bad:#B23A2E; --bad-soft:#F8DEDA;
+  --inst:#2B3538; --inst-2:#3A474B; --lcd:#2A1F10; --lcd-ink:#FFB547;
+  --water:#CFE6EE; --glass:#E9F3F5; --grid:rgba(13,116,128,.07);
+  --c1:#0D7480; --c2:#C2571A; --c3:#6B4FB8; --c4:#2E7D4F; --c5:#A3366B; --c6:#8A6D12;
+  --display:"Bricolage Grotesque", "Avenir Next", "Segoe UI", sans-serif;
+  --body:"Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --mono:"JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --paper:#111A1C; --surface:#182326; --sunk:#141E20; --ink:#E2ECEB; --muted:#93A6A7; --line:#2C3C3F;
+  --accent:#43B9C4; --accent-soft:#16363A; --amber:#E9A445; --amber-soft:#3A2A12;
+  --good:#5CC48A; --good-soft:#163323; --bad:#EE7D70; --bad-soft:#3B1C18;
+  --inst:#0E1517; --inst-2:#243034; --lcd:#1E160A; --lcd-ink:#FFBE5C;
+  --water:#1F3A44; --glass:#20343A; --grid:rgba(67,185,196,.07);
+  --c1:#43B9C4; --c2:#F08A4B; --c3:#A78BFA; --c4:#5CC48A; --c5:#EC7FB2; --c6:#D9B44A;
+  color-scheme:dark; } }
+:root[data-theme="dark"]{
+  --paper:#111A1C; --surface:#182326; --sunk:#141E20; --ink:#E2ECEB; --muted:#93A6A7; --line:#2C3C3F;
+  --accent:#43B9C4; --accent-soft:#16363A; --amber:#E9A445; --amber-soft:#3A2A12;
+  --good:#5CC48A; --good-soft:#163323; --bad:#EE7D70; --bad-soft:#3B1C18;
+  --inst:#0E1517; --inst-2:#243034; --lcd:#1E160A; --lcd-ink:#FFBE5C;
+  --water:#1F3A44; --glass:#20343A; --grid:rgba(67,185,196,.07);
+  --c1:#43B9C4; --c2:#F08A4B; --c3:#A78BFA; --c4:#5CC48A; --c5:#EC7FB2; --c6:#D9B44A;
+  color-scheme:dark; }
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5}
+.wrap{max-width:1240px;margin:0 auto;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
+header.top{padding-block:28px 8px}
+.eyebrow{font:600 12px/1 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(30px,5vw,48px);line-height:1.05;margin:.35em 0 .25em;letter-spacing:-.01em;text-wrap:balance}
+h2{font-family:var(--display);font-weight:700;font-size:24px;line-height:1.15;margin:0;text-wrap:balance}
+h3{font-family:var(--display);font-weight:500;font-size:18px;margin:0 0 6px;text-wrap:balance}
+.lede{max-width:68ch;color:var(--muted);margin:0}
+.lede b{color:var(--ink)}
+nav.tabs{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0 18px;border-bottom:1px solid var(--line)}
+nav.tabs a{display:flex;flex-direction:column;gap:2px;padding:10px 14px 12px;text-decoration:none;color:var(--muted);border-bottom:3px solid transparent;margin-bottom:-1px}
+nav.tabs a span{font:700 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase}
+nav.tabs a strong{font:500 17px/1.2 var(--display);color:var(--ink)}
+nav.tabs a[aria-current="page"]{border-bottom-color:var(--accent);color:var(--accent)}
+nav.tabs a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible, .well:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.station{display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,1fr);gap:20px;align-items:start;padding-bottom:40px}
+@media (max-width:900px){.station{grid-template-columns:minmax(0,1fr)}}
+.col{display:flex;flex-direction:column;gap:16px;min-width:0}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:18px;min-width:0}
+.notebook{background-color:var(--surface);background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:18px 18px}
+.intro{display:flex;flex-direction:column;gap:6px}
+.intro p{margin:0;max-width:70ch}
+.tag{display:inline-block;font:700 11px/1 var(--mono);letter-spacing:.05em;padding:5px 7px;border-radius:4px;background:var(--accent-soft);color:var(--accent);margin-right:6px}
+.tag.amber{background:var(--amber-soft);color:var(--amber)}
+.muted{color:var(--muted)}
+.small{font-size:14px}
+.note{font-size:14px;background:var(--amber-soft);border-left:3px solid var(--amber);padding:9px 12px;border-radius:0 6px 6px 0}
+.note b{color:var(--amber)}
+.msg{font-size:14px;min-height:1.5em;padding:8px 10px;border-radius:6px;background:var(--sunk);border:1px solid var(--line)}
+.msg.good{background:var(--good-soft);border-color:transparent;color:var(--good)}
+.msg.bad{background:var(--bad-soft);border-color:transparent;color:var(--bad)}
+.msg:empty{display:none}
+
+.controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.ctl{display:flex;flex-direction:column;gap:5px;min-width:0}
+.ctl label, .lbl{font:600 12px/1.2 var(--body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+select, input[type="number"], input[type="text"]{font:inherit;font-size:15px;color:var(--ink);background:var(--sunk);border:1px solid var(--line);border-radius:6px;padding:7px 9px;width:100%}
+input[type="range"]{width:100%;accent-color:var(--accent)}
+.row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+button{font:600 15px/1.2 var(--body);border-radius:6px;padding:9px 13px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+button:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
+button.primary{background:var(--accent);border-color:var(--accent);color:var(--surface)}
+button.primary:hover:not(:disabled){filter:brightness(1.08);color:var(--surface)}
+button:disabled{opacity:.45;cursor:not-allowed}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:7px;overflow:hidden}
+.seg button{border:0;border-radius:0;padding:7px 11px;font-size:14px}
+.seg button + button{border-left:1px solid var(--line)}
+.seg button[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent)}
+
+.svgbox{width:100%;overflow-x:auto}
+.svgbox svg{display:block;width:100%;height:auto;min-width:480px}
+svg text{font-family:var(--body)}
+.hot{cursor:pointer}
+.hot:hover rect, .hot:hover circle{stroke:var(--accent)}
+
+table{border-collapse:collapse;width:100%;font-size:14px;font-variant-numeric:tabular-nums}
+th{font:600 12px/1.2 var(--body);text-transform:uppercase;letter-spacing:.05em;color:var(--muted);text-align:left;padding:7px 8px;border-bottom:1px solid var(--line)}
+td{padding:6px 8px;border-bottom:1px solid var(--line)}
+td.num, th.num{text-align:right;font-family:var(--mono);font-size:13px}
+.tablebox{overflow-x:auto;max-height:280px;overflow-y:auto}
+.empty{color:var(--muted);font-style:italic;padding:10px 0}
+.chip{display:inline-block;width:12px;height:12px;border-radius:3px;vertical-align:-1px;margin-right:6px;border:1px solid rgba(0,0,0,.15)}
+
+canvas.graph{width:100%;height:290px;display:block}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--muted)}
+.legend i{display:inline-block;width:14px;height:3px;border-radius:2px;vertical-align:middle;margin-right:6px}
+
+details.q{border-top:1px solid var(--line);padding:10px 0}
+details.q:first-of-type{border-top:0}
+details.q summary{cursor:pointer;font-weight:600;list-style:none;display:flex;gap:10px}
+details.q summary::-webkit-details-marker{display:none}
+details.q summary .qn{font:700 13px/1.6 var(--mono);color:var(--accent);flex:none}
+details.q summary .mk{color:var(--muted);font-weight:400;white-space:nowrap}
+details.q .ans{margin:8px 0 2px 34px;font-size:15px;background:var(--sunk);border-radius:6px;padding:10px 12px}
+details.q .ans ul{margin:4px 0;padding-left:20px}
+details.q:not([open]) summary::after{content:"Show answer";margin-left:auto;font:600 12px/1.6 var(--body);color:var(--accent);flex:none}
+
+/* Colorimeter */
+.lcdrow{display:flex;flex-wrap:wrap;gap:12px;align-items:stretch}
+.lcd{flex:1 1 220px;background:var(--lcd);border-radius:8px;padding:12px 16px;color:var(--lcd-ink);font-family:var(--mono);display:flex;flex-direction:column;justify-content:center;min-width:0;border:3px solid var(--inst)}
+.lcd .big{font-size:40px;font-weight:700;line-height:1;letter-spacing:.02em;font-variant-numeric:tabular-nums}
+.lcd .sub{font-size:12px;opacity:.75;letter-spacing:.08em;text-transform:uppercase;margin-top:6px}
+.prep{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}
+.prep fieldset{border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin:0;min-width:0}
+.prep legend{font:600 12px/1 var(--body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:0 4px}
+.prep label{display:flex;gap:6px;align-items:flex-start;font-size:14px;padding:2px 0;cursor:pointer}
+.bars{display:flex;flex-direction:column;gap:6px}
+.bar{display:grid;grid-template-columns:110px minmax(0,1fr) 52px;gap:8px;align-items:center;font-size:14px}
+.bar .track{height:16px;background:var(--sunk);border-radius:3px;overflow:hidden;border:1px solid var(--line)}
+.bar .fill{height:100%;border-radius:2px}
+.bar .v{font-family:var(--mono);font-size:13px;text-align:right}
+.faultopts{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.faultopts button{text-align:left;font-weight:400}
+.readlist{font-family:var(--mono);font-size:14px;background:var(--sunk);border-radius:6px;padding:8px 12px;margin:8px 0}
+
+/* Amylase */
+.clock{font:700 34px/1 var(--mono);font-variant-numeric:tabular-nums;color:var(--ink)}
+.tile{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:14px}
+.well{aspect-ratio:1;max-width:100%;border-radius:50%;border:2px solid var(--line);background:radial-gradient(circle at 35% 30%, rgba(255,255,255,.55), rgba(255,255,255,0) 45%), var(--surface);position:relative;cursor:pointer;padding:0}
+.well .t{position:absolute;left:50%;bottom:-17px;transform:translateX(-50%);font:500 10px/1 var(--mono);color:var(--muted);white-space:nowrap}
+.well.ep{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+.well.ep::after{content:"END";position:absolute;top:-10px;left:50%;transform:translateX(-50%);font:700 9px/1 var(--mono);color:var(--surface);background:var(--accent);padding:2px 4px;border-radius:3px}
+.tile{padding-bottom:26px;row-gap:24px}
+.scale{display:flex;gap:4px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.scale div{display:flex;flex-direction:column;align-items:center;gap:3px;flex:1 1 60px}
+.scale span.sw{width:100%;height:16px;border-radius:4px;border:1px solid var(--line)}
+
+/* Immobilise */
+.steps{display:flex;flex-wrap:wrap;gap:6px;counter-reset:s}
+.steps button{font-size:13px;padding:6px 10px;border-radius:20px}
+.steps button[aria-current="step"]{background:var(--accent);color:var(--surface);border-color:var(--accent)}
+.steps button.done{border-color:var(--good);color:var(--good)}
+.strip{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.strip .pad{width:46px;height:46px;border-radius:6px;border:2px solid var(--line)}
+.chart{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;width:100%}
+.chart button{display:flex;flex-direction:column;align-items:center;gap:4px;padding:6px 2px;font-size:12px;font-weight:600}
+.chart button span{width:100%;height:22px;border-radius:4px;border:1px solid var(--line)}
+.checks{display:flex;flex-direction:column;gap:6px}
+.checks button{text-align:left}
+.checks button.done{border-color:var(--good);color:var(--good)}
+.checks button.done::before{content:"✓ ";}
+footer{border-top:1px solid var(--line);padding-block:18px 32px;font-size:13px;color:var(--muted)}
+.ghost{position:fixed;pointer-events:none;z-index:60;opacity:.92;transform:rotate(-4deg);margin:0}
+[data-movable]{touch-action:none;cursor:grab}
+[data-movable].picked{outline:3px solid var(--amber);outline-offset:3px}
+body.holding [data-drop]{outline:2px dashed var(--accent);outline-offset:3px}
+[data-drop].over{outline:3px solid var(--accent)!important;background-color:var(--accent-soft)}
+.slotwrap{position:relative;min-width:480px}
+.slotwrap svg{min-width:0!important}
+#slot{position:absolute;left:46.3%;top:16%;width:9.2%;height:60%;background:transparent;border:0;border-radius:4px;padding:0}
+.rack{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end;padding:12px;background:var(--sunk);border:1px solid var(--line);border-radius:8px}
+.cuvcell{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;color:var(--muted);width:56px;text-align:center;line-height:1.15}
+.cuv{width:40px;height:74px;padding:0;border-radius:3px 3px 5px 5px;border:1.5px solid #9FB4B8;position:relative;background:var(--glass);overflow:hidden}
+.cuv .liq{position:absolute;left:0;right:0;bottom:0;height:72%}
+.cuv::before,.cuv::after{content:"";position:absolute;top:0;bottom:0;width:9px;background:repeating-linear-gradient(0deg,rgba(255,255,255,.6) 0 2px,rgba(110,130,135,.4) 2px 4px);z-index:1}
+.cuv::before{left:0}.cuv::after{right:0}
+.cuv .fp{position:absolute;left:50%;top:28%;width:15px;height:12px;margin-left:-7.5px;border-radius:50%;border:2px dashed #6f5e4e;z-index:2}
+.cuvcell.inslot .cuv{opacity:.3}
+.bench2{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-end;justify-content:space-around;padding:12px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;margin-bottom:12px}
+.benchitem{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12px;color:var(--muted);text-align:center;max-width:120px}
+.vessel{width:52px;height:84px;border:2px solid #9FB4B8;border-top:0;border-radius:0 0 22px 22px;background:linear-gradient(to top,#EFE9D8 62%,transparent 62%);padding:0}
+.vessel.beaker{width:84px;height:62px;border-radius:0 0 8px 8px;background:linear-gradient(to top,#CFE6EE 60%,transparent 60%)}
+.pip{width:28px;height:104px;padding:0;border:0;background:transparent}
+.pip svg{width:100%;height:100%;display:block}
+.poe{border:1px dashed var(--c5);border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:8px;background:var(--surface)}
+.poe > .lbl{color:var(--c5)}
+.poe .row button{font-size:14px;padding:7px 11px}
+textarea{font:inherit;font-size:15px;color:var(--ink);background:var(--sunk);border:1px solid var(--line);border-radius:6px;padding:8px 10px;width:100%;min-height:70px;resize:vertical}
+canvas.sketching{cursor:crosshair;touch-action:none;outline:2px dashed var(--c5);outline-offset:2px}
+canvas.dragline{touch-action:none;cursor:ns-resize}
+.planner .chk{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:4px 12px}
+.planner label.cb{display:flex;gap:8px;align-items:flex-start;font-size:14px;cursor:pointer}
+.verdict{list-style:none;padding:0;margin:10px 0 0;display:flex;flex-direction:column;gap:4px;font-size:14px}
+.verdict:empty{display:none}
+.verdict li::before{content:"✓ ";color:var(--good);font-weight:700}
+.verdict li.x::before{content:"✗ ";color:var(--bad)}
+.verdict li.w::before{content:"! ";color:var(--amber)}
+canvas.mol{width:100%;height:260px;display:block;border-radius:8px;background:var(--sunk);border:1px solid var(--line)}
+.gauge{height:14px;border-radius:7px;background:linear-gradient(90deg,var(--line) 0 15%,var(--good-soft) 15% 60%,var(--bad-soft) 60% 100%);position:relative;border:1px solid var(--line)}
+.gauge i{position:absolute;top:-5px;bottom:-5px;width:4px;border-radius:2px;background:var(--ink);left:-2px}
+#plunger{user-select:none;-webkit-user-select:none;touch-action:none}
+#plunger.down{filter:brightness(.85)}
+@media (prefers-reduced-motion: reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap">
+<header class="top">
+  <div class="eyebrow">Biology AS 9700 · Chapter 3 Enzymes</div>
+  <h1>Enzyme Virtual Lab</h1>
+  <p class="lede">Three stations. <b>Learn the colorimeter</b>, then use it on <b>Practical Activity 3.1</b> (amylase breaking down starch) and run <b>Practical Activity 3.2</b> (lactase immobilised in alginate beads). The apparatus behaves like the real thing, so careless technique gives bad data. Every reading is simulated.</p>
+  <nav class="tabs" aria-label="Stations">
+    <a href="#colorimeter" data-tab="colorimeter"><span>Station 1 · 3.1.4</span><strong>Using a colorimeter</strong></a>
+    <a href="#amylase" data-tab="amylase"><span>Station 2 · PA 3.1</span><strong>Disappearance of starch</strong></a>
+    <a href="#immobilise" data-tab="immobilise"><span>Station 3 · PA 3.2</span><strong>Immobilising lactase</strong></a>
+  </nav>
+</header>
+
+<!-- ================= STATION 1 ================= -->
+<section id="st-colorimeter" class="station" aria-label="Station 1: Using a colorimeter">
+  <div class="col">
+    <div class="card intro">
+      <h2>How a colorimeter works</h2>
+      <p class="small">White light passes through a coloured <b>filter</b>, then through the solution in a <b>cuvette</b>. A <b>light meter</b> measures how much light gets through. The more strongly the solution absorbs, the higher the <b>absorbance</b> and the higher the concentration of the coloured substance. Click any part to read about it. Then drag cuvettes from the rack into the slot, holding them by their ridged sides.</p>
+    </div>
+    <div class="card">
+      <div class="svgbox"><div class="slotwrap"><svg id="cmSvg" viewBox="0 0 560 230" role="img" aria-label="Colorimeter: lamp, filter, cuvette, light meter and readout"></svg><button id="slot" data-drop="slot" aria-label="Cuvette slot of the colorimeter"></button></div></div>
+      <div class="msg" id="partInfo" style="margin-top:10px">Lamp → filter → cuvette → light meter → readout. Click a part.</div>
+      <div class="lbl" style="margin:16px 0 6px">Cuvette rack</div>
+      <p class="small muted" style="margin:0 0 8px">Drag a cuvette into the slot, or tap it and then tap the slot. Where you grab it matters: the striped edges are the ridged faces.</p>
+      <div class="rack" id="rack"></div>
+      <div class="row" style="margin-top:10px"><button id="btnWipe">Wipe the cuvette in the slot with lens tissue</button><button id="btnEject">Take the cuvette out</button></div>
+    </div>
+    <div class="card">
+      <h3>Operate the instrument</h3>
+      <div class="lcdrow" style="margin-bottom:12px">
+        <div class="lcd" aria-live="polite"><div class="big" id="lcdVal">----</div><div class="sub" id="lcdSub">Power off</div></div>
+        <div class="col" style="flex:1 1 200px;gap:8px">
+          <div class="row"><button id="btnPower" class="primary">Switch on</button><button id="btnWarm" disabled>Skip 5 min warm-up</button></div>
+          <div class="row"><button id="btnZero" disabled>Zero (set A = 0)</button><button id="btnRecord" disabled>Record reading</button></div>
+          <div class="seg" role="group" aria-label="Display mode"><button id="mA" aria-pressed="true">Absorbance</button><button id="mT" aria-pressed="false">% Transmission</button></div>
+        </div>
+      </div>
+      <div class="controls">
+        <div class="ctl"><label for="selFilter">Filter</label><select id="selFilter"></select></div>
+        <div class="ctl"><span class="lbl">In the slot</span><div id="slotName" style="font-weight:600;padding:6px 0">Empty</div></div>
+      </div>
+      <div class="msg" id="cmMsg" style="margin-top:12px"></div>
+    </div>
+    <div class="card">
+      <h3>Prepare the cuvette</h3>
+      <p class="small muted" style="margin-top:0">How you hold the cuvette is decided when you drag it from the rack. Set the rest here and watch the live reading.</p>
+      <div class="prep" id="prep"></div>
+    </div>
+    <div class="card">
+      <h3>Fault-finding challenge</h3>
+      <p class="small" style="margin-top:0">Your partner measured the <b>0.60% starch standard</b> three times. With good technique and the orange filter it should read <b>0.66</b>. What went wrong?</p>
+      <button id="btnFault">New scenario</button>
+      <div id="faultBox"></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card notebook">
+      <h3>Task 1 · Choose the best filter</h3>
+      <p class="small" style="margin-top:0">Zero with the blank, put the <b>1.00% starch standard</b> in the slot, then record a reading on every filter. The best filter gives the <b>highest absorbance</b>.</p>
+      <div class="poe" id="poeFilter" style="margin-bottom:12px"></div>
+      <div class="bars" id="filterBars"></div>
+    </div>
+    <div class="card notebook">
+      <h3>Task 2 · Calibration curve</h3>
+      <p class="small" style="margin-top:0">On the filter you chose, record each standard (0.00 to 1.00 g per 100 cm³ starch, all with the same volume of iodine solution). Then record Unknown X and Unknown Y and read their concentrations off your line.</p>
+      <canvas class="graph" id="calGraph" aria-label="Calibration curve of absorbance against starch concentration"></canvas>
+      <div class="legend" id="calLegend"></div>
+      <div class="controls" style="margin-top:12px">
+        <div class="ctl"><label for="ansX">Unknown X / g per 100 cm³</label><input id="ansX" type="number" step="0.01" min="0" max="1.2" placeholder="e.g. 0.45"></div>
+        <div class="ctl"><label for="ansY">Unknown Y / g per 100 cm³</label><input id="ansY" type="number" step="0.01" min="0" max="1.2" placeholder="e.g. 0.20"></div>
+      </div>
+      <div class="row" style="margin-top:10px"><button id="btnCheckXY">Check my answers</button></div>
+      <div class="msg" id="xyMsg" style="margin-top:10px"></div>
+    </div>
+    <div class="card notebook">
+      <div class="row" style="justify-content:space-between"><h3>Readings log</h3><button id="btnClearLog">Clear log</button></div>
+      <div class="tablebox"><table><thead><tr><th>#</th><th>Cuvette</th><th>Filter</th><th class="num">A</th><th class="num">%T</th></tr></thead><tbody id="logBody"></tbody></table></div>
+    </div>
+    <div class="card">
+      <h3>Check your understanding</h3>
+      <details class="q"><summary><span class="qn">1</span><span>Why is the filter that gives the highest absorbance the best one to use? <span class="mk">[2]</span></span></summary><div class="ans">The blue-black starch–iodine complex absorbs orange-red light most strongly (it lets blue through, which is why it looks blue). Using that filter gives the <b>largest change in absorbance for a given change in concentration</b>, so the method is most sensitive and small differences are detected.</div></details>
+      <details class="q"><summary><span class="qn">2</span><span>Why is the colorimeter zeroed with a blank of water plus iodine, not just water? <span class="mk">[2]</span></span></summary><div class="ans">The blank contains everything except the starch. Zeroing with it removes the absorbance of the cuvette, the water and the iodine solution itself, so the reading shows <b>only the colour due to the starch–iodine complex</b>. (Try zeroing with plain water on the violet filter to see the iodine's own absorbance.)</div></details>
+      <details class="q"><summary><span class="qn">3</span><span>A student holds the cuvette by its clear faces. Explain the effect on the reading. <span class="mk">[2]</span></span></summary><div class="ans">Fingerprints on the clear faces sit in the light path. They absorb or scatter some light, so less reaches the light meter and the <b>absorbance reads too high</b>, making the concentration seem higher than it is.</div></details>
+      <details class="q"><summary><span class="qn">4</span><span>A reading is 25% transmission. Calculate the absorbance. <span class="mk">[2]</span></span></summary><div class="ans">A = log₁₀(100 ÷ %T) = log₁₀(100 ÷ 25) = log₁₀ 4 = <b>0.60</b>. Absorbance has no units.</div></details>
+      <details class="q"><summary><span class="qn">5</span><span>Why does a calibration curve need the same filter, cuvette and volume of iodine for every tube? <span class="mk">[2]</span></span></summary><div class="ans">Absorbance depends on the filter wavelength, the path length and the amount of iodine as well as on starch concentration. Keeping them constant means <b>absorbance changes only because concentration changes</b>, so an unknown can be read off the same line.</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ================= STATION 2 ================= -->
+<section id="st-amylase" class="station" aria-label="Station 2: Practical Activity 3.1" hidden>
+  <div class="col">
+    <div class="card intro">
+      <h2>Practical Activity 3.1 · Measuring the rate of disappearance of a substrate</h2>
+      <p class="small">Amylase hydrolyses starch to maltose. At timed intervals you add a drop of the reaction mixture to iodine solution on a spotting tile. As starch is used up, the colour goes <b>blue-black → brown → pale brown → no blue-black colour left</b>. Time how long it takes to reach the end-point, or measure each sample in the colorimeter to get numbers you can plot.</p>
+      <p class="note"><b>Safety:</b> wear eye protection. Iodine solution stains skin and is an irritant. Amylase is an enzyme and can cause allergic reactions: avoid skin contact and do not inhale dust.</p>
+    </div>
+    <div class="card">
+      <div class="svgbox"><svg id="bathSvg" viewBox="0 0 560 200" role="img" aria-label="Thermostatic water bath with starch and amylase tubes"></svg></div>
+      <div class="controls" style="margin-top:12px">
+        <div class="ctl"><label for="selT">Water bath temperature: <span id="tVal">40</span> °C</label><input type="range" id="selT" min="10" max="70" step="5" value="40"></div>
+        <div class="ctl"><label for="selE">Amylase concentration</label><select id="selE"><option value="0.25">0.25%</option><option value="0.5">0.50%</option><option value="1" selected>1.00%</option></select></div>
+        <div class="ctl"><label for="selMethod">Method</label><select id="selMethod"><option value="tile">Spotting tile (judge the colour)</option><option value="colorimeter">Colorimeter (orange filter)</option></select></div>
+      </div>
+      <div class="row small" style="margin-top:10px;gap:16px">
+        <label class="row" style="gap:6px"><input type="checkbox" id="chkPre" checked> Pre-incubate both tubes in the bath for 5 min</label>
+        <label class="row" style="gap:6px"><input type="checkbox" id="chkAuto"> Lab assistant samples automatically every</label><select id="selIv" style="width:auto" aria-label="Sampling interval"><option value="15">15 s</option><option value="30" selected>30 s</option><option value="60">60 s</option></select>
+      </div>
+      <p class="small muted" style="margin:8px 0 0">Constant for every run: 5 cm³ of 1% starch, 5 cm³ of amylase, pH 7 buffer, 1 drop of mixture into 2 drops of iodine.</p>
+    </div>
+    <div class="card">
+      <h3>Inside the tube · molecule view</h3>
+      <p class="small muted" style="margin:0 0 8px">A live view of the reaction at the current temperature. Move the temperature slider to see the effect before you run anything.</p>
+      <canvas class="mol" id="molCanvas" role="img" aria-label="Animation of amylase and starch molecules at the current temperature"></canvas>
+      <div class="legend" id="molLegend" style="margin-top:8px"></div>
+      <p class="small muted" style="margin:6px 0 0">Not to scale. Hotter molecules move faster, so starch enters active sites more often. Above about 45 °C the amylase vibrates so much that hydrogen and ionic bonds break, the active site changes shape and starch no longer fits.</p>
+    </div>
+    <div class="card">
+      <div class="row" style="justify-content:space-between;align-items:center">
+        <div><div class="lbl">Time since mixing</div><div class="clock" id="clock">00:00</div></div>
+        <div class="seg" role="group" aria-label="Simulation speed"><button data-speed="1" aria-pressed="true">×1</button><button data-speed="10" aria-pressed="false">×10</button><button data-speed="30" aria-pressed="false">×30</button></div>
+      </div>
+      <div class="row" style="margin-top:12px">
+        <button class="primary" id="btnMix">Mix starch and amylase</button>
+        <button id="btnFinish" disabled>Finish and save run</button>
+      </div>
+      <div class="msg" id="amyMsg" style="margin-top:12px"></div>
+      <div class="lbl" style="margin:14px 0 6px">Sampling bench</div>
+      <p class="small muted" style="margin:0 0 8px">Drag the pipette to the reaction tube to draw up a sample, then to an empty well, then to the distilled water to rinse it. Or tap the pipette, then tap where it goes.</p>
+      <div class="bench2">
+        <div class="benchitem"><button class="vessel" id="tube" data-drop="tube" aria-label="Reaction tube: draw up a sample"></button>reaction tube</div>
+        <div class="benchitem"><button class="pip" id="pipette" aria-label="Dropping pipette: pick up"></button><span id="pipState">empty, clean</span></div>
+        <div class="benchitem"><button class="vessel beaker" id="rinse" data-drop="rinse" aria-label="Beaker of distilled water: rinse the pipette"></button>distilled water</div>
+      </div>
+      <div class="lbl" style="margin:14px 0 8px">Spotting tile <span class="muted" style="text-transform:none;letter-spacing:0">· click the first well with no blue-black colour to mark the end-point</span></div>
+      <div class="tile" id="tile"></div>
+      <div class="scale" id="iodScale" style="margin-top:12px"></div>
+    </div>
+  </div>
+
+  <div class="col">
+    <div class="card notebook planner" id="plan2"></div>
+    <div class="card notebook">
+      <h3>Results table</h3>
+      <div class="tablebox"><table><thead><tr><th>Run</th><th class="num">Temp / °C</th><th class="num">Amylase / %</th><th>Method</th><th class="num">End-point / s</th><th class="num">Rate = 1000 ÷ t / s⁻¹</th></tr></thead><tbody id="runBody"></tbody></table></div>
+      <div class="row" style="margin-top:8px"><button id="btnClearRuns">Clear all runs</button><button id="btnDemo">Load class data (example runs)</button></div>
+    </div>
+    <div class="card notebook">
+      <div class="row" style="justify-content:space-between">
+        <h3>Graph</h3>
+        <div class="seg" role="group" aria-label="Graph type"><button data-g="progress" aria-pressed="true">Progress curve</button><button data-g="temp" aria-pressed="false">Rate vs temp</button><button data-g="conc" aria-pressed="false">Rate vs [amylase]</button></div>
+      </div>
+      <div class="poe" id="poe2" style="margin:10px 0"></div>
+      <canvas class="graph" id="amyGraph" aria-label="Results graph"></canvas>
+      <div class="legend" id="amyLegend"></div>
+      <div id="tangentBox" style="margin-top:12px">
+        <div class="lbl">Initial rate from a tangent at t = 0 <span class="muted" style="text-transform:none;letter-spacing:0">· drag on the graph to tilt the tangent</span></div>
+        <div class="controls" style="margin-top:6px">
+          <div class="ctl"><label for="selTanRun">Colorimeter run</label><select id="selTanRun"></select></div>
+          <div class="ctl"><label for="tanSlope">Tangent gradient: <span id="tanVal">−0.10</span> min⁻¹</label><input type="range" id="tanSlope" min="0" max="1.6" step="0.01" value="0.1"></div>
+        </div>
+        <div class="row" style="margin-top:8px"><button id="btnTan">Check my tangent</button></div>
+        <div class="msg" id="tanMsg" style="margin-top:8px"></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Check your understanding</h3>
+      <details class="q"><summary><span class="qn">1</span><span>Sketch the curve of starch remaining against time and explain its shape. <span class="mk">[3]</span></span></summary><div class="ans">The curve starts high and falls <b>steeply at first</b>, then more and more gently, levelling off at zero. At the start there are many starch molecules, so active sites are almost always occupied and the rate is fastest. As starch is used up, collisions between substrate and active sites become less frequent, so the rate falls until no substrate is left.</div></details>
+      <details class="q"><summary><span class="qn">2</span><span>How do you use this curve to find the initial rate? <span class="mk">[2]</span></span></summary><div class="ans">Draw a <b>tangent to the curve at t = 0</b> and calculate its gradient (change in absorbance ÷ change in time). A quicker estimate is the change in the first 30 s. The tangent is better because the rate is already falling during those 30 s.</div></details>
+      <details class="q"><summary><span class="qn">3</span><span>Why are samples tested in separate wells of iodine, not with iodine added to the whole reaction mixture? <span class="mk">[1]</span></span></summary><div class="ans">Iodine <b>interferes with the reaction and slows it down</b>, so it must not be in the reaction tube.</div></details>
+      <details class="q"><summary><span class="qn">4</span><span>Why must both tubes be pre-incubated in the water bath before mixing? <span class="mk">[2]</span></span></summary><div class="ans">So the starch and amylase are <b>already at the bath temperature</b> when the reaction starts. Otherwise the mixture warms (or cools) during the first minutes and the true temperature of the reaction is unknown. Untick the box and compare runs at 60 °C to see the effect.</div></details>
+      <details class="q"><summary><span class="qn">5</span><span>Explain why the rate falls above about 45 °C. <span class="mk">[3]</span></span></summary><div class="ans">High kinetic energy makes the enzyme molecule vibrate so much that <b>hydrogen and ionic bonds holding its tertiary structure break</b>. The active site changes shape, so starch no longer fits and fewer enzyme–substrate complexes form. The enzyme is <b>denatured</b>; this is not reversed on cooling.</div></details>
+      <details class="q"><summary><span class="qn">6</span><span>Suggest one advantage of the colorimeter over the spotting tile. <span class="mk">[1]</span></span></summary><div class="ans">The end-point is judged by eye on the tile, which is <b>subjective</b>. The colorimeter gives a <b>quantitative</b> reading at every time, so you can plot a progress curve and compare runs objectively.</div></details>
+    </div>
+  </div>
+</section>
+
+<!-- ================= STATION 3 ================= -->
+<section id="st-immobilise" class="station" aria-label="Station 3: Practical Activity 3.2" hidden>
+  <div class="col">
+    <div class="card intro">
+      <h2>Practical Activity 3.2 · Immobilising enzymes</h2>
+      <p class="small">Lactase is mixed with <b>sodium alginate</b> and dripped into <b>calcium chloride</b>. Each drop instantly becomes a jelly bead with the enzyme trapped inside. Packed into a column, the beads convert lactose in milk into glucose and galactose, and the milk runs out free of both lactose and lactase.</p>
+      <p class="note"><b>Safety:</b> wear eye protection. Calcium chloride is an irritant. Never taste the milk in a laboratory.</p>
+    </div>
+    <div class="card">
+      <nav class="steps" id="steps" aria-label="Procedure steps"></nav>
+      <div class="svgbox" style="margin-top:12px"><svg id="immSvg" viewBox="0 0 560 260" role="img" aria-label="Apparatus for the current step"></svg></div>
+      <div id="stepPanel" style="margin-top:12px"></div>
+      <div class="msg" id="immMsg" style="margin-top:12px"></div>
+    </div>
+  </div>
+  <div class="col">
+    <div class="card notebook planner" id="plan3"></div>
+    <div class="card notebook">
+      <h3>Results · glucose in the milk leaving the column</h3>
+      <div class="tablebox"><table><thead><tr><th>Run</th><th>Column</th><th class="num">Flow / cm³ min⁻¹</th><th class="num">Temp / °C</th><th class="num">Your strip reading / mmol dm⁻³</th></tr></thead><tbody id="immBody"></tbody></table></div>
+      <div class="poe" id="poe3" style="margin:10px 0"></div>
+      <canvas class="graph" id="immGraph" aria-label="Glucose concentration against flow rate"></canvas>
+      <div class="legend" id="immLegend"></div>
+    </div>
+    <div class="card notebook">
+      <h3>Free versus immobilised lactase · heat stability</h3>
+      <p class="small" style="margin-top:0">Syllabus 3.2.4 asks you to compare the two. Heat free lactase solution and immobilised beads for 10 min at one temperature, cool, then measure the activity left as a percentage of an unheated sample.</p>
+      <div class="controls">
+        <div class="ctl"><label for="selHeat">Heat for 10 min at: <span id="heatVal">60</span> °C</label><input type="range" id="selHeat" min="30" max="90" step="5" value="60"></div>
+      </div>
+      <div class="row" style="margin-top:10px"><button class="primary" id="btnHeat">Heat both and test</button><button id="btnHeatAll">Run the whole range</button></div>
+      <div class="poe" id="poeHeat" style="margin:10px 0"></div>
+      <canvas class="graph" id="heatGraph" aria-label="Activity remaining against temperature for free and immobilised lactase"></canvas>
+      <div class="legend"><span><i style="background:var(--c2)"></i>Free lactase in solution</span><span><i style="background:var(--c1)"></i>Immobilised in alginate</span><span><i style="background:var(--c5)"></i>Your prediction</span></div>
+    </div>
+    <div class="card">
+      <h3>Check your understanding</h3>
+      <details class="q"><summary><span class="qn">1</span><span>Why test the product with glucose test strips rather than Benedict's reagent? <span class="mk">[2]</span></span></summary><div class="ans">Lactose is itself a <b>reducing sugar</b>, so milk gives a positive Benedict's result before any lactase has acted. Glucose strips respond to <b>glucose only</b>, so they show that hydrolysis has happened.</div></details>
+      <details class="q"><summary><span class="qn">2</span><span>Explain why slower flow through the column gives more glucose. <span class="mk">[2]</span></span></summary><div class="ans">Slower flow means the milk spends <b>longer in contact</b> with the beads, so more lactose molecules collide with active sites of lactase and more are hydrolysed before the milk leaves.</div></details>
+      <details class="q"><summary><span class="qn">3</span><span>Why are the beads rinsed with distilled water before use? <span class="mk">[2]</span></span></summary><div class="ans">To remove excess calcium chloride and any <b>lactase stuck to the outside</b> of the beads. Otherwise free enzyme washes into the first sample, raising its glucose and contaminating the product.</div></details>
+      <details class="q"><summary><span class="qn">4</span><span>What is the control column and what should it show? <span class="mk">[2]</span></span></summary><div class="ans">Beads made in the same way but with <b>water instead of lactase</b>. The milk should contain <b>no glucose</b>, showing that glucose in the test column comes from the enzyme, not from the alginate, the calcium chloride or the milk.</div></details>
+      <details class="q"><summary><span class="qn">5</span><span>State three advantages of using immobilised enzymes. <span class="mk">[3]</span></span></summary><div class="ans"><ul><li>The enzyme can be <b>recovered and reused</b>, which cuts cost.</li><li>The product is <b>not contaminated</b> with enzyme.</li><li>Immobilised enzymes are <b>more stable</b> and tolerate a wider range of temperature and pH, because the alginate holds the molecule in shape and shields part of it.</li></ul></div></details>
+      <details class="q"><summary><span class="qn">6</span><span>Use the heat-stability graph to compare free and immobilised lactase. <span class="mk">[3]</span></span></summary><div class="ans">Both keep nearly all their activity at low temperatures. Free lactase loses activity from about 50 °C and is almost fully denatured by about 65 °C. Immobilised lactase keeps its activity to <b>about 10 °C higher</b>. Quote two pairs of values read from your graph to support the comparison.</div></details>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Built for Cambridge International AS &amp; A Level Biology 9700 (2025–2027) outcomes 3.1.3, 3.1.4, 3.2.1 and 3.2.4. Procedures follow Practical Activities 3.1 and 3.2 and Figure 3.7 of the Cambridge coursebook (Fosbery &amp; Jones, 5th edition), rewritten for this lab. All readings are generated by a model with random error, so values vary between runs. Prepared by Eko Febriadi.
+</footer>
+</div>
+
+<script>
+(function(){
+"use strict";
+const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const rnd=(a,b)=>a+Math.random()*(b-a);
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+function hex2rgb(h){h=h.replace('#','');return [0,2,4].map(i=>parseInt(h.substr(i,2),16));}
+function rgb2hex(r){return '#'+r.map(v=>Math.round(clamp(v,0,255)).toString(16).padStart(2,'0')).join('');}
+function lerpHex(a,b,t){const A=hex2rgb(a),B=hex2rgb(b);return rgb2hex(A.map((v,i)=>v+(B[i]-v)*t));}
+function ramp(stops,x){if(x<=stops[0][0])return stops[0][1];for(let i=1;i<stops.length;i++){if(x<=stops[i][0]){const t=(x-stops[i-1][0])/(stops[i][0]-stops[i-1][0]);return lerpHex(stops[i-1][1],stops[i][1],t);}}return stops[stops.length-1][1];}
+// starch-iodine colour by starch concentration (g per 100 cm3, 1.0 = start)
+const IODSTOPS=[[0,'#F1DFAE'],[0.05,'#E2B566'],[0.14,'#B9763A'],[0.28,'#7E4A35'],[0.45,'#463056'],[0.7,'#232650'],[1.1,'#131632']];
+const iodColour=s=>ramp(IODSTOPS,s);
+const fmtTime=s=>{s=Math.round(s);return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0');};
+
+/* ---------- small helpers ---------- */
+const store={get(k){try{return localStorage.getItem('evl-'+k)||'';}catch(e){return '';}},set(k,v){try{localStorage.setItem('evl-'+k,v);}catch(e){}}};
+const esc=x=>String(x).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const RM=matchMedia('(prefers-reduced-motion: reduce)');
+function interp(pts,x){if(!pts||!pts.length)return null;if(x<=pts[0][0])return pts[0][1];for(let i=1;i<pts.length;i++){if(x<=pts[i][0]){const a=pts[i-1],b=pts[i];return a[1]+(b[1]-a[1])*(x-a[0])/((b[0]-a[0])||1);}}return pts[pts.length-1][1];}
+
+/* ---------- drag-or-tap ---------- */
+let held=null;
+function clearHeld(){if(held)held.el.classList.remove('picked');held=null;document.body.classList.remove('holding');}
+function dropAt(x,y){for(const n of document.elementsFromPoint(x,y)){const t=n.closest&&n.closest('[data-drop]');if(t)return t;}return null;}
+function makeMovable(el,{onDrop}){
+  el.dataset.movable='1';
+  el.addEventListener('pointerdown',e=>{
+    if(e.pointerType==='mouse'&&e.button!==0)return;
+    const r=el.getBoundingClientRect();const info={x:(e.clientX-r.left)/r.width,y:(e.clientY-r.top)/r.height};
+    el.__tapInfo=info;const sx=e.clientX,sy=e.clientY;let ghost=null,over=null;
+    try{el.setPointerCapture(e.pointerId);}catch(_){}
+    const move=ev=>{
+      if(!ghost){if(Math.hypot(ev.clientX-sx,ev.clientY-sy)<6)return;clearHeld();ghost=el.cloneNode(true);ghost.removeAttribute('id');ghost.classList.add('ghost');ghost.style.width=r.width+'px';ghost.style.height=r.height+'px';document.body.appendChild(ghost);document.body.classList.add('holding');}
+      ghost.style.left=(ev.clientX-info.x*r.width)+'px';ghost.style.top=(ev.clientY-info.y*r.height)+'px';
+      const t=dropAt(ev.clientX,ev.clientY);if(t!==over){if(over)over.classList.remove('over');over=t;if(over)over.classList.add('over');}
+    };
+    const up=ev=>{
+      el.removeEventListener('pointermove',move);el.removeEventListener('pointerup',up);el.removeEventListener('pointercancel',up);
+      if(ghost){ghost.remove();if(over)over.classList.remove('over');document.body.classList.remove('holding');el.__dragged=true;
+        if(ev.type==='pointerup'){const t=dropAt(ev.clientX,ev.clientY);if(t)onDrop(t,info);}}
+    };
+    el.addEventListener('pointermove',move);el.addEventListener('pointerup',up);el.addEventListener('pointercancel',up);
+  });
+  el.addEventListener('click',e=>{
+    e.stopPropagation();
+    if(el.__dragged){el.__dragged=false;return;}
+    if(held&&held.el===el){clearHeld();return;}
+    clearHeld();held={el,onDrop,info:el.__tapInfo||{x:.1,y:.5}};el.__tapInfo=null;
+    el.classList.add('picked');document.body.classList.add('holding');
+  });
+}
+document.addEventListener('click',e=>{
+  if(!held)return;const t=e.target.closest('[data-drop]');
+  if(t){e.preventDefault();e.stopPropagation();const h=held;clearHeld();h.onDrop(t,h.info);}
+  else if(!e.target.closest('[data-movable]'))clearHeld();
+},true);
+document.addEventListener('keydown',e=>{if(e.key==='Escape')clearHeld();});
+
+/* ---------- sketch a prediction on a graph ---------- */
+const PRED={};const SK={cv:null,key:null,after:null,drawing:false};
+function toData(cv,e){const g=cv.__g;if(!g)return null;const r=cv.getBoundingClientRect();const px=e.clientX-r.left,py=e.clientY-r.top;return [g.xmin+(px-g.L)/g.pw*(g.xmax-g.xmin),g.ymin+(g.T+g.ph-py)/g.ph*(g.ymax-g.ymin)];}
+function startSketch(cv,key,after){if(SK.cv)SK.cv.classList.remove('sketching');SK.cv=cv;SK.key=key;SK.after=after;cv.classList.add('sketching');}
+function stopSketch(){if(SK.cv)SK.cv.classList.remove('sketching');SK.cv=null;SK.drawing=false;}
+function sketchable(cv,redraw){
+  cv.addEventListener('pointerdown',e=>{if(SK.cv!==cv)return;const d=toData(cv,e);if(!d)return;e.preventDefault();e.stopImmediatePropagation();try{cv.setPointerCapture(e.pointerId);}catch(_){}SK.drawing=true;const g=cv.__g;PRED[SK.key]=[[clamp(d[0],g.xmin,g.xmax),clamp(d[1],g.ymin,g.ymax)]];redraw();});
+  cv.addEventListener('pointermove',e=>{if(SK.cv!==cv||!SK.drawing)return;const d=toData(cv,e),g=cv.__g,arr=PRED[SK.key];if(!d||!arr)return;const x=Math.min(g.xmax,d[0]);if(x>arr[arr.length-1][0]+0.004*(g.xmax-g.xmin)){arr.push([x,clamp(d[1],g.ymin,g.ymax)]);redraw();}});
+  const end=()=>{if(SK.cv!==cv||!SK.drawing)return;const k=SK.key,a=SK.after;stopSketch();if(PRED[k]&&PRED[k].length<3)delete PRED[k];redraw();if(a)a();};
+  cv.addEventListener('pointerup',end);cv.addEventListener('pointercancel',end);
+}
+function makePoe(cfg){
+  let sig='';
+  function update(){
+    const box=$(cfg.el);if(!box)return;
+    const k=cfg.key(),p=PRED[k],hd=!!(p&&cfg.hasData(k)),sk=SK.cv===$(cfg.cv)&&SK.key===k;
+    const sg=[k,!!p,hd,sk].join('|');
+    if(sg!==sig){sig=sg;
+      box.innerHTML=`<div class="lbl">Predict · observe · explain</div><div class="small">${cfg.prompt(k)}</div>
+        <div class="row"><button data-a="sk">${sk?'Now draw on the graph in one stroke, left to right (tap to cancel)':p?'Redraw my prediction':'Sketch my prediction'}</button>${p&&!sk?'<button data-a="cl">Clear</button>':''}</div>
+        ${hd?`<div class="small fb"></div><label class="lbl" for="ex-${k}">Explain the difference between your prediction and the data</label><textarea id="ex-${k}"></textarea><details class="q"><summary><span class="qn">✓</span><span>Model explanation</span></summary><div class="ans">${cfg.model(k)}</div></details>`:p?'<div class="small muted">Prediction saved as the dashed line. Now collect data to compare.</div>':''}`;
+      box.querySelector('[data-a="sk"]').onclick=()=>{if(sk){stopSketch();update();return;}startSketch($(cfg.cv),k,update);update();};
+      const cl=box.querySelector('[data-a="cl"]');if(cl)cl.onclick=()=>{delete PRED[k];update();cfg.redraw();};
+      const ta=box.querySelector('textarea');if(ta){ta.value=store.get('ex-'+k);ta.oninput=()=>store.set('ex-'+k,ta.value);}
+    }
+    const fb=box.querySelector('.fb');if(fb)fb.innerHTML=cfg.feedback(k);
+  }
+  return update;
+}
+
+/* ---------- investigation planner ---------- */
+function makePlanner(cfg){
+  const P={iv:'',dv:'',cvs:new Set(),nv:5,reps:3,locked:false,base:null};
+  const lbl=(arr,v)=>(arr.find(o=>o.v===v)||{label:''}).label;
+  const lc=t=>t.charAt(0).toLowerCase()+t.slice(1);
+  const g=id=>document.getElementById(cfg.id+'-'+id);
+  function verdict(){
+    const out=[];
+    out.push(P.iv?['','Independent variable: '+lbl(cfg.ivs,P.iv).toLowerCase()+'.']:['x','Choose the independent variable: the one thing you change on purpose.']);
+    const dv=cfg.dvs.find(d=>d.v===P.dv);
+    if(!dv)out.push(['x','Choose the dependent variable: what you measure.']);
+    else if(!dv.ok)out.push(['x','"'+dv.label+'" is not what you measure. '+cfg.dvHint]);
+    else out.push(['','Dependent variable: '+dv.label.toLowerCase()+'.']);
+    if(P.iv){
+      const bad=P.cvs.has(P.iv);
+      if(bad)out.push(['x','You ticked '+lc(lbl(cfg.cvs,P.iv))+' as a control variable, but it is your independent variable.']);
+      const miss=cfg.cvs.filter(c=>c.real!==false&&c.v!==P.iv&&!P.cvs.has(c.v));
+      const junk=cfg.cvs.filter(c=>c.real===false&&P.cvs.has(c.v));
+      if(miss.length)out.push(['w','Also keep constant: '+miss.map(c=>lc(c.label)).join('; ')+'.']);
+      if(junk.length)out.push(['w',junk.map(c=>c.label).join(' and ')+(junk.length>1?' do':' does')+' not affect the result, so there is no need to control '+(junk.length>1?'them':'it')+'.']);
+      if(!miss.length&&!junk.length&&!bad)out.push(['','Control variables: complete.']);
+    }
+    out.push(P.nv<5?['w','Use at least 5 values of the independent variable to show a clear pattern.']:['','Number of values: '+P.nv+'.']);
+    out.push(P.reps<3?['w','Repeat each value 3 times so you can calculate a mean and spot anomalous results.']:['','Repeats: '+P.reps+' at each value.']);
+    return out;
+  }
+  function meansTable(){
+    const runs=cfg.runs().filter(r=>r.planned);
+    if(!runs.length)return '<p class="empty">No planned runs yet. Your first saved run fixes the control values.</p>';
+    const m=new Map();runs.forEach(r=>{const v=r[P.iv];if(!m.has(v))m.set(v,[]);m.get(v).push(r);});
+    const keys=[...m.keys()].sort((a,b)=>a-b);
+    const rows=keys.map(v=>{
+      const rs=m.get(v),ok=rs.filter(r=>!(r.planBreak||r.iod)),vals=ok.map(cfg.value);
+      const med=vals.slice().sort((a,b)=>a-b)[Math.floor(vals.length/2)];
+      const anom=r=>vals.length>=3&&med>0&&Math.abs(cfg.value(r)-med)/med>0.25;
+      const good=ok.filter(r=>!anom(r)).map(cfg.value);
+      const mean=good.length?good.reduce((a,b)=>a+b,0)/good.length:null;
+      const cells=rs.map(r=>{const bad=r.planBreak||r.iod,an=!bad&&anom(r);return `<span title="${bad?'left out: not a fair test':an?'possible anomaly: left out of the mean':''}" style="${bad?'text-decoration:line-through;color:var(--muted)':an?'color:var(--bad);font-weight:700':''}">${cfg.value(r).toFixed(cfg.dec)}${an?'?':''}</span>`;}).join(', ');
+      return `<tr><td class="num">${cfg.fmt(P.iv,v)}</td><td class="num">${ok.length} / ${P.reps}</td><td class="num">${cells}</td><td class="num">${mean===null?'—':mean.toFixed(cfg.dec)}</td></tr>`;
+    }).join('');
+    return `<div class="tablebox" style="margin-top:10px"><table><thead><tr><th class="num">${cfg.ivShort[P.iv]}</th><th class="num">Repeats</th><th class="num">${cfg.valueLabel}</th><th class="num">Mean</th></tr></thead><tbody>${rows}</tbody></table></div><p class="small muted" style="margin:6px 0 0">${keys.length} of ${P.nv} values done. Struck-through results broke the plan. Results marked ? differ from the others at that value by more than 25% and are left out of the mean.</p>`;
+  }
+  function render(){
+    const el=$(cfg.el);
+    if(!P.locked){
+      el.innerHTML=`<h3>Plan your investigation</h3><p class="small" style="margin-top:0">${cfg.intro}</p>
+      <div class="controls"><div class="ctl"><label for="${cfg.id}-iv">Independent variable</label><select id="${cfg.id}-iv"><option value="">Choose…</option>${cfg.ivs.map(o=>`<option value="${o.v}" ${P.iv===o.v?'selected':''}>${o.label}</option>`).join('')}</select></div>
+      <div class="ctl"><label for="${cfg.id}-dv">Dependent variable</label><select id="${cfg.id}-dv"><option value="">Choose…</option>${cfg.dvs.map(o=>`<option value="${o.v}" ${P.dv===o.v?'selected':''}>${o.label}</option>`).join('')}</select></div></div>
+      <div class="lbl" style="margin:12px 0 6px">Variables to keep constant</div>
+      <div class="chk">${cfg.cvs.map(c=>`<label class="cb"><input type="checkbox" id="${cfg.id}-cv-${c.v}" ${P.cvs.has(c.v)?'checked':''}> ${c.label}</label>`).join('')}</div>
+      <div class="controls" style="margin-top:12px"><div class="ctl"><label for="${cfg.id}-nv">Number of values to test</label><select id="${cfg.id}-nv">${[2,3,4,5,6,7].map(n=>`<option value="${n}" ${P.nv===n?'selected':''}>${n}</option>`).join('')}</select></div>
+      <div class="ctl"><label for="${cfg.id}-reps">Repeats at each value</label><select id="${cfg.id}-reps">${[1,2,3].map(n=>`<option value="${n}" ${P.reps===n?'selected':''}>${n}</option>`).join('')}</select></div></div>
+      <div class="row" style="margin-top:12px"><button id="${cfg.id}-chk">Check my plan</button><button class="primary" id="${cfg.id}-lock">Lock plan and start</button></div>
+      <ul class="verdict" id="${cfg.id}-v"></ul>`;
+      g('iv').onchange=e=>{P.iv=e.target.value;};g('dv').onchange=e=>{P.dv=e.target.value;};
+      cfg.cvs.forEach(c=>{g('cv-'+c.v).onchange=e=>{if(e.target.checked)P.cvs.add(c.v);else P.cvs.delete(c.v);};});
+      g('nv').onchange=e=>{P.nv=+e.target.value;};g('reps').onchange=e=>{P.reps=+e.target.value;};
+      const show=()=>{g('v').innerHTML=verdict().map(([c,t])=>`<li class="${c}">${esc(t)}</li>`).join('');};
+      g('chk').onclick=show;
+      g('lock').onclick=()=>{if(verdict().some(x=>x[0]==='x')){show();return;}P.locked=true;render();};
+    }else{
+      const dv=cfg.dvs.find(d=>d.v===P.dv);
+      el.innerHTML=`<div class="row" style="justify-content:space-between"><h3 style="margin:0">Your plan</h3><button id="${cfg.id}-edit">Edit plan</button></div>
+      <p class="small" style="margin:6px 0 0">Change only <b>${lbl(cfg.ivs,P.iv).toLowerCase()}</b>. Measure <b>${dv.label.toLowerCase()}</b>. ${P.nv} values × ${P.reps} repeats. ${P.base?'Fixed by your first planned run: '+cfg.runKeys.filter(k=>k.k!==P.iv).map(k=>k.label+' = '+cfg.fmt(k.k,P.base[k.k])).join(', ')+'.':'Your first saved run fixes the control values.'}</p>${meansTable()}`;
+      g('edit').onclick=()=>{P.locked=false;render();};
+    }
+  }
+  function check(run){
+    if(!P.locked||(cfg.skip&&cfg.skip(run)))return null;
+    run.planned=true;
+    if(!P.base){P.base={};cfg.runKeys.forEach(k=>P.base[k.k]=run[k.k]);return null;}
+    const ch=cfg.runKeys.filter(k=>k.k!==P.iv&&run[k.k]!==P.base[k.k]);
+    if(ch.length){run.planBreak=ch.map(k=>k.label).join(' and ');return 'Run '+run.no+' changed the '+run.planBreak+' as well as the independent variable, so it is not a fair test. It is left out of the means.';}
+    return null;
+  }
+  return {render,check,P};
+}
+
+/* ---------- generic graph ---------- */
+function niceStep(range,n){const raw=range/n;const p=Math.pow(10,Math.floor(Math.log10(raw)));const m=raw/p;return (m<=1?1:m<=2?2:m<=2.5?2.5:m<=5?5:10)*p;}
+function plot(cv,o){
+  const dpr=window.devicePixelRatio||1,W=cv.clientWidth,H=cv.clientHeight; if(!W)return;
+  cv.width=W*dpr;cv.height=H*dpr;const c=cv.getContext('2d');c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,W,H);
+  const L=58,R=14,T=12,B=46,pw=W-L-R,ph=H-T-B;
+  const xmin=o.xMin||0,xmax=o.xMax,ymin=o.yMin||0,ymax=o.yMax;
+  const X=v=>L+(v-xmin)/(xmax-xmin)*pw,Y=v=>T+ph-(v-ymin)/(ymax-ymin)*ph;
+  const ink=css('--ink'),muted=css('--muted'),line=css('--line');
+  c.font='12px "Source Sans 3", system-ui, sans-serif';c.textBaseline='middle';
+  const xs=o.xStep||niceStep(xmax-xmin,6),ys=o.yStep||niceStep(ymax-ymin,5);
+  c.strokeStyle=line;c.lineWidth=1;c.fillStyle=muted;
+  for(let v=ymin;v<=ymax+1e-9;v+=ys){const y=Math.round(Y(v))+.5;c.beginPath();c.moveTo(L,y);c.lineTo(L+pw,y);c.stroke();c.textAlign='right';c.fillText(o.yFmt?o.yFmt(v):+v.toFixed(2),L-7,y);}
+  for(let v=xmin;v<=xmax+1e-9;v+=xs){const x=Math.round(X(v))+.5;c.beginPath();c.moveTo(x,T);c.lineTo(x,T+ph);c.stroke();c.textAlign='center';c.fillText(o.xFmt?o.xFmt(v):+v.toFixed(2),x,T+ph+14);}
+  c.strokeStyle=muted;c.beginPath();c.moveTo(L+.5,T);c.lineTo(L+.5,T+ph+.5);c.lineTo(L+pw,T+ph+.5);c.stroke();
+  c.fillStyle=ink;c.font='600 12px "Source Sans 3", system-ui, sans-serif';c.textAlign='center';c.fillText(o.xLabel,L+pw/2,H-10);
+  c.save();c.translate(14,T+ph/2);c.rotate(-Math.PI/2);c.fillText(o.yLabel,0,0);c.restore();
+  c.save();c.beginPath();c.rect(L,T-4,pw+4,ph+8);c.clip();
+  (o.lines||[]).forEach(l=>{c.strokeStyle=l.color;c.lineWidth=l.w||1.5;c.setLineDash(l.dash||[]);c.beginPath();c.moveTo(X(l.x1),Y(l.y1));c.lineTo(X(l.x2),Y(l.y2));c.stroke();c.setLineDash([]);});
+  (o.series||[]).forEach(s=>{
+    if(s.line&&s.pts.length>1){c.strokeStyle=s.color;c.lineWidth=2;c.setLineDash(s.dash||[]);c.beginPath();s.pts.forEach((p,i)=>i?c.lineTo(X(p[0]),Y(p[1])):c.moveTo(X(p[0]),Y(p[1])));c.stroke();c.setLineDash([]);}
+    if(!s.noPts)s.pts.forEach(p=>{c.fillStyle=s.hollow?css('--surface'):s.color;c.strokeStyle=s.color;c.lineWidth=2;c.beginPath();
+      if(s.shape==='x'){const x=X(p[0]),y=Y(p[1]);c.moveTo(x-5,y-5);c.lineTo(x+5,y+5);c.moveTo(x+5,y-5);c.lineTo(x-5,y+5);c.stroke();}
+      else{c.arc(X(p[0]),Y(p[1]),s.r||4,0,Math.PI*2);c.fill();c.stroke();}});
+  });
+  c.restore();
+  cv.__g={L,T,pw,ph,xmin,xmax,ymin,ymax};
+  if(o.empty){c.fillStyle=muted;c.font='italic 14px "Source Sans 3", system-ui, sans-serif';c.textAlign='center';c.fillText(o.empty,L+pw/2,T+ph/2);}
+}
+const SERIES=['--c1','--c2','--c3','--c4','--c5','--c6'];
+
+/* =========================================================
+   STATION 1 · COLORIMETER
+   ========================================================= */
+const FILTERS=[{nm:430,name:'Violet',col:'#7B4FD0'},{nm:470,name:'Blue',col:'#2F6FE0'},{nm:530,name:'Green',col:'#2FA65A'},{nm:580,name:'Yellow',col:'#E3C12B'},{nm:600,name:'Orange',col:'#F08A24'},{nm:630,name:'Red',col:'#D9382E'}];
+const EPS={430:.22,470:.34,530:.62,580:.90,600:1.00,630:.94};   // starch-iodine complex, relative
+const IOD={430:.46,470:.34,530:.09,580:.04,600:.03,630:.02};     // free iodine solution
+const SAMPLES=[{id:'water',label:'Distilled water only',c:0,iod:false},{id:'blank',label:'Blank: water + iodine',c:0,iod:true,std:true}]
+  .concat([0.2,0.4,0.6,0.8,1.0].map(c=>({id:'s'+c,label:'Standard '+c.toFixed(2)+'% starch + iodine',c,iod:true,std:true})))
+  .concat([{id:'X',label:'Unknown X + iodine',c:0.53,iod:true,unk:true},{id:'Y',label:'Unknown Y + iodine',c:0.27,iod:true,unk:true}]);
+const smp=id=>SAMPLES.find(s=>s.id===id);
+const s1={on:false,warm:false,warmStart:0,filter:470,mode:'A',sample:null,zero:null,readings:[],smudge:{},pred:null,prep:{fill:'34',orient:'clear',bubbles:'tap'},live:null};
+const PREP=[
+  {k:'fill',t:'Fill level',o:[['14','about ¼ full'],['34','about ¾ full'],['brim','to the brim']]},
+  {k:'orient',t:'In the slot, the light passes through',o:[['clear','the clear faces'],['ridged','the ridged faces']]},
+  {k:'bubbles',t:'Air bubbles',o:[['tap','tapped out'],['leave','left in']]}
+];
+function trueA(s,f){return s.iod?1.10*EPS[f]*s.c+IOD[f]:0;}
+function rawReading(){
+  const s=smp(s1.sample),p=s1.prep;let a;
+  if(!s){a=-0.04;}
+  else if(p.fill==='14'){a=0.01;}else{
+    a=trueA(s,s1.filter);
+    if(s1.smudge[s.id])a+=s1.smudge[s.id]+rnd(-.005,.005);
+    if(p.fill==='brim')a+=rnd(.02,.04);
+    if(p.orient==='ridged')a+=rnd(.37,.42);
+    if(p.bubbles==='leave')a+=Math.random()*Math.random()*.25;
+  }
+  if(!s1.warm)a+=0.06+rnd(-.07,.07);
+  return a+rnd(-.003,.003);
+}
+function currentA(){if(!s1.on)return null;return rawReading()-(s1.zero===null?-0.15:s1.zero);}
+function buildCmSvg(){
+  const f=FILTERS.find(x=>x.nm===s1.filter),s=smp(s1.sample);
+  const sc=s?(s.iod?iodColour(s.c):css('--glass')):'none';
+  const on=s1.on;const A=s1.live==null?0.3:clamp(s1.live,0,2);const tr=Math.pow(10,-A);
+  const beamOp=on?.85:0, after=on?clamp(tr,.08,.9):0;
+  const fillH=s1.prep.fill==='14'?22:s1.prep.fill==='brim'?92:70;
+  $('#cmSvg').innerHTML=`
+  <rect x="8" y="30" width="544" height="170" rx="14" fill="${css('--inst')}"/>
+  <rect x="20" y="42" width="520" height="146" rx="8" fill="${css('--inst-2')}"/>
+  <rect x="70" y="108" width="80" height="14" fill="#FFF6D8" opacity="${beamOp}"/>
+  <rect x="182" y="108" width="74" height="14" fill="${f.col}" opacity="${on?.8:0}"/>
+  <rect x="312" y="108" width="80" height="14" fill="${f.col}" opacity="${after}"/>
+  <g class="hot" data-part="lamp"><circle cx="58" cy="115" r="22" fill="${on?'#FFE9A8':'#59666A'}" stroke="${css('--inst')}" stroke-width="3"/><path d="M50 115 q8 -12 16 0" stroke="${on?'#B86E0C':'#2B3538'}" stroke-width="2" fill="none"/></g>
+  <g class="hot" data-part="filter"><rect x="156" y="78" width="22" height="74" rx="3" fill="${f.col}" stroke="${css('--inst')}" stroke-width="2"/></g>
+  ${s?'':'<rect x="262" y="40" width="46" height="132" rx="2" fill="none" stroke="#7E9296" stroke-width="2" stroke-dasharray="5 4"/><text x="285" y="110" text-anchor="middle" font-size="11" fill="#9FB4B8">empty</text>'}<g data-part="cuvette" ${s?'':'display="none"'}><rect x="262" y="40" width="46" height="132" rx="2" fill="${css('--glass')}" stroke="#9FB4B8" stroke-width="2" opacity=".95"/>
+    <rect x="264" y="${170-fillH}" width="42" height="${fillH}" fill="${sc}" opacity=".95"/>
+    ${s1.prep.bubbles==='leave'?'<circle cx="276" cy="140" r="3" fill="#fff" opacity=".8"/><circle cx="292" cy="118" r="2.5" fill="#fff" opacity=".8"/><circle cx="284" cy="150" r="2" fill="#fff" opacity=".8"/>':''}
+    ${s&&s1.smudge[s.id]?'<ellipse cx="285" cy="98" rx="8" ry="6" fill="none" stroke="#8b7a6a" stroke-dasharray="2 2" opacity=".9"/>':''}
+    ${s1.prep.fill==='brim'?'<path d="M300 60 q4 10 0 18" stroke="#9fc6d4" stroke-width="3" fill="none"/>':''}</g>
+  <g class="hot" data-part="detector"><rect x="396" y="92" width="26" height="46" rx="4" fill="#20292C" stroke="#7E9296" stroke-width="2"/><rect x="398" y="100" width="6" height="30" fill="#5D7D86"/></g>
+  <path d="M422 115 H452" stroke="#7E9296" stroke-width="2"/>
+  <g class="hot" data-part="readout"><rect x="452" y="88" width="78" height="54" rx="5" fill="${css('--lcd')}" stroke="#7E9296" stroke-width="2"/>
+    <text x="491" y="121" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="17" font-weight="700" fill="${css('--lcd-ink')}">${on?$('#lcdVal').textContent:''}</text></g>
+  <g font-size="12" fill="${css('--ink')}" text-anchor="middle">
+   <text x="58" y="20">lamp</text><text x="167" y="20">filter (${f.nm} nm)</text><text x="285" y="20">cuvette</text><text x="409" y="20">light meter</text><text x="491" y="20">readout</text></g>
+  <g font-size="11" fill="${css('--muted')}" text-anchor="middle"><text x="110" y="222">white light</text><text x="219" y="222">${f.name.toLowerCase()} light only</text><text x="352" y="222">light not absorbed</text></g>`;
+}
+const PARTS={lamp:'Lamp: a bulb or LED giving white light. It must warm up for about 5 minutes or the output drifts and readings creep.',
+ filter:'Filter: lets through one band of wavelengths. Choose the colour the solution absorbs most, which is the complementary colour to the solution. A blue-black solution absorbs orange-red light.',
+ cuvette:'Cuvette: a small plastic or glass tube with two clear faces (light passes through these) and two ridged faces (hold it by these). Fill about ¾ full so the beam goes through the liquid.',
+ detector:'Light meter (photocell): measures the intensity of light that passes through the solution.',
+ readout:'Readout: shows absorbance (A) or percentage transmission (%T). A = log₁₀(100 ÷ %T). More colour means higher A and lower %T.'};
+$('#cmSvg').addEventListener('click',e=>{const g=e.target.closest('[data-part]');if(g)$('#partInfo').textContent=PARTS[g.dataset.part];});
+function lcdText(A){if(s1.mode==='A')return clamp(A,-0.1,2.5).toFixed(2);return clamp(100*Math.pow(10,-A),0,120).toFixed(1);}
+function cmMsg(t,k){const m=$('#cmMsg');m.textContent=t;m.className='msg'+(k?' '+k:'');}
+function refreshLive(){
+  if(!s1.on){$('#lcdVal').textContent='----';$('#lcdSub').textContent='Power off';s1.live=null;buildCmSvg();return;}
+  if(!s1.warm&&Date.now()-s1.warmStart>9000){s1.warm=true;cmMsg('Lamp warmed up. Zero the instrument with the blank before taking readings.');$('#btnWarm').disabled=true;}
+  s1.live=currentA();$('#lcdVal').textContent=lcdText(s1.live);
+  $('#lcdSub').textContent=(s1.mode==='A'?'Absorbance':'% Transmission')+' · '+s1.filter+' nm'+(s1.warm?'':' · warming up')+(s1.zero===null?' · not zeroed':'');
+  buildCmSvg();
+}
+setInterval(refreshLive,700);
+FILTERS.forEach(f=>{const o=document.createElement('option');o.value=f.nm;o.textContent=f.name+' ('+f.nm+' nm)';$('#selFilter').appendChild(o);});
+$('#selFilter').value=s1.filter;
+const SHORT={water:'Water',blank:'Blank','s0.2':'0.20%','s0.4':'0.40%','s0.6':'0.60%','s0.8':'0.80%','s1':'1.00%',X:'Unknown X',Y:'Unknown Y'};
+function renderRack(){
+  $('#rack').innerHTML=SAMPLES.map(s=>`<div class="cuvcell${s1.sample===s.id?' inslot':''}"><button class="cuv" data-sid="${s.id}" aria-label="${esc(s.label)}${s1.smudge[s.id]?', fingerprints on it':''}${s1.sample===s.id?', in the colorimeter':''}"><span class="liq" style="background:${s.iod?iodColour(s.c):'#DCEBF0'}"></span>${s1.smudge[s.id]?'<span class="fp"></span>':''}</button><span>${SHORT[s.id]}</span></div>`).join('');
+  $$('#rack .cuv').forEach(b=>makeMovable(b,{onDrop:(t,info)=>{if(t.id==='slot')insertCuvette(b.dataset.sid,info);}}));
+  $('#slotName').textContent=s1.sample?smp(s1.sample).label:'Empty';
+}
+function insertCuvette(id,info){
+  const clear=info.x>0.24&&info.x<0.76;
+  if(clear&&!s1.smudge[id])s1.smudge[id]=rnd(.05,.10);
+  s1.sample=id;
+  cmMsg(clear?'You held it by the clear faces. Fingerprints are now in the light path, so the absorbance will read too high. Wipe it with lens tissue.':s1.smudge[id]?'Inserted, but this cuvette still has fingerprints on it. Wipe it.':'Inserted '+smp(id).label+', held by the ridged faces.',clear||s1.smudge[id]?'bad':'good');
+  renderRack();refreshLive();
+}
+$('#btnWipe').addEventListener('click',()=>{if(!s1.sample){cmMsg('There is no cuvette in the slot.','bad');return;}const had=!!s1.smudge[s1.sample];delete s1.smudge[s1.sample];cmMsg(had?'Wiped. The fingerprints are gone.':'Wiped. It was already clean.','good');renderRack();refreshLive();});
+$('#btnEject').addEventListener('click',()=>{s1.sample=null;cmMsg('The slot is empty.');renderRack();refreshLive();});
+$('#slot').addEventListener('click',()=>{$('#partInfo').textContent=PARTS.cuvette;});
+let poeFSig='';
+function renderPoeFilter(){
+  const done=FILTERS.filter(f=>latest('s1',f.nm)).length;let best=null;
+  FILTERS.forEach(f=>{const r=latest('s1',f.nm);if(r&&(!best||r.A>best.A))best={f,A:r.A};});
+  const sig=[s1.pred,done===6,done===6?best.f.nm:''].join('|');
+  if(sig===poeFSig){const pr=$('#poeFProg');if(pr)pr.textContent=done+' of 6 filters measured.';return;}
+  poeFSig=sig;
+  let h='<div class="lbl">Predict · observe · explain</div>';
+  if(!s1.pred)h+=`<div class="small">Before you measure: which filter will give the <b>highest absorbance</b> with the blue-black starch–iodine solution?</div><div class="row">${FILTERS.map(f=>`<button data-pf="${f.nm}"><span class="chip" style="background:${f.col}"></span>${f.name}</button>`).join('')}</div>`;
+  else{const pf=FILTERS.find(f=>f.nm===s1.pred);
+    h+=`<div class="small">Your prediction: <b>${pf.name} (${pf.nm} nm)</b>. <span id="poeFProg">${done} of 6 filters measured.</span></div>`;
+    if(done===6){h+=`<div class="small"><b>Observed:</b> the highest absorbance was with the ${best.f.name.toLowerCase()} filter (A = ${best.A.toFixed(2)}). ${best.f.nm===s1.pred?'Your prediction was right.':'That is not what you predicted.'}</div><label class="lbl" for="ex-filter">Explain why this filter gives the highest reading</label><textarea id="ex-filter"></textarea><details class="q"><summary><span class="qn">✓</span><span>Model explanation</span></summary><div class="ans">A solution looks the colour of the light it lets through. Blue-black starch–iodine lets blue light through and <b>absorbs orange-red light most strongly</b>, the complementary colour. With the orange filter, the light reaching the cuvette is the light the solution absorbs best, so a small change in starch concentration gives a large change in absorbance.</div></details>`;}
+    else h+='<div class="small muted">Now measure the 1.00% standard on all six filters, zeroing with the blank each time.</div>';}
+  $('#poeFilter').innerHTML=h;
+  $$('#poeFilter [data-pf]').forEach(b=>b.onclick=()=>{s1.pred=+b.dataset.pf;renderPoeFilter();});
+  const ta=$('#ex-filter');if(ta){ta.value=store.get('ex-filter');ta.oninput=()=>store.set('ex-filter',ta.value);}
+}
+$('#selFilter').addEventListener('change',e=>{s1.filter=+e.target.value;if(s1.zero!==null){s1.zero=null;cmMsg('Filter changed. Zero again with the blank: the blank\'s absorbance is different at every wavelength.','bad');}refreshLive();drawFilterBars();drawCal();});
+$('#btnPower').addEventListener('click',()=>{s1.on=!s1.on;if(s1.on){s1.warm=false;s1.warmStart=Date.now();s1.zero=null;cmMsg('Switched on. The lamp needs about 5 minutes to warm up (watch the reading drift). Skip ahead or wait.');}else cmMsg('');
+  $('#btnPower').textContent=s1.on?'Switch off':'Switch on';['#btnWarm','#btnZero','#btnRecord'].forEach(b=>$(b).disabled=!s1.on);$('#btnWarm').disabled=!s1.on||s1.warm;refreshLive();});
+$('#btnWarm').addEventListener('click',()=>{s1.warm=true;$('#btnWarm').disabled=true;cmMsg('5 minutes later: the lamp is stable. Now zero with the blank.');refreshLive();});
+$('#btnZero').addEventListener('click',()=>{
+  const s=smp(s1.sample);
+  // zero against the deterministic part (instrument averages over a few seconds)
+  let z=0;for(let i=0;i<8;i++)z+=rawReading();s1.zero=z/8;
+  if(!s1.warm)cmMsg('Zeroed while the lamp is still warming up. Readings will drift. Zero again once it is warm.','bad');
+  else if(!s)cmMsg('Zeroed with the slot empty. Zero with the blank cuvette in place, so the cuvette walls and the iodine are taken into account.','bad');
+  else if(s.id==='blank')cmMsg('Zeroed on the blank (water + iodine). The readout now shows only the absorbance due to starch–iodine.','good');
+  else if(s.id==='water')cmMsg('Zeroed on plain water. The iodine\'s own colour will be included in every reading. Small on orange or red, large on violet or blue.');
+  else cmMsg('You zeroed on "'+s.label+'". Every reading is now measured relative to that tube, so the standards will read too low. Zero with the blank.','bad');
+  refreshLive();});
+$('#btnRecord').addEventListener('click',()=>{
+  const A=s1.live;const s=smp(s1.sample);if(!s){cmMsg('Put a cuvette in the slot first.','bad');return;}
+  s1.readings.push({n:s1.readings.length+1,id:s.id,label:s.label,f:s1.filter,A,zeroOK:s1.zero!==null});
+  if(s1.zero===null)cmMsg('Recorded, but the colorimeter has not been zeroed, so this value has an unknown offset.','bad');
+  else cmMsg('Recorded '+s.label+' at '+s1.filter+' nm: A = '+A.toFixed(2)+'.');
+  renderLog();drawFilterBars();drawCal();});
+$('#btnClearLog').addEventListener('click',()=>{s1.readings=[];renderLog();drawFilterBars();drawCal();});
+[['#mA','A'],['#mT','T']].forEach(([id,m])=>$(id).addEventListener('click',()=>{s1.mode=m;$('#mA').setAttribute('aria-pressed',m==='A');$('#mT').setAttribute('aria-pressed',m==='T');refreshLive();}));
+function renderPrep(){
+  $('#prep').innerHTML=PREP.map(p=>`<fieldset><legend>${p.t}</legend>${p.o.map(([v,l])=>`<label><input type="radio" name="prep-${p.k}" id="prep-${p.k}-${v}" value="${v}" ${s1.prep[p.k]===v?'checked':''}> ${l}</label>`).join('')}</fieldset>`).join('');
+  $$('#prep input').forEach(i=>i.addEventListener('change',e=>{const k=e.target.name.slice(5);s1.prep[k]=e.target.value;refreshLive();
+    const bad={grip:{clear:'Fingerprints on the clear faces absorb and scatter light: readings go up.'},fill:{'14':'The beam passes above the liquid, so the meter sees almost no colour.',brim:'Brim-full cuvettes spill and wet the outside.'},wipe:{no:'Drips on the outside scatter light: readings go up.'},orient:{ridged:'The ridged faces scatter light: absorbance far too high.'},bubbles:{leave:'Bubbles drifting through the beam make the reading jump around.'}};
+    const t=(bad[k]||{})[e.target.value];cmMsg(t||'Good technique.',t?'bad':'good');}));
+}
+function renderLog(){
+  const b=$('#logBody');
+  if(!s1.readings.length){b.innerHTML='<tr><td colspan="5" class="empty">No readings yet. Switch on, warm up, zero with the blank, then record.</td></tr>';return;}
+  b.innerHTML=s1.readings.slice().reverse().map(r=>`<tr><td>${r.n}</td><td>${r.label}${r.zeroOK?'':' <span class="tag amber">not zeroed</span>'}</td><td>${r.f} nm</td><td class="num">${r.A.toFixed(2)}</td><td class="num">${(100*Math.pow(10,-r.A)).toFixed(1)}</td></tr>`).join('');
+}
+function latest(id,f){for(let i=s1.readings.length-1;i>=0;i--){const r=s1.readings[i];if(r.id===id&&r.f===f)return r;}return null;}
+function drawFilterBars(){
+  renderPoeFilter();
+  const vals=FILTERS.map(f=>({f,r:latest('s1',f.nm)}));
+  const mx=Math.max(1.2,...vals.map(v=>v.r?v.r.A:0));
+  const done=vals.filter(v=>v.r);
+  let best=null;done.forEach(v=>{if(!best||v.r.A>best.r.A)best=v;});
+  $('#filterBars').innerHTML=vals.map(v=>`<div class="bar"><span><span class="chip" style="background:${v.f.col}"></span>${v.f.name} ${v.f.nm}</span><div class="track"><div class="fill" style="width:${v.r?clamp(v.r.A/mx*100,0,100):0}%;background:${v.f.col}"></div></div><span class="v">${v.r?v.r.A.toFixed(2):'—'}</span></div>`).join('')+
+   `<p class="small ${done.length===6?'':'muted'}" style="margin:6px 0 0">${done.length===6?`Highest absorbance: <b>${best.f.name} (${best.f.nm} nm)</b>. Blue-black absorbs orange-red light, the complementary colour. Use this filter for Task 2 and for Practical 3.1.`:`${done.length} of 6 filters recorded. Remember to zero with the blank again each time you change filter.`}</p>`;
+}
+function fitLine(pts){const n=pts.length;const mx=pts.reduce((a,p)=>a+p[0],0)/n,my=pts.reduce((a,p)=>a+p[1],0)/n;let sxy=0,sxx=0;pts.forEach(p=>{sxy+=(p[0]-mx)*(p[1]-my);sxx+=(p[0]-mx)**2;});const m=sxx?sxy/sxx:0;return {m,b:my-m*mx};}
+function drawCal(){
+  const f=s1.filter;
+  const std=SAMPLES.filter(s=>s.std).map(s=>({s,r:latest(s.id,f)})).filter(v=>v.r);
+  const pts=std.map(v=>[v.s.c,v.r.A]);
+  const series=[{pts,color:css('--c1')}],lines=[];let fit=null;
+  if(pts.length>=3){fit=fitLine(pts);lines.push({x1:0,y1:fit.b,x2:1.1,y2:fit.b+fit.m*1.1,color:css('--c1'),w:1.5});}
+  const unk=['X','Y'].map(id=>({id,r:latest(id,f)})).filter(u=>u.r);
+  const ucol={X:css('--c2'),Y:css('--c3')};
+  unk.forEach(u=>{if(fit&&fit.m>0){const c=(u.r.A-fit.b)/fit.m;u.c=c;lines.push({x1:0,y1:u.r.A,x2:c,y2:u.r.A,color:ucol[u.id],dash:[5,4]});lines.push({x1:c,y1:u.r.A,x2:c,y2:0,color:ucol[u.id],dash:[5,4]});series.push({pts:[[c,u.r.A]],color:ucol[u.id],shape:'x'});}});
+  const ymax=Math.max(1.4,...pts.map(p=>p[1]+.1));
+  plot($('#calGraph'),{xMax:1.1,yMax:Math.ceil(ymax*5)/5,xStep:.2,yStep:.2,xLabel:'Starch concentration / g per 100 cm³',yLabel:'Absorbance at '+f+' nm',series,lines,empty:pts.length?null:'Record the standards at '+f+' nm to plot them'});
+  $('#calLegend').innerHTML=`<span><i style="background:var(--c1)"></i>Standards (${pts.length} of 6)${fit?` · line: A = ${fit.m.toFixed(2)}c ${fit.b>=0?'+':'−'} ${Math.abs(fit.b).toFixed(2)}`:''}</span>`+unk.map(u=>`<span><i style="background:${ucol[u.id]}"></i>Unknown ${u.id}: A = ${u.r.A.toFixed(2)}${u.c!=null?` → ${u.c.toFixed(2)} g per 100 cm³`:''}</span>`).join('');
+}
+$('#btnCheckXY').addEventListener('click',()=>{
+  const x=parseFloat($('#ansX').value),y=parseFloat($('#ansY').value);const out=[];let ok=true;
+  [['X',x,.53],['Y',y,.27]].forEach(([n,v,t])=>{if(isNaN(v)){out.push(n+': no answer yet.');ok=false;return;}
+    const d=Math.abs(v-t);if(d<=0.04)out.push(n+' = '+v.toFixed(2)+' ✓ (true value '+t.toFixed(2)+').');else{ok=false;out.push(n+' = '+v.toFixed(2)+' is off. '+(d>0.1?'Check you zeroed with the blank and used the same filter for the standards and unknowns.':'Close. Read the line more carefully.'));}});
+  const m=$('#xyMsg');m.textContent=out.join(' ');m.className='msg '+(ok?'good':'bad');});
+// fault-finding
+const FAULTS=[
+ {id:'finger',label:'Held the cuvette by its clear faces',gen:()=>[0,1,2].map(()=>.66+rnd(.06,.09)),blank:()=>0,why:'All three readings are about 0.08 too high and fairly consistent, while the blank was fine. Fingerprints in the light path absorb and scatter light.'},
+ {id:'orient',label:'Put the cuvette in with the ridged faces in the light path',gen:()=>[0,1,2].map(()=>1.05+rnd(-.02,.02)),blank:()=>0,why:'The readings are about 0.4 too high. Ridged faces scatter a lot of light, so very little reaches the meter.'},
+ {id:'bubble',label:'Left air bubbles in the cuvette',gen:()=>[.66+rnd(.01,.03),.66+rnd(.12,.18),.66+rnd(.04,.07)],blank:()=>0,why:'The readings jump around: repeats should agree within about 0.01. Bubbles drifting through the beam scatter light by different amounts each time.'},
+ {id:'under',label:'Filled the cuvette only about a quarter full',gen:()=>[0,1,2].map(()=>.01+rnd(0,.01)),blank:()=>0,why:'The readings are near zero for a coloured solution. The beam passes above the liquid, through air.'},
+ {id:'nozero',label:'Did not zero the colorimeter with the blank',gen:()=>[0,1,2].map(()=>.81+rnd(-.01,.01)),blank:()=>.15,why:'The blank itself reads 0.15 instead of 0.00, and every reading carries the same offset. Always zero with the blank first.'}];
+let curFault=null;
+$('#btnFault').addEventListener('click',()=>{
+  curFault=FAULTS[Math.floor(Math.random()*FAULTS.length)];
+  const r=curFault.gen();const order=FAULTS.slice().sort(()=>Math.random()-.5);
+  $('#faultBox').innerHTML=`<div class="readlist">Blank check: ${curFault.blank().toFixed(2)}<br>0.60% standard: ${r.map(v=>v.toFixed(2)).join(' · ')}</div><div class="faultopts">${order.map(f=>`<button data-f="${f.id}">${f.label}</button>`).join('')}</div><div class="msg" id="faultMsg" style="margin-top:8px"></div>`;
+  $$('#faultBox [data-f]').forEach(b=>b.addEventListener('click',()=>{const ok=b.dataset.f===curFault.id;const m=$('#faultMsg');m.className='msg '+(ok?'good':'bad');m.textContent=ok?'Correct. '+curFault.why:'Not this one. Look at whether the error is consistent or random, and at the blank.';}));
+});
+
+/* =========================================================
+   STATION 2 · AMYLASE (PA 3.1)
+   ========================================================= */
+const K0=0.0157,KM=0.3,WELLS=30,TMAX=1800;
+const fT=T=>Math.pow(2,(T-40)/10);
+const kd=T=>T<=42?0:0.0004*Math.exp(0.3*(T-45));
+const s2={T:40,E:1,iv:30,method:'tile',pre:true,auto:false,speed:1,pip:{hold:null,iodine:false},iodHits:0,running:false,t:0,S:1,act:1,Tm:40,samples:[],runs:[],nextAuto:0,ep:null,graph:'progress',runNo:0,init:0,last:0};
+function rateAt(S,E,Tm,act){return K0*E*fT(Tm)*act*S/(KM+S);}
+function startRun(){
+  s2.T=+$('#selT').value;s2.E=+$('#selE').value;s2.method=$('#selMethod').value;s2.pre=$('#chkPre').checked;s2.auto=$('#chkAuto').checked;s2.iv=+$('#selIv').value;
+  s2.t=0;s2.S=1;s2.samples=[];s2.ep=null;s2.nextAuto=0;
+  s2.Tm=s2.pre?s2.T:20;
+  s2.act=s2.pre?Math.exp(-kd(s2.T)*300):1;  // 5 min pre-incubation of the enzyme
+  s2.init=-1.10*rateAt(1,s2.E,s2.Tm,s2.act)*60; // dA/dt at t=0, per min
+  s2.running=true;s2.last=performance.now();
+  $('#btnMix').disabled=true;$('#btnFinish').disabled=false;s2.iodHits=0;s2.pip.hold=null;renderPip();
+  ['#selT','#selE','#selMethod','#chkPre','#chkAuto','#selIv'].forEach(i=>$(i).disabled=true);
+  amyMsg((s2.pre?'Both tubes were pre-incubated at '+s2.T+' °C. ':'Not pre-incubated: the tubes start at room temperature (20 °C) and warm towards '+s2.T+' °C. ')+'Mixed. The clock is running.');
+  if(s2.auto)takeSample();else amyMsg($('#amyMsg').textContent+' Take your first sample straight away with the pipette.');
+  renderTile();drawBath();requestAnimationFrame(loop);
+}
+function amyMsg(t,k){const m=$('#amyMsg');m.textContent=t;m.className='msg'+(k?' '+k:'');}
+function stepModel(dt){
+  const h=0.5;let n=Math.ceil(dt/h);const hh=dt/n;
+  for(let i=0;i<n;i++){
+    if(!s2.pre)s2.Tm+=(s2.T-s2.Tm)*(1-Math.exp(-hh/90));
+    s2.S=Math.max(0,s2.S-rateAt(s2.S,s2.E,s2.Tm,s2.act)*hh);
+    s2.act*=Math.exp(-kd(s2.Tm)*hh);s2.t+=hh;
+    if(s2.auto&&s2.t>=s2.nextAuto-1e-6)takeSample();
+  }
+}
+function loop(now){
+  if(!s2.running)return;
+  const dt=Math.min(0.25,(now-s2.last)/1000)*s2.speed;s2.last=now;
+  stepModel(dt);$('#clock').textContent=fmtTime(s2.t);
+  if(s2.t>=TMAX){finishRun(true);return;}
+  if(s2.samples.length>=WELLS){finishRun(false,'The tile is full ('+WELLS+' wells). Next time use a longer sampling interval.');return;}
+  requestAnimationFrame(loop);
+}
+function takeSample(){
+  if(s2.samples.length>=WELLS)return;
+  const t=s2.auto?Math.round(s2.nextAuto):Math.round(s2.t);
+  if(s2.auto)s2.nextAuto+=s2.iv;
+  addSample(t,s2.S);
+}
+function addSample(t,S){
+  if(s2.samples.length>=WELLS)return;
+  const A=Math.max(0,1.10*S+rnd(-.008,.008));
+  s2.samples.push({t,S,A});
+  if(s2.method==='colorimeter'&&s2.ep===null&&A<=0.05){s2.ep=t;amyMsg('Colorimeter end-point reached: A ≤ 0.05 at '+t+' s. You can finish and save the run.','good');}
+  renderTile();drawAmyGraph();
+}
+function finishRun(timeout,why){
+  s2.running=false;
+  const run={no:++s2.runNo,T:s2.T,E:s2.E,method:s2.method,pre:s2.pre,iv:s2.iv,iod:s2.iodHits,ep:s2.ep,samples:s2.samples.slice(),init:s2.init};
+  s2.runs.push(run);const pw=PL2.check(run);s2.pip.hold=null;renderPip();
+  $('#btnMix').disabled=false;$('#btnFinish').disabled=true;
+  ['#selT','#selE','#selMethod','#chkPre','#chkAuto','#selIv'].forEach(i=>$(i).disabled=false);
+  if(run.ep===null)amyMsg((why?why+' ':'')+(timeout?'30 minutes passed without reaching the end-point. ':'')+'Run '+run.no+' saved with no end-point, so its rate is recorded as 0. '+(run.method==='tile'?'If one of the wells has no blue-black colour, click it to add the end-point. ':'')+(s2.T>=55?'At this temperature the amylase is denatured.':''),'bad');
+  else amyMsg('Run '+run.no+' saved: end-point '+run.ep+' s, rate = '+(1000/run.ep).toFixed(2)+' s⁻¹. Change one variable and run again.','good');
+  renderRuns();fillTanRuns();drawAmyGraph();drawBath();
+  if(pw)amyMsg(pw,'bad');else if(run.iod)amyMsg('Run '+run.no+' saved, but iodine got into the reaction tube '+run.iod+' time'+(run.iod>1?'s':'')+'. Treat it as unreliable and repeat it.','bad');
+}
+$('#btnMix').addEventListener('click',startRun);
+$('#btnFinish').addEventListener('click',()=>finishRun(false));
+$('#selT').addEventListener('input',e=>{$('#tVal').textContent=e.target.value;s2.T=+e.target.value;drawBath();});
+$$('[data-speed]').forEach(b=>b.addEventListener('click',()=>{s2.speed=+b.dataset.speed;$$('[data-speed]').forEach(x=>x.setAttribute('aria-pressed',x===b));}));
+function renderTile(){
+  const tile=$('#tile');let h='';
+  for(let i=0;i<WELLS;i++){const s=s2.samples[i];
+    if(s){const ep=s2.ep===s.t;h+=`<button class="well${ep?' ep':''}" data-i="${i}" style="background:radial-gradient(circle at 35% 30%, rgba(255,255,255,.45), rgba(255,255,255,0) 45%), ${iodColour(s.S)}" aria-label="Sample at ${s.t} seconds${s2.method==='colorimeter'?', absorbance '+s.A.toFixed(2):''}"><span class="t">${s.t}s${s2.method==='colorimeter'?' · '+s.A.toFixed(2):''}</span></button>`;}
+    else h+=`<button class="well" data-drop="well" data-well="${i}" aria-label="Empty well with iodine: put a sample here" style="background:radial-gradient(circle at 35% 30%, rgba(255,255,255,.45), rgba(255,255,255,0) 45%), ${iodColour(0)}"></button>`;}
+  tile.innerHTML=h;
+  $$('#tile .well[data-i]').forEach(w=>w.addEventListener('click',()=>{const s=s2.samples[+w.dataset.i];
+    if(s2.method==='colorimeter'){amyMsg('In colorimeter mode the end-point is set objectively (A ≤ 0.05). This well reads A = '+s.A.toFixed(2)+'.');return;}
+    s2.ep=(s2.ep===s.t)?null:s.t;renderTile();
+    if(s2.ep!==null){const st=s.S;amyMsg('End-point marked at '+s.t+' s. '+(st>0.08?'Look again: this well still has a brown tinge of starch.':'Good judgement: no blue-black colour left.')+(s2.running?' Finish the run to save it.':''),st>0.08?'bad':'good');
+      if(!s2.running){const r=s2.runs[s2.runs.length-1];if(r&&r.samples.includes(s)){r.ep=s.t;renderRuns();drawAmyGraph();}}}}));
+}
+function renderScale(){const lv=[[1,'1.00%'],[.6,'0.60%'],[.35,'0.35%'],[.2,'0.20%'],[.1,'0.10%'],[0.03,'0.03%'],[0,'0%']];
+  $('#iodScale').innerHTML=lv.map(([s,l])=>`<div><span class="sw" style="background:${iodColour(s)}"></span>${l}</div>`).join('')+'<div style="flex-basis:100%;align-items:flex-start;font-size:12px">Reference colours: starch concentration in the sample (g per 100 cm³).</div>';}
+function renderRuns(){
+  queueMicrotask(afterRuns);
+  const b=$('#runBody');
+  if(!s2.runs.length){b.innerHTML='<tr><td colspan="6" class="empty">No runs yet. Set the bath, mix, and mark the end-point.</td></tr>';return;}
+  b.innerHTML=s2.runs.map((r,i)=>`<tr><td><span class="chip" style="background:${css(SERIES[i%6])}"></span>${r.no}${r.pre?'':' <span class="tag amber">no pre-inc.</span>'}${r.demo?' <span class="tag">example</span>':''}${r.iod?' <span class="tag amber">iodine in tube</span>':''}${r.planBreak?' <span class="tag amber">not a fair test</span>':''}</td><td class="num">${r.T}</td><td class="num">${r.E.toFixed(2)}</td><td>${r.method==='tile'?'Tile':'Colorimeter'}</td><td class="num">${r.ep===null?'not reached':r.ep}</td><td class="num">${r.ep===null?'0':(1000/r.ep).toFixed(2)}</td></tr>`).join('');
+}
+$('#btnClearRuns').addEventListener('click',()=>{s2.runs=[];s2.runNo=0;PL2.P.base=null;renderRuns();fillTanRuns();drawAmyGraph();});
+$('#btnDemo').addEventListener('click',()=>{
+  // simulate a temperature series with colorimeter, 1% amylase, pre-incubated
+  [10,20,30,40,45,50,60,70].forEach(T=>{let S=1,act=Math.exp(-kd(T)*300),t=0,ep=null;const samples=[];
+    for(let ts=0;ts<=TMAX;ts+=30){while(t<ts){S=Math.max(0,S-rateAt(S,1,T,act)*0.5);act*=Math.exp(-kd(T)*0.5);t+=0.5;}
+      const A=Math.max(0,1.10*S+rnd(-.008,.008));samples.push({t:ts,S,A});if(ep===null&&A<=0.05)ep=ts;}
+    s2.runs.push({no:++s2.runNo,T,E:1,method:'colorimeter',pre:true,iv:30,iod:0,ep,samples,init:-1.10*rateAt(1,1,T,Math.exp(-kd(T)*300))*60,demo:true});});
+  renderRuns();fillTanRuns();setGraph('temp');amyMsg('Loaded 8 example runs (10–70 °C, 1.00% amylase, colorimeter, sampled every 30 s). Look at the rate against temperature graph.');});
+function setGraph(g){s2.graph=g;$$('[data-g]').forEach(x=>x.setAttribute('aria-pressed',x.dataset.g===g));$('#tangentBox').hidden=g!=='progress';if(SK.cv===$('#amyGraph'))stopSketch();drawAmyGraph();updPoe2();}
+$$('[data-g]').forEach(b=>b.addEventListener('click',()=>setGraph(b.dataset.g)));
+function fillTanRuns(){const sel=$('#selTanRun');const prev=sel.value;const cr=s2.runs.filter(r=>r.method==='colorimeter');
+  sel.innerHTML=cr.length?cr.map(r=>`<option value="${r.no}">Run ${r.no} · ${r.T} °C · ${r.E.toFixed(2)}%</option>`).join(''):'<option value="">No colorimeter runs yet</option>';
+  if(cr.some(r=>String(r.no)===prev))sel.value=prev;else if(cr.length)sel.value=cr[cr.length-1].no;$('#tanMsg').textContent='';$('#tanMsg').className='msg';drawAmyGraph();}
+$('#selTanRun').addEventListener('change',drawAmyGraph);
+$('#tanSlope').addEventListener('input',e=>{$('#tanVal').textContent='−'+(+e.target.value).toFixed(2);drawAmyGraph();});
+$('#btnTan').addEventListener('click',()=>{const r=s2.runs.find(x=>String(x.no)===$('#selTanRun').value);const m=$('#tanMsg');
+  if(!r){m.className='msg bad';m.textContent='Do a colorimeter run first.';return;}
+  const g=-(+$('#tanSlope').value),t=r.init,err=Math.abs(g-t)/Math.abs(t||1);
+  m.className='msg '+(err<=0.15?'good':'bad');
+  m.textContent=err<=0.15?`Good tangent. Initial rate ≈ ${Math.abs(t).toFixed(2)} absorbance units per minute; yours is ${Math.abs(g).toFixed(2)}.`:
+    (Math.abs(g)<Math.abs(t)?'Too shallow. The tangent should touch the curve only at t = 0 and match its steepest slope.':'Too steep. The tangent should lie along the curve right at the start, not cut through it.');});
+function drawAmyGraph(){
+  const cv=$('#amyGraph'),lg=$('#amyLegend');
+  if(s2.graph==='progress'){
+    const series=[];const legend=[];
+    s2.runs.forEach((r,i)=>{if(r.method!=='colorimeter')return;const col=css(SERIES[i%6]);series.push({pts:r.samples.map(s=>[s.t/60,s.A]),color:col,line:true,r:3});legend.push(`<span><i style="background:${col}"></i>Run ${r.no} · ${r.T} °C · ${r.E.toFixed(2)}%</span>`);});
+    if(s2.running&&s2.method==='colorimeter'){series.push({pts:s2.samples.map(s=>[s.t/60,s.A]),color:css('--ink'),line:true,r:3});legend.push(`<span><i style="background:var(--ink)"></i>Current run</span>`);}
+    const lines=[];const tr=s2.runs.find(x=>String(x.no)===$('#selTanRun').value);
+    if(tr&&tr.samples.length){const t0=tr.samples[0].t/60,a0=tr.samples[0].A,g=Math.max(+$('#tanSlope').value,0.005);lines.push({x1:0,y1:a0+g*t0,x2:t0+a0/g,y2:0,color:css('--amber'),w:2,dash:[7,4]});legend.push(`<span><i style="background:var(--amber)"></i>Your tangent (run ${tr.no})</span>`);}
+    if(PRED.progress){series.push({pts:PRED.progress,color:css('--c5'),line:true,noPts:true,dash:[6,5]});legend.push('<span><i style="background:var(--c5)"></i>Your prediction</span>');}
+    cv.classList.toggle('dragline',!!tr&&SK.cv!==cv);
+    plot(cv,{xMax:progXMax(),yMax:1.2,xStep:null,yStep:.2,xLabel:'Time / min',yLabel:'Absorbance (starch remaining)',series,lines,empty:series.length?null:'Colorimeter runs appear here'});
+    lg.innerHTML=legend.join('');
+  }else{
+    const key=s2.graph==='temp'?'T':'E';
+    const pts=s2.runs.map((r,i)=>({x:r[key],y:r.ep===null?0:1000/r.ep,i}));
+    const series=pts.map(p=>({pts:[[p.x,p.y]],color:css(SERIES[p.i%6]),r:5}));const pk=s2.graph;if(PRED[pk])series.push({pts:PRED[pk],color:css('--c5'),line:true,noPts:true,dash:[6,5]});cv.classList.remove('dragline');
+    const ymax=Math.max(4,...pts.map(p=>p.y))*1.15;
+    if(key==='T')plot(cv,{xMin:0,xMax:80,xStep:10,yMax:Math.ceil(ymax),xLabel:'Temperature / °C',yLabel:'Rate = 1000 ÷ end-point time / s⁻¹',series,empty:pts.length?null:'Save runs at different temperatures'});
+    else plot(cv,{xMin:0,xMax:1.2,xStep:.25,yMax:Math.ceil(ymax),xLabel:'Amylase concentration / %',yLabel:'Rate = 1000 ÷ end-point time / s⁻¹',xFmt:v=>v.toFixed(2),series,empty:pts.length?null:'Save runs with different amylase concentrations'});
+    lg.innerHTML=(pts.length?'<span>Each point is one run, coloured as in the results table. Change only one variable at a time.</span>':'')+(PRED[pk]?'<span><i style="background:var(--c5)"></i>Your prediction</span>':'');
+  }
+}
+function drawBath(){
+  const T=s2.running?s2.T:+$('#selT').value;const hot=clamp((T-10)/60,0,1);
+  const mixCol=s2.running?'#EFE9D8':css('--glass');
+  $('#bathSvg').innerHTML=`
+  <rect x="40" y="58" width="360" height="126" rx="8" fill="${css('--inst')}"/>
+  <rect x="50" y="78" width="340" height="96" rx="4" fill="${css('--water')}"/>
+  ${[0,1,2,3,4].map(i=>`<path d="M${70+i*60} 88 q10 -6 20 0 t20 0" stroke="${css('--surface')}" stroke-width="1.5" fill="none" opacity=".6"/>`).join('')}
+  <rect x="50" y="166" width="340" height="8" fill="${lerpHex('#3B6EA8','#D9382E',hot)}" opacity=".55"/>
+  ${s2.running?`<g><rect x="190" y="28" width="30" height="130" rx="15" fill="${mixCol}" stroke="#9FB4B8" stroke-width="2"/><text x="205" y="22" text-anchor="middle" font-size="12" fill="${css('--ink')}">reaction mixture</text></g>`:
+  `<g><rect x="140" y="28" width="30" height="130" rx="15" fill="#F4F1E6" stroke="#9FB4B8" stroke-width="2"/><text x="155" y="22" text-anchor="middle" font-size="12" fill="${css('--ink')}">1% starch</text>
+   <rect x="250" y="28" width="30" height="130" rx="15" fill="#F2F0E2" stroke="#9FB4B8" stroke-width="2"/><text x="265" y="22" text-anchor="middle" font-size="12" fill="${css('--ink')}">amylase</text></g>`}
+  <rect x="330" y="20" width="10" height="140" rx="5" fill="${css('--surface')}" stroke="#9FB4B8"/><rect x="332" y="${150-hot*110}" width="6" height="${hot*110+8}" fill="#D9382E"/><circle cx="335" cy="162" r="9" fill="#D9382E"/>
+  <rect x="420" y="70" width="120" height="70" rx="8" fill="${css('--lcd')}"/>
+  <text x="480" y="102" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="24" font-weight="700" fill="${css('--lcd-ink')}">${T.toFixed(0)} °C</text>
+  <text x="480" y="126" text-anchor="middle" font-size="11" fill="${css('--lcd-ink')}" opacity=".75">${s2.running&&!s2.pre?'mixture '+s2.Tm.toFixed(0)+' °C':'bath set point'}</text>
+  <text x="220" y="198" text-anchor="middle" font-size="12" fill="${css('--muted')}">thermostatically controlled water bath</text>`;
+}
+setInterval(()=>{if(s2.running&&!s2.pre)drawBath();},800);
+
+function progXMax(){let m=0;s2.runs.forEach(r=>{if(r.method==='colorimeter'&&r.samples.length)m=Math.max(m,r.samples[r.samples.length-1].t);});if(s2.running)m=Math.max(m,s2.t);return Math.max(10,Math.ceil(m/60/5)*5);}
+
+/* --- dropping pipette --- */
+function renderPip(){
+  const p=s2.pip;
+  $('#pipette').innerHTML=`<svg viewBox="0 0 28 104" aria-hidden="true"><rect x="7" y="2" width="14" height="26" rx="7" fill="${css('--c2')}"/><path d="M10 28 h8 v54 l-3 18 h-2 l-3 -18z" fill="${css('--glass')}" stroke="#9FB4B8" stroke-width="1.5"/>${p.hold?'<path d="M10.8 58 h6.4 v24 l-2.6 16 h-1.2 l-2.6 -16z" fill="#E6DCBC"/>':''}${p.iodine?'<path d="M12.4 92 h3.2 l-0.8 7 h-1.6z" fill="#7E4A35"/>':''}</svg>`;
+  $('#pipState').textContent=(p.hold?'holds sample from '+p.hold.t+' s':'empty')+', '+(p.iodine?'iodine on the tip':'clean');
+}
+function pipDrop(t){
+  const p=s2.pip;
+  if(t.id==='tube'){
+    if(!s2.running){amyMsg('Mix the starch and amylase first.','bad');return;}
+    if(p.hold){amyMsg('The pipette is already full. Put a drop into an empty well.','bad');return;}
+    if(p.iodine){s2.act*=0.8;s2.iodHits++;amyMsg('Iodine on the pipette tip went into the reaction tube. Iodine slows amylase, so this run is now unreliable. Rinse the pipette in distilled water after every well.','bad');}
+    else amyMsg('Sample drawn up at '+Math.round(s2.t)+' s. Now drop it into an empty well.');
+    p.hold={t:Math.round(s2.t),S:s2.S};
+  }else if(t.id==='rinse'){
+    amyMsg(p.hold?'You emptied the sample into the rinse water. Draw up a new one from the tube.':'Pipette rinsed in distilled water. Ready for the next sample.',p.hold?'':'good');
+    p.hold=null;p.iodine=false;
+  }else if(t.dataset.well!=null){
+    if(!p.hold){amyMsg('The pipette is empty. Draw up a sample from the reaction tube first.','bad');return;}
+    if(s2.samples.length>=WELLS){amyMsg('The tile is full.','bad');return;}
+    const late=s2.running&&s2.t-p.hold.t>10;const S=s2.running?s2.S:p.hold.S;const before=s2.ep;
+    addSample(p.hold.t,S);p.hold=null;p.iodine=true;
+    if(s2.ep===before)amyMsg(late?'Drop added, but it sat in the pipette for more than 10 s and kept reacting, so it does not match the time you recorded. Transfer quickly. Rinse the pipette now.':'Drop added. The tip touched the iodine, so rinse the pipette before the next sample.',late?'bad':'');
+  }
+  renderPip();
+}
+makeMovable($('#pipette'),{onDrop:pipDrop});
+
+/* --- planner --- */
+const PL2=makePlanner({id:'p2',el:'#plan2',
+  intro:'Decide what you will change, what you will measure and what you will keep the same. Once you lock the plan, every saved run is checked against it.',
+  ivs:[{v:'T',label:'Temperature of the water bath'},{v:'E',label:'Concentration of amylase'}],
+  ivShort:{T:'Temp / °C',E:'Amylase / %'},
+  dvs:[{v:'ep',label:'Time taken to reach the end-point',ok:true},{v:'col',label:'Colour of the iodine solution at the start'},{v:'vol',label:'Volume of starch solution used'}],
+  dvHint:'You measure the time taken for the iodine test to stop giving a blue-black colour.',
+  cvs:[{v:'T',label:'Temperature'},{v:'E',label:'Amylase concentration'},{v:'starch',label:'Starch concentration and volume'},{v:'vamy',label:'Volume of amylase'},{v:'pH',label:'pH (same buffer in every tube)'},{v:'iod',label:'Volume of iodine in each well'},{v:'ivl',label:'Time between samples'},{v:'judge',label:'How the end-point is judged'},{v:'pre',label:'Pre-incubation time'},{v:'tile',label:'Colour of the spotting tile',real:false},{v:'day',label:'Day of the week',real:false}],
+  runKeys:[{k:'T',label:'temperature'},{k:'E',label:'amylase concentration'},{k:'method',label:'method'},{k:'pre',label:'pre-incubation'}],
+  fmt:(k,v)=>k==='T'?v+' °C':k==='E'?(+v).toFixed(2)+'%':k==='method'?(v==='tile'?'spotting tile':'colorimeter'):k==='pre'?(v?'yes':'no'):String(v),
+  value:r=>r.ep===null?0:1000/r.ep,valueLabel:'Rate = 1000 ÷ t / s⁻¹',dec:2,runs:()=>s2.runs});
+function afterRuns(){if(PL2.P.locked)PL2.render();updPoe2();}
+
+/* --- predict, observe, explain --- */
+function lastColRun(){for(let i=s2.runs.length-1;i>=0;i--)if(s2.runs[i].method==='colorimeter')return s2.runs[i];return null;}
+function groupMeans(key){const m=new Map();s2.runs.forEach(r=>{const v=r[key];if(!m.has(v))m.set(v,[]);m.get(v).push(r.ep===null?0:1000/r.ep);});return [...m.entries()].map(([x,a])=>[+x,a.reduce((q,y)=>q+y,0)/a.length]).sort((a,b)=>a[0]-b[0]);}
+const POE2={
+  progress:{prompt:'Before you mix: sketch how the absorbance (starch remaining) will change with time at your chosen temperature. Then do a colorimeter run to compare.',
+    has:()=>!!lastColRun(),
+    fb:()=>{const p=PRED.progress,r=lastColRun();if(!p||!r)return '';
+      const x0=p[0][0];let xz=p[p.length-1][0];const reached=p.some(q=>q[1]<=0.06);for(const q of p){if(q[1]<=0.06){xz=q[0];break;}}
+      const span=xz-x0;let shape='';
+      if(span>0.2){const e=(interp(p,x0)-interp(p,x0+span*.25))/(span*.25),l=(interp(p,x0+span*.5)-interp(p,x0+span*.75))/(span*.25);
+        shape=e>l*1.4?'Your curve is steepest at the start and then flattens, like the real one.':'Your curve is close to a straight line, or gets steeper. The real curve is steepest at the start and levels off as the starch runs out.';}
+      const te=r.ep!=null?r.ep/60:null;let timing='';
+      if(te!=null)timing=reached?`You predicted the starch would be used up at about ${xz.toFixed(1)} min. Run ${r.no} (${r.T} °C) reached the end-point at ${te.toFixed(1)} min.`:`Your sketch never reaches zero, but in run ${r.no} the starch was used up by ${te.toFixed(1)} min.`;
+      return '<b>Observed:</b> '+shape+' '+timing;},
+    model:'The curve is steepest at the start because starch concentration is highest, so active sites are almost always occupied and enzyme–substrate complexes form most often. As starch is hydrolysed to maltose there are fewer substrate molecules, collisions with active sites become less frequent and the rate falls. The curve levels off at zero when no starch is left. A higher temperature (up to the optimum) or more amylase makes the whole curve steeper.'},
+  temp:{prompt:'Sketch how the rate will change from 0 to 80 °C. Then save runs at 4 or more temperatures, or load the class data.',
+    has:()=>groupMeans('T').length>=4,
+    fb:()=>{const p=PRED.temp,g=groupMeans('T');if(!p||g.length<4)return '';
+      let pk=g[0];g.forEach(q=>{if(q[1]>pk[1])pk=q;});let pp=p[0];p.forEach(q=>{if(q[1]>pp[1])pp=q;});
+      const half=pp[1]/2;let lx=null,rx=null;for(const q of p){if(q[0]<pp[0]&&q[1]>=half&&lx===null)lx=q[0];if(q[0]>pp[0]&&q[1]<=half&&rx===null)rx=q[0];}
+      let asym='';
+      if(rx===null)asym='Above the optimum your sketch does not fall to half its peak, but the data drop to almost zero by 60 °C.';
+      else if(lx!==null)asym=(rx-pp[0])<(pp[0]-lx)?'Your curve falls more steeply after the optimum than it rises before it, which matches the data.':'Your curve is fairly symmetrical. The data fall much more steeply above the optimum than they rise below it.';
+      return `<b>Observed:</b> you predicted the fastest rate at about ${Math.round(pp[0])} °C; your data peak at ${pk[0]} °C. ${asym}`;},
+    model:'Rate rises with temperature because molecules have more kinetic energy, so enzyme–substrate collisions are more frequent and more energetic. Above the optimum (about 45 °C here) amylase is denatured: hydrogen and ionic bonds holding its tertiary structure break, the active site changes shape and starch no longer fits. The fall above the optimum is steeper than the rise because denaturation is rapid and cannot be reversed.'},
+  conc:{prompt:'Sketch how the rate will change as amylase concentration rises from 0 to 1.2%. Then save runs at 3 concentrations, all at the same temperature.',
+    has:()=>groupMeans('E').length>=3,
+    fb:()=>{const p=PRED.conc,g=groupMeans('E');if(!p||g.length<3)return '';const lo=g[0],hi=g[g.length-1];
+      const dr=hi[1]/(lo[1]||1e-9),a=interp(p,lo[0]),b=interp(p,hi[0]),pr=a>0.05?b/a:null;
+      return `<b>Observed:</b> from ${lo[0].toFixed(2)}% to ${hi[0].toFixed(2)}% amylase, the rate in your data rose ${dr.toFixed(1)}×. ${pr===null?'Your sketch starts at zero there, so compare the shapes instead.':'Your sketch rose '+pr.toFixed(1)+'×.'}`;},
+    model:'With starch in excess, doubling the amylase concentration doubles the number of active sites available. Enzyme–substrate complexes form twice as often, so the rate roughly doubles: rate is proportional to enzyme concentration. The line would only level off if starch became the limiting factor.'}};
+const updPoe2=makePoe({el:'#poe2',cv:'#amyGraph',key:()=>s2.graph,prompt:k=>POE2[k].prompt,hasData:k=>POE2[k].has(),feedback:k=>POE2[k].fb(),model:k=>POE2[k].model,redraw:()=>drawAmyGraph()});
+sketchable($('#amyGraph'),()=>drawAmyGraph());
+
+/* --- drag the tangent on the graph --- */
+(function(){
+  const cv=$('#amyGraph');let drag=false;
+  const tanRun=()=>s2.runs.find(x=>String(x.no)===$('#selTanRun').value);
+  const set=e=>{const tr=tanRun();const d=toData(cv,e);if(!tr||!tr.samples.length||!d)return;const t0=tr.samples[0].t/60,a0=tr.samples[0].A;if(d[0]-t0<0.05)return;
+    const g=clamp((a0-d[1])/(d[0]-t0),0,1.6);$('#tanSlope').value=g.toFixed(2);$('#tanVal').textContent='−'+g.toFixed(2);drawAmyGraph();};
+  cv.addEventListener('pointerdown',e=>{if(SK.cv===cv||s2.graph!=='progress'||!tanRun())return;drag=true;try{cv.setPointerCapture(e.pointerId);}catch(_){}set(e);});
+  cv.addEventListener('pointermove',e=>{if(drag)set(e);});
+  ['pointerup','pointercancel'].forEach(t=>cv.addEventListener(t,()=>{drag=false;}));
+})();
+
+/* --- molecule view --- */
+const MOL={sub:[],enz:[],prod:[],last:0,NE:0,w:0,h:0,dpr:1,wasRun:false,vis:true,init:false,col:{},stat:''};
+const N0=34;
+function molColours(){MOL.col={enz:css('--c1'),den:css('--muted'),sub:css('--c3'),prod:css('--c2')};}
+function molState(){if(s2.running)return {T:s2.Tm,E:s2.E,act:s2.act,S:s2.S,run:true};const T=+$('#selT').value,E=+$('#selE').value;return {T,E,act:$('#chkPre').checked?Math.exp(-kd(T)*300):1,S:1,run:false};}
+const rv=()=>{const a=Math.random()*6.283;return [Math.cos(a),Math.sin(a)];};
+function newSub(edge){const [vx,vy]=rv();let x=Math.random()*MOL.w,y=Math.random()*MOL.h;if(edge){if(Math.random()<.5)x=Math.random()<.5?6:MOL.w-6;else y=Math.random()<.5?6:MOL.h-6;}return {x,y,vx,vy,a:Math.random()*6.283,cd:0};}
+function molEnz(E){const NE=Math.max(2,Math.round(6*E));if(NE===MOL.NE)return;const old=MOL.enz;MOL.enz=[];for(let i=0;i<NE;i++){const [vx,vy]=rv();MOL.enz.push(old[i]||{x:30+Math.random()*(MOL.w-60),y:30+Math.random()*(MOL.h-60),vx,vy,a:Math.random()*6.283,busy:0,ph:Math.random()*6.283});}MOL.NE=NE;}
+function molResize(){const cv=$('#molCanvas');const w=cv.clientWidth,h=cv.clientHeight;if(!w||!h)return false;const dpr=window.devicePixelRatio||1;
+  if(w!==MOL.w||h!==MOL.h||dpr!==MOL.dpr){cv.width=w*dpr;cv.height=h*dpr;if(MOL.w){const sx=w/MOL.w,sy=h/MOL.h;[].concat(MOL.sub,MOL.enz,MOL.prod).forEach(p=>{p.x*=sx;p.y*=sy;});}MOL.w=w;MOL.h=h;MOL.dpr=dpr;}return true;}
+function molMove(p,sp,dt){const tn=(Math.random()-.5)*3*dt,c=Math.cos(tn),sn=Math.sin(tn),vx=p.vx*c-p.vy*sn;p.vy=p.vx*sn+p.vy*c;p.vx=vx;p.x+=p.vx*sp*dt;p.y+=p.vy*sp*dt;
+  if(p.x<6){p.x=6;p.vx=Math.abs(p.vx);}if(p.x>MOL.w-6){p.x=MOL.w-6;p.vx=-Math.abs(p.vx);}if(p.y<6){p.y=6;p.vy=Math.abs(p.vy);}if(p.y>MOL.h-6){p.y=MOL.h-6;p.vy=-Math.abs(p.vy);}p.a+=(Math.random()-.5)*2*dt;}
+function molFrame(now){
+  requestAnimationFrame(molFrame);
+  const dt=Math.min(.05,Math.max(0,(now-(MOL.last||now))/1000));MOL.last=now;
+  if($('#st-amylase').hidden||!MOL.vis||!molResize())return;
+  const st=molState();
+  if(!MOL.init){MOL.init=true;molEnz(st.E);MOL.sub=Array.from({length:N0},()=>newSub(false));}
+  molEnz(st.E);
+  if(st.run&&!MOL.wasRun){MOL.sub=Array.from({length:N0},()=>newSub(false));MOL.prod=[];MOL.enz.forEach(e=>e.busy=0);}
+  MOL.wasRun=st.run;
+  const T=st.T,still=RM.matches,sp=still?0:16+(T-10)*1.25,R=Math.max(12,Math.min(22,MOL.w/24));
+  const nDen=Math.round(MOL.NE*(1-st.act));
+  MOL.sub.forEach(p=>{molMove(p,sp,dt);p.cd=Math.max(0,p.cd-dt);});
+  MOL.prod.forEach(p=>molMove(p,sp*1.1,dt));
+  MOL.enz.forEach((e,i)=>{molMove(e,sp*.3,dt);if(!still)e.a+=dt*.5;e.den=i<nDen;
+    if(e.busy>0){e.busy-=dt;if(e.busy<=0||e.den){e.busy=0;const sx=e.x+Math.cos(e.a)*R,sy=e.y+Math.sin(e.a)*R;for(const off of [-.6,.6])MOL.prod.push({x:sx,y:sy,vx:Math.cos(e.a+off),vy:Math.sin(e.a+off),a:Math.random()*6.283});if(!st.run)MOL.sub.push(newSub(true));}}});
+  const busy=MOL.enz.filter(e=>e.busy>0).length,target=st.run?Math.round(N0*st.S):N0;
+  let excess=MOL.sub.length+busy-target;
+  MOL.enz.forEach(e=>{if(e.den||e.busy>0)return;const ax=e.x+Math.cos(e.a)*R*.75,ay=e.y+Math.sin(e.a)*R*.75,br=st.run&&excess>3?R*1.5:R*.7;
+    for(let j=0;j<MOL.sub.length;j++){const q=MOL.sub[j];if(q.cd>0)continue;if(Math.hypot(q.x-ax,q.y-ay)<br){
+      const ok=st.run?excess>0:Math.random()<clamp(.3*fT(T),.04,1);
+      if(ok){MOL.sub.splice(j,1);e.busy=.5/clamp(fT(T),.4,2.5);excess--;}else q.cd=.8;break;}}});
+  if(st.run&&excess>6){for(let k=0;k<excess-6&&MOL.sub.length;k++){const q=MOL.sub.splice(Math.floor(Math.random()*MOL.sub.length),1)[0];MOL.prod.push({x:q.x,y:q.y,vx:q.vx,vy:q.vy,a:0},{x:q.x+5,y:q.y,vx:-q.vx,vy:-q.vy,a:0});}}
+  if(!st.run&&MOL.sub.length+busy<N0&&Math.random()<dt*5)MOL.sub.push(newSub(true));
+  while(MOL.prod.length>(st.run?70:24))MOL.prod.shift();
+  const cv=$('#molCanvas'),c=cv.getContext('2d');c.setTransform(MOL.dpr,0,0,MOL.dpr,0,0);c.clearRect(0,0,MOL.w,MOL.h);
+  const C=MOL.col,jit=still?0:(T>40?(T-40)*.07:.15);
+  c.fillStyle=C.prod;MOL.prod.forEach(p=>{for(let k=0;k<2;k++){c.beginPath();c.arc(p.x+Math.cos(p.a)*k*6,p.y+Math.sin(p.a)*k*6,3,0,6.283);c.fill();}});
+  c.fillStyle=C.sub;MOL.sub.forEach(p=>{for(let k=-1;k<=1;k++){c.beginPath();c.arc(p.x+Math.cos(p.a)*k*7,p.y+Math.sin(p.a)*k*7,3.6,0,6.283);c.fill();}});
+  MOL.enz.forEach(e=>{c.save();c.translate(e.x+(Math.random()-.5)*2*jit,e.y+(Math.random()-.5)*2*jit);
+    if(e.den){c.globalAlpha=.55;c.fillStyle=C.den;c.beginPath();for(let k=0;k<=14;k++){const an=k/14*6.283,rr=R*(.78+.22*Math.sin(k*2.7+e.ph+(still?0:now/400)));if(k)c.lineTo(Math.cos(an)*rr,Math.sin(an)*rr);else c.moveTo(Math.cos(an)*rr,Math.sin(an)*rr);}c.closePath();c.fill();}
+    else{c.globalAlpha=.92;c.rotate(e.a);c.fillStyle=C.enz;c.beginPath();c.arc(0,0,R,.45,6.283-.45);c.lineTo(R*.42,-R*.2);c.lineTo(R*.42,R*.2);c.closePath();c.fill();
+      if(e.busy>0){c.globalAlpha=1;c.fillStyle=C.sub;for(let k=-1;k<=1;k++){c.beginPath();c.arc(R*.72,k*R*.2,R*.13,0,6.283);c.fill();}}}
+    c.restore();});
+  const stat=`${T.toFixed(0)} °C · active amylase ${MOL.NE-nDen} of ${MOL.NE} · starch ${MOL.sub.length+busy} · maltose ${MOL.prod.length}${st.run?'':' · preview'}`;
+  if(stat!==MOL.stat){MOL.stat=stat;$('#molStat').textContent=stat;}
+}
+function molInit(){
+  molColours();
+  $('#molLegend').innerHTML='<span><i style="background:var(--c1)"></i>amylase (notch = active site)</span><span><i style="background:var(--c3)"></i>starch</span><span><i style="background:var(--c2)"></i>maltose</span><span><i style="background:var(--muted)"></i>denatured amylase</span><span id="molStat" style="flex-basis:100%;font-family:var(--mono);font-size:12px"></span>';
+  if('IntersectionObserver' in window)new IntersectionObserver(es=>{MOL.vis=es[es.length-1].isIntersecting;}).observe($('#molCanvas'));
+  requestAnimationFrame(molFrame);
+}
+
+/* =========================================================
+   STATION 3 · IMMOBILISED LACTASE (PA 3.2)
+   ========================================================= */
+const BANDS=[0,5.5,14,28,55,111];
+const BANDCOL=['#86CFD8','#8FC9A2','#A7B85C','#8F8A36','#7C5C2A','#573A1F'];
+function stripColour(g){if(g<=0)return BANDCOL[0];for(let i=1;i<BANDS.length;i++){if(g<=BANDS[i]){return lerpHex(BANDCOL[i-1],BANDCOL[i],(g-BANDS[i-1])/(BANDS[i]-BANDS[i-1]));}}return BANDCOL[5];}
+const s3={step:1,maxStep:1,added:false,stirred:false,nozzle:3,height:10,beads:[],hardened:false,rinsed:null,mesh:false,clamp:false,poured:false,column:'lactase',flow:5,temp:20,uses:0,runs:[],pending:null,heat:[]};
+const STEPS=['Mix enzyme + alginate','Form beads','Harden and rinse','Pack the column','Run milk and test','Reuse the column'];
+function immMsg(t,k){const m=$('#immMsg');m.textContent=t;m.className='msg'+(k?' '+k:'');}
+function renderSteps(){
+  $('#steps').innerHTML=STEPS.map((s,i)=>{const n=i+1;return `<button data-step="${n}" ${n>s3.maxStep?'disabled':''} ${n===s3.step?'aria-current="step"':''} class="${n<s3.maxStep&&n!==s3.step?'done':''}">${n} · ${s}</button>`;}).join('');
+  $$('#steps [data-step]').forEach(b=>b.addEventListener('click',()=>{s3.step=+b.dataset.step;renderAll3();}));
+}
+function unlock(n){if(s3.maxStep<n)s3.maxStep=n;}
+function beaker(x,y,w,h,fill,label){return `<path d="M${x} ${y} v${h} q0 10 10 10 h${w-20} q10 0 10 -10 v-${h}" fill="${css('--glass')}" stroke="#9FB4B8" stroke-width="2"/>
+  <rect x="${x+2}" y="${y+h*0.35}" width="${w-4}" height="${h*0.65+8}" rx="8" fill="${fill}" opacity=".9"/>
+  <text x="${x+w/2}" y="${y+h+30}" text-anchor="middle" font-size="12" fill="${css('--ink')}">${label}</text>`;}
+function beadsSvg(x0,y0,w,h,max){const r=s3.nozzle*1.6,st='fill="#E8DFA8" stroke="#B9A75A" stroke-width="1"';return s3.beads.slice(0,max).map(b=>{const x=x0+b.x*w,y=y0+b.y*h;
+  if(b.q==='merged')return `<ellipse cx="${x}" cy="${y}" rx="${r*2.3}" ry="${r*1.3}" ${st}/>`;
+  if(b.q==='flat')return `<ellipse cx="${x}" cy="${y}" rx="${r*1.5}" ry="${r*.55}" ${st}/>`;
+  if(b.q==='tail')return `<path d="M${x-r} ${y} a${r} ${r} 0 1 0 ${2*r} 0 L${x} ${y-r*2.6} Z" ${st}/>`;
+  return `<circle cx="${x}" cy="${y}" r="${r}" ${st}/>`;}).join('');}
+function scene3(){
+  const ink=css('--ink'),mut=css('--muted');let g='';
+  if(s3.step===1){
+    g+=beaker(60,70,120,110,'#EDE6C8','2% sodium alginate (10 cm³)');
+    g+=`<rect x="250" y="40" width="34" height="120" rx="16" fill="${css('--glass')}" stroke="#9FB4B8" stroke-width="2"/><rect x="252" y="${s3.added?150:80}" width="30" height="${s3.added?8:78}" rx="10" fill="#F6E7B4"/><text x="267" y="190" text-anchor="middle" font-size="12" fill="${ink}">lactase solution</text>`;
+    g+=beaker(360,70,140,110,s3.stirred?'#EFE3AE':s3.added?'#F0E9CC':css('--glass'),'mixture');
+    if(s3.added&&!s3.stirred)g+=`<path d="M380 140 q20 -10 40 0 t40 0" stroke="#E7C873" stroke-width="5" fill="none" opacity=".8"/>`;
+    if(s3.stirred)g+=`<line x1="430" y1="40" x2="470" y2="170" stroke="${mut}" stroke-width="4" stroke-linecap="round"/>`;
+  }else if(s3.step===2){
+    const d=s3.nozzle;
+    g+=`<rect x="250" y="8" width="40" height="110" rx="4" fill="${css('--glass')}" stroke="#9FB4B8" stroke-width="2"/><rect x="252" y="40" width="36" height="76" fill="#EFE3AE"/><rect x="262" y="118" width="16" height="10" fill="#9FB4B8"/><rect x="${270-d}" y="128" width="${2*d}" height="12" fill="#9FB4B8"/>
+    <text x="300" y="60" font-size="12" fill="${ink}">syringe: enzyme–alginate mixture</text>
+    <line x1="430" y1="140" x2="430" y2="182" stroke="${mut}"/><text x="436" y="165" font-size="11" fill="${mut}">≈10 cm drop</text>
+    <circle id="dropAnim" cx="270" cy="150" r="${d*1.6}" fill="#EFE3AE" opacity="0"/>`;
+    g+=beaker(170,150,200,70,css('--water'),'1.5% calcium chloride solution');
+    g+=beadsSvg(185,205,170,22,120);
+  }else if(s3.step===3){
+    g+=beaker(60,90,170,100,css('--water'),s3.hardened?'beads hardened (10 min)':'calcium chloride with beads');
+    g+=beadsSvg(72,150,146,40,120);
+    g+=`<path d="M320 70 h160 l-50 70 v40 h-60 v-40 z" fill="none" stroke="#9FB4B8" stroke-width="2"/><text x="400" y="60" text-anchor="middle" font-size="12" fill="${ink}">tea strainer over sink</text>`;
+    if(s3.rinsed!==null)g+=s3.beads.slice(0,60).map(b=>`<circle cx="${350+b.x*100}" cy="${78+b.y*40}" r="${s3.nozzle*1.6}" fill="#E8DFA8" stroke="#B9A75A"/>`).join('')+(s3.rinsed?`<path d="M400 20 v40" stroke="#6EB5D4" stroke-width="3" stroke-dasharray="4 4"/><text x="408" y="35" font-size="11" fill="${mut}">distilled water</text>`:'');
+  }else{
+    // column (steps 4-6)
+    const filled=s3.poured;
+    g+=`<line x1="150" y1="10" x2="150" y2="250" stroke="${mut}" stroke-width="4"/><rect x="150" y="40" width="70" height="10" fill="${mut}"/>`+
+      `<rect x="220" y="20" width="56" height="170" rx="3" fill="${css('--glass')}" stroke="#9FB4B8" stroke-width="2"/>`+
+      (s3.mesh?`<line x1="222" y1="178" x2="274" y2="178" stroke="${mut}" stroke-width="3" stroke-dasharray="3 2"/>`:'')+
+      `<path d="M240 190 v14 h16 v-14" fill="${css('--glass')}" stroke="#9FB4B8" stroke-width="2"/><rect x="232" y="198" width="32" height="8" rx="2" fill="${s3.step>=5?css('--accent'):mut}"/>`+
+      (filled?Array.from({length:Math.min(60,s3.beads.length)},(_,i)=>`<circle cx="${228+(i%6)*8+(Math.floor(i/6)%2)*4}" cy="${173-Math.floor(i/6)*9}" r="4" fill="${s3.column==='control'&&s3.step>=5?'#DCDCD0':'#E8DFA8'}" stroke="#B9A75A"/>`).join(''):'')+
+      `<text x="288" y="70" font-size="12" fill="${ink}">${s3.step>=5&&s3.column==='control'?'control beads (no lactase)':'alginate beads with lactase'}</text>`+
+      `<text x="270" y="216" font-size="12" fill="${ink}">tap sets flow rate</text>`;
+    if(s3.step>=5){
+      g+=`<path d="M210 0 q30 10 38 22" stroke="#F4F2EA" stroke-width="10" fill="none" opacity="${s3.pending==='running'?1:.0}"/>`+
+        `<rect x="222" y="${s3.pending==='running'?24:999}" width="52" height="20" fill="#F4F2EA" opacity=".9"/>`+
+        beaker(205,222,86,20,'#F4F2EA','')+
+        `<text x="420" y="210" text-anchor="middle" font-size="12" fill="${ink}">milk out: ${s3.pending&&s3.pending!=='running'?'collected':s3.pending==='running'?'dripping…':'waiting'}</text>`;
+      if(s3.pending==='running')g+=`<circle cx="248" cy="212" r="3" fill="#F4F2EA"><animate attributeName="cy" from="208" to="236" dur=".6s" repeatCount="indefinite"/></circle>`;
+    }
+  }
+  $('#immSvg').innerHTML=g;
+}
+function panel(html){$('#stepPanel').innerHTML=html;}
+function renderPanel(){
+  const st=s3.step;
+  if(st===1){panel(`<h3>Step 1 · Make the enzyme–alginate mixture</h3><p class="small" style="margin-top:0">Add the lactase solution to the 2% sodium alginate solution, then stir gently until evenly mixed. Stir slowly: air bubbles make beads that float.</p>
+    <div class="checks"><button id="a1" class="${s3.added?'done':''}">Add 10 cm³ lactase to 10 cm³ sodium alginate</button><button id="a2" class="${s3.stirred?'done':''}" ${s3.added?'':'disabled'}>Stir gently until evenly mixed</button></div>
+    <div class="row" style="margin-top:10px"><button class="primary" id="next" ${s3.stirred?'':'disabled'}>Next: form beads</button></div>`);
+    $('#a1').onclick=()=>{s3.added=true;immMsg('Lactase added. The two solutions have not mixed yet.');renderAll3();};
+    $('#a2').onclick=()=>{s3.stirred=true;immMsg('Evenly mixed. Draw the mixture up into a syringe.','good');renderAll3();};
+    $('#next').onclick=()=>{unlock(2);s3.step=2;immMsg('');renderAll3();};
+  }else if(st===2){panel(`<h3>Step 2 · Drip into calcium chloride</h3><p class="small" style="margin-top:0">Each drop that touches the calcium chloride gels at once into a bead: calcium ions cross-link the alginate chains and trap the enzyme. Squeeze the plunger gently, in short bursts, so the drops fall one at a time. Aim for at least 50 drops.</p>
+    <div class="controls"><div class="ctl"><label for="selNoz">Syringe nozzle</label><select id="selNoz" ${s3.beads.length?'disabled':''}><option value="2">Fine: beads ≈ 2 mm</option><option value="3">Standard: beads ≈ 3 mm</option><option value="5">Wide: beads ≈ 5 mm</option></select></div>
+    <div class="ctl"><label for="selH">Nozzle height above the surface: <span id="hVal">${s3.height}</span> cm</label><input type="range" id="selH" min="2" max="20" step="1" value="${s3.height}"></div></div>
+    <div style="margin-top:12px"><div class="lbl" style="margin-bottom:8px">Pressure on the plunger</div><div class="gauge" id="gauge"><i></i></div><div class="row small muted" style="justify-content:space-between;margin-top:4px"><span>none</span><span>gentle: single drops</span><span>too hard: a stream</span></div></div>
+    <div class="row" style="margin-top:12px"><button class="primary" id="plunger">Press and hold the plunger</button><span class="small" id="beadCount">${beadSummary()}</span></div>
+    <div class="row" style="margin-top:10px"><button id="resetBeads" ${s3.beads.length?'':'disabled'}>Pour away and start again</button><button id="next" ${dropsMade()>=50?'':'disabled'}>Next: harden and rinse</button></div>`);
+    $('#selNoz').value=s3.nozzle;$('#selNoz').onchange=e=>{s3.nozzle=+e.target.value;scene3();};
+    $('#selH').oninput=e=>{s3.height=+e.target.value;$('#hVal').textContent=s3.height;};
+    bindPlunger($('#plunger'));
+    $('#resetBeads').onclick=()=>{s3.beads=[];plg.merge=0;immMsg('Beads poured away. Start again.');renderAll3();};
+    $('#next').onclick=()=>{unlock(3);s3.step=3;immMsg('');renderAll3();};
+  }else if(st===3){panel(`<h3>Step 3 · Harden, strain and rinse</h3><p class="small" style="margin-top:0">Leave the beads in the calcium chloride for about 10 minutes so they harden right through. Then strain them and rinse with distilled water.</p>
+    <div class="checks"><button id="a1" class="${s3.hardened?'done':''}">Leave for 10 minutes to harden</button>
+    <button id="a2" class="${s3.rinsed===true?'done':''}" ${s3.hardened?'':'disabled'}>Strain and rinse with distilled water</button>
+    <button id="a3" class="${s3.rinsed===false?'done':''}" ${s3.hardened?'':'disabled'}>Strain but do not rinse</button></div>
+    <div class="row" style="margin-top:10px"><button class="primary" id="next" ${s3.rinsed!==null?'':'disabled'}>Next: pack the column</button></div>`);
+    $('#a1').onclick=()=>{s3.hardened=true;immMsg('10 minutes later: firm, even beads.');renderAll3();};
+    $('#a2').onclick=()=>{s3.rinsed=true;immMsg('Rinsed. Excess calcium chloride and any lactase on the bead surfaces are washed away.','good');renderAll3();};
+    $('#a3').onclick=()=>{s3.rinsed=false;immMsg('Not rinsed. Some free lactase is still on the outside of the beads. Watch your first result.','bad');renderAll3();};
+    $('#next').onclick=()=>{unlock(4);s3.step=4;immMsg('');renderAll3();};
+  }else if(st===4){panel(`<h3>Step 4 · Pack the column</h3><p class="small" style="margin-top:0">A syringe barrel makes a good column. Put a small piece of nylon mesh in the bottom so beads cannot block the outlet, clamp it vertically, then add the beads gently so they pack evenly.</p>
+    <div class="checks"><button id="a1" class="${s3.mesh?'done':''}">Put nylon mesh in the barrel</button><button id="a2" class="${s3.clamp?'done':''}">Clamp the barrel vertically over a beaker</button><button id="a3" class="${s3.poured?'done':''}" ${s3.mesh&&s3.clamp?'':'disabled'}>Add the beads gently</button></div>
+    <div class="row" style="margin-top:10px"><button class="primary" id="next" ${s3.poured?'':'disabled'}>Next: run the milk</button></div>`);
+    $('#a1').onclick=()=>{s3.mesh=true;renderAll3();};$('#a2').onclick=()=>{s3.clamp=true;renderAll3();};
+    $('#a3').onclick=()=>{s3.poured=true;immMsg(s3.beads.length+' beads packed. Ready for milk.','good');renderAll3();};
+    $('#next').onclick=()=>{unlock(6);s3.step=5;immMsg('');renderAll3();};
+  }else if(st===5||st===6){
+    const reuse=st===6;
+    panel(`<h3>${reuse?'Step 6 · Reuse the same column':'Step 5 · Run milk through and test for glucose'}</h3>
+    <p class="small" style="margin-top:0">${reuse?'Run fresh milk through the same beads several times at the same flow rate. If the glucose readings stay about the same, the immobilised enzyme is still working and can be reused.':'Set the tap, pour 10 cm³ of milk in the top and collect what comes out. Dip a glucose test strip in the collected milk, wait 30 s, and match the pad colour to the chart.'} Column used ${s3.uses} time${s3.uses===1?'':'s'} so far.</p>
+    <div class="controls">
+      <div class="ctl"><label for="selFlow">Flow rate: <span id="flowVal">${s3.flow}</span> cm³ min⁻¹</label><input type="range" id="selFlow" min="1" max="20" step="1" value="${s3.flow}" ${reuse?'disabled':''}></div>
+      <div class="ctl"><label for="selMilkT">Milk temperature: <span id="mtVal">${s3.temp}</span> °C</label><input type="range" id="selMilkT" min="20" max="60" step="5" value="${s3.temp}" ${reuse?'disabled':''}></div>
+      <div class="ctl"><label for="selCol">Column</label><select id="selCol" ${reuse?'disabled':''}><option value="lactase">Beads with lactase</option><option value="control">Control: beads made with water</option></select></div>
+    </div>
+    <div class="row" style="margin-top:10px"><button class="primary" id="run" ${s3.pending&&s3.pending!=='done'?'disabled':''}>Run 10 cm³ milk through</button><button id="dip" ${s3.pending&&typeof s3.pending==='object'&&!s3.pending.dipped?'':'disabled'}>Dip glucose test strip</button></div>
+    <div id="stripArea" style="margin-top:12px"></div>`);
+    $('#selCol').value=s3.column;
+    $('#selFlow').oninput=e=>{s3.flow=+e.target.value;$('#flowVal').textContent=s3.flow;};
+    $('#selMilkT').oninput=e=>{s3.temp=+e.target.value;$('#mtVal').textContent=s3.temp;};
+    $('#selCol').onchange=e=>{s3.column=e.target.value;scene3();};
+    $('#run').onclick=()=>{s3.pending='running';scene3();$('#run').disabled=true;immMsg('Milk trickling through the beads…');
+      setTimeout(()=>{s3.pending={G:glucoseOut(),dipped:false,flow:s3.flow,temp:s3.temp,column:s3.column};s3.uses++;scene3();renderPanel();immMsg('10 cm³ collected. Test it.');},1600);};
+    $('#dip').onclick=()=>{s3.pending.dipped=true;renderStrip();$('#dip').disabled=true;};
+    if(s3.pending&&typeof s3.pending==='object'&&s3.pending.dipped)renderStrip();
+  }
+}
+function glucoseOut(){
+  const drops=dropsMade(),n=Math.min(120,drops),Q=s3.flow,T=s3.temp;
+  const qf=drops?s3.beads.reduce((a,b)=>a+b.f,0)/drops:1;
+  const tau=(8*n/60)/Q;   // contact time, min
+  const size={2:1.5,3:1,5:0.6}[s3.nozzle];
+  const fT3=Math.pow(2,(T-20)/10)*(T>55?Math.exp(-(T-55)/5):1);
+  const k=s3.column==='control'?0:0.18*size*fT3*Math.pow(0.985,s3.uses)*qf;
+  let G=140*(1-Math.exp(-k*tau));
+  if(s3.rinsed===false&&s3.column==='lactase'&&s3.runs.filter(r=>r.column==='lactase').length===0)G+=10;
+  return Math.max(0,G*(1+rnd(-.04,.04)));
+}
+function renderStrip(){
+  const p=s3.pending;
+  $('#stripArea').innerHTML=`<div class="strip"><div><div class="lbl">Test pad</div><div class="pad" style="background:${stripColour(p.G)}"></div></div>
+    <div style="flex:1;min-width:0"><div class="lbl" style="margin-bottom:4px">Colour chart · glucose / mmol dm⁻³ · click the closest match</div><div class="chart">${BANDS.map((b,i)=>`<button data-b="${i}"><span style="background:${BANDCOL[i]}"></span>${b}</button>`).join('')}</div></div></div>`;
+  $$('#stripArea [data-b]').forEach(b=>b.onclick=()=>{
+    const i=+b.dataset.b;let best=0,bd=1e9;BANDS.forEach((v,j)=>{const d=Math.abs(Math.log(v+2)-Math.log(p.G+2));if(d<bd){bd=d;best=j;}});
+    const run={no:s3.runs.length+1,column:p.column,flow:p.flow,temp:p.temp,read:BANDS[i],G:p.G,reuse:s3.step===6};
+    s3.runs.push(run);s3.pending='done';const pw=PL3.check(run);
+    immMsg(i===best?`Recorded ${BANDS[i]} mmol dm⁻³. Good match.${p.column==='control'?' No glucose: the alginate and calcium chloride do not hydrolyse lactose.':''}${s3.rinsed===false&&run.column==='lactase'&&s3.runs.filter(r=>r.column==='lactase').length===1?' This first reading is boosted by free lactase washed off unrinsed beads.':''}`:
+      `Recorded ${BANDS[i]} mmol dm⁻³. The pad is closer to ${BANDS[best]}. Compare it in good light against the chart.`,i===best?'good':'bad');
+    if(pw)immMsg(pw,'bad');
+    renderImmTable();drawImmGraph();renderPanel();});
+}
+function renderImmTable(){queueMicrotask(afterImm);const b=$('#immBody');
+  if(!s3.runs.length){b.innerHTML='<tr><td colspan="5" class="empty">No results yet. Complete steps 1–4, then run milk through the column.</td></tr>';return;}
+  b.innerHTML=s3.runs.map(r=>`<tr><td>${r.no}${r.reuse?' <span class="tag">reuse</span>':''}${r.planBreak?' <span class="tag amber">not a fair test</span>':''}</td><td>${r.column==='control'?'Control':'Lactase'}</td><td class="num">${r.flow}</td><td class="num">${r.temp}</td><td class="num">${r.read}</td></tr>`).join('');}
+function drawImmGraph(){
+  const L=s3.runs.filter(r=>r.column==='lactase'),C=s3.runs.filter(r=>r.column==='control');
+  const ymax=Math.max(120,...s3.runs.map(r=>r.read))*1.1;
+  plot($('#immGraph'),{xMin:0,xMax:20,xStep:2,yMax:Math.ceil(ymax/20)*20,yStep:20,xLabel:'Flow rate / cm³ min⁻¹',yLabel:'Glucose / mmol dm⁻³',
+    series:[{pts:L.map(r=>[r.flow,r.read]),color:css('--c1'),r:5},{pts:C.map(r=>[r.flow,r.read]),color:css('--c2'),shape:'x'}].concat(PRED.flow?[{pts:PRED.flow,color:css('--c5'),line:true,noPts:true,dash:[6,5]}]:[]),empty:s3.runs.length?null:'Results at different flow rates appear here'});
+  $('#immLegend').innerHTML=`<span><i style="background:var(--c1)"></i>Lactase column</span><span><i style="background:var(--c2)"></i>Control column</span><span>Keep milk temperature the same when you compare flow rates.</span>`+(PRED.flow?'<span><i style="background:var(--c5)"></i>Your prediction</span>':'');
+}
+function stability(T,imm){return 100/(1+Math.exp((T-(imm?68:57))/(imm?4.5:3.2)));}
+function heatAt(T){s3.heat=s3.heat.filter(h=>h.T!==T);s3.heat.push({T,free:clamp(stability(T,false)+rnd(-2,2),0,100),imm:clamp(stability(T,true)+rnd(-2,2),0,100)});s3.heat.sort((a,b)=>a.T-b.T);}
+function drawHeat(){queueMicrotask(()=>updPoeHeat());const h=s3.heat;
+  plot($('#heatGraph'),{xMin:30,xMax:90,xStep:10,yMax:110,yStep:20,xLabel:'Temperature for 10 min / °C',yLabel:'Activity remaining / %',
+    series:[{pts:h.map(p=>[p.T,p.free]),color:css('--c2'),line:true},{pts:h.map(p=>[p.T,p.imm]),color:css('--c1'),line:true}].concat(PRED.heat?[{pts:PRED.heat,color:css('--c5'),line:true,noPts:true,dash:[6,5]}]:[]),empty:h.length?null:'Choose a temperature and heat both samples'});}
+$('#selHeat').addEventListener('input',e=>$('#heatVal').textContent=e.target.value);
+$('#btnHeat').addEventListener('click',()=>{const T=+$('#selHeat').value;heatAt(T);drawHeat();const p=s3.heat.find(x=>x.T===T);immMsg(`After 10 min at ${T} °C: free lactase kept ${p.free.toFixed(0)}% of its activity; immobilised lactase kept ${p.imm.toFixed(0)}%.`);});
+$('#btnHeatAll').addEventListener('click',()=>{for(let T=30;T<=90;T+=5)heatAt(T);drawHeat();immMsg('Tested every 5 °C from 30 to 90 °C. Read off the temperature at which each form keeps 50% of its activity.');});
+function renderAll3(){renderSteps();scene3();renderPanel();}
+
+/* --- plunger --- */
+const plg={down:false,p:0,acc:0,last:0,run:false,merge:0,warned:''};
+function dropsMade(){return s3.beads.reduce((a,b)=>a+b.n,0);}
+function beadSummary(){const c={good:0,merged:0,flat:0,tail:0};s3.beads.forEach(b=>c[b.q]++);return `${dropsMade()} drops → ${c.good} round beads${c.merged?`, ${c.merged} merged blob${c.merged>1?'s':''}`:''}${c.flat?`, ${c.flat} flattened`:''}${c.tail?`, ${c.tail} with tail${c.tail>1?'s':''}`:''}`;}
+function addDrop(stream){
+  if(dropsMade()>=120){plg.down=false;immMsg('That is enough for one column (120 drops). Let go of the plunger.');return;}
+  if(stream){plg.good=0;plg.merge++;if(plg.merge>=3){plg.merge=0;s3.beads.push({x:Math.random(),y:Math.random(),q:'merged',n:3,f:1.8});}
+    if(plg.warned!=='stream'){plg.warned='stream';immMsg('Too much pressure: the mixture comes out as a stream and forms merged blobs with much less surface area. Squeeze more gently, in short bursts.','bad');}}
+  else{const h=s3.height,q=h<6?'flat':h>14?'tail':'good';s3.beads.push({x:Math.random(),y:Math.random(),q,n:1,f:q==='good'?1:q==='flat'?.8:.85});
+    if(q!=='good'&&plg.warned!==q){plg.warned=q;immMsg(q==='flat'?'The nozzle is too close to the surface: drops spread before they gel and make flattened beads.':'The nozzle is too high: drops hit the surface hard and form beads with tails.','bad');}
+    if(q==='good'){plg.good=(plg.good||0)+1;if(plg.warned&&plg.good>=5){plg.warned='';immMsg('Good: single drops making round beads.','good');}}else plg.good=0;}
+  scene3();
+  const d=document.getElementById('dropAnim');if(d&&d.animate&&!RM.matches){d.setAttribute('opacity','1');const an=d.animate([{transform:'translateY(0)'},{transform:'translateY(55px)'}],{duration:300});an.onfinish=()=>d.setAttribute('opacity','0');}
+  const bc=$('#beadCount');if(bc)bc.textContent=beadSummary();
+  const nx=$('#next');if(nx)nx.disabled=dropsMade()<50;const rb=$('#resetBeads');if(rb)rb.disabled=!s3.beads.length;const nz=$('#selNoz');if(nz)nz.disabled=true;
+}
+function plungerLoop(now){
+  const dt=Math.min(.05,(now-plg.last)/1000);plg.last=now;
+  plg.p=plg.down?Math.min(1,plg.p+dt/1.6):Math.max(0,plg.p-dt/.3);
+  const gi=$('#gauge i');if(gi)gi.style.left=`calc(${(plg.p*100).toFixed(1)}% - 2px)`;
+  if(plg.p>.15){plg.acc+=dt*(plg.p>.6?9:2.5+(plg.p-.15)*14);while(plg.acc>=1){plg.acc-=1;addDrop(plg.p>.6);}}
+  if(plg.down||plg.p>0)requestAnimationFrame(plungerLoop);else plg.run=false;
+}
+function plungerDown(){plg.down=true;const b=$('#plunger');if(b)b.classList.add('down');if(!plg.run){plg.run=true;plg.last=performance.now();requestAnimationFrame(plungerLoop);}}
+function plungerUp(){plg.down=false;const b=$('#plunger');if(b)b.classList.remove('down');}
+function bindPlunger(b){
+  b.addEventListener('pointerdown',e=>{e.preventDefault();try{b.setPointerCapture(e.pointerId);}catch(_){}plungerDown();});
+  ['pointerup','pointercancel','lostpointercapture'].forEach(t=>b.addEventListener(t,plungerUp));
+  b.addEventListener('keydown',e=>{if((e.key===' '||e.key==='Enter')&&!e.repeat){e.preventDefault();plungerDown();}});
+  b.addEventListener('keyup',e=>{if(e.key===' '||e.key==='Enter')plungerUp();});
+  b.addEventListener('contextmenu',e=>e.preventDefault());
+}
+
+/* --- planner --- */
+const PL3=makePlanner({id:'p3',el:'#plan3',
+  intro:'Plan the column investigation before you run any milk. The control column (no lactase) is not checked against the plan.',
+  ivs:[{v:'flow',label:'Flow rate of milk through the column'},{v:'temp',label:'Temperature of the milk'}],
+  ivShort:{flow:'Flow / cm³ min⁻¹',temp:'Temp / °C'},
+  dvs:[{v:'glu',label:'Glucose concentration of the milk leaving the column',ok:true},{v:'beads',label:'Number of beads in the column'},{v:'colour',label:'Colour of the milk going in'}],
+  dvHint:'You measure the glucose concentration of the milk that comes out, using a test strip.',
+  cvs:[{v:'flow',label:'Flow rate'},{v:'temp',label:'Milk temperature'},{v:'beads',label:'Number and size of beads'},{v:'vol',label:'Volume of milk run through'},{v:'lac',label:'Lactase concentration in the alginate'},{v:'milk',label:'Type of milk (same lactose content)'},{v:'wait',label:'Time before reading the test strip'},{v:'beaker',label:'Shape of the collecting beaker',real:false},{v:'clamp',label:'Colour of the clamp stand',real:false}],
+  runKeys:[{k:'flow',label:'flow rate'},{k:'temp',label:'milk temperature'}],
+  fmt:(k,v)=>k==='flow'?v+' cm³ min⁻¹':k==='temp'?v+' °C':String(v),
+  value:r=>r.read,valueLabel:'Glucose / mmol dm⁻³',dec:1,runs:()=>s3.runs,skip:r=>r.column==='control'});
+
+/* --- predict, observe, explain --- */
+const updPoe3=makePoe({el:'#poe3',cv:'#immGraph',key:()=>'flow',
+  prompt:()=>'Before you run any milk, sketch how the glucose concentration will change as the flow rate rises from 1 to 20 cm³ min⁻¹.',
+  hasData:()=>new Set(s3.runs.filter(r=>r.column==='lactase').map(r=>r.flow)).size>=3,
+  feedback:()=>{const p=PRED.flow,L=s3.runs.filter(r=>r.column==='lactase').sort((a,b)=>a.flow-b.flow);if(!p||L.length<2)return '';
+    const lo=L[0],hi=L[L.length-1],pl=interp(p,lo.flow),ph=interp(p,hi.flow);
+    return `<b>Observed:</b> at ${lo.flow} cm³ min⁻¹ you predicted about ${Math.round(pl)} and measured ${lo.read} mmol dm⁻³; at ${hi.flow} cm³ min⁻¹ you predicted about ${Math.round(ph)} and measured ${hi.read}. ${hi.read===lo.read?'Your two strip readings are the same, so compare the pad colours again carefully.':(ph<pl)===(hi.read<lo.read)?'Your sketch has the right trend.':'Your sketch has the wrong trend: glucose falls as flow rate rises.'}`;},
+  model:()=>'Slower flow gives each portion of milk a longer contact time with the beads, so more lactose molecules collide with the active sites of lactase and are hydrolysed. The graph is a curve, not a straight line: at very slow flow most of the lactose is already used up, so glucose levels off; at fast flow the contact time is short and little lactose is hydrolysed.',
+  redraw:()=>drawImmGraph()});
+const updPoeHeat=makePoe({el:'#poeHeat',cv:'#heatGraph',key:()=>'heat',
+  prompt:()=>'Sketch how much activity <b>free lactase</b> will keep after 10 minutes at each temperature from 30 to 90 °C. Then decide where you expect the immobilised curve to sit.',
+  hasData:()=>s3.heat.length>=5,
+  feedback:()=>{const p=PRED.heat;if(!p)return '';let x50=null;for(const q of p){if(q[1]<=50){x50=q[0];break;}}
+    const t50=imm=>{const h=s3.heat,k=imm?'imm':'free';for(let i=1;i<h.length;i++){const a=h[i-1][k],b=h[i][k];if(a>=50&&b<50)return h[i-1].T+(a-50)/(a-b)*(h[i].T-h[i-1].T);}return null;};
+    const f=t50(false),im=t50(true);
+    return `<b>Observed:</b> ${x50===null?'your sketch never drops below 50%.':'you predicted free lactase would fall to 50% at about '+Math.round(x50)+' °C.'} ${f?'In the data, free lactase falls to 50% at about '+Math.round(f)+' °C':'Test a wider range to find where free lactase falls to 50%'}${im?' and immobilised lactase at about '+Math.round(im)+' °C.':'.'}`;},
+  model:()=>'Free lactase is denatured at a lower temperature (about 57 °C for half its activity here). Immobilised lactase keeps its activity up to about 68 °C, because the alginate holds the enzyme molecules in shape and shields part of each molecule from the heat. This greater stability is one advantage of immobilised enzymes.',
+  redraw:()=>drawHeat()});
+sketchable($('#immGraph'),()=>drawImmGraph());
+sketchable($('#heatGraph'),()=>drawHeat());
+function afterImm(){if(PL3.P.locked)PL3.render();updPoe3();}
+
+
+/* ---------- routing ---------- */
+const TABS=['colorimeter','amylase','immobilise'];
+function route(){const h=location.hash.replace('#','');const t=TABS.includes(h)?h:'colorimeter';
+  TABS.forEach(x=>{$('#st-'+x).hidden=x!==t;});$$('nav.tabs a').forEach(a=>{if(a.dataset.tab===t)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
+  redrawAll();}
+function redrawAll(){molColours();renderPip();buildCmSvg();drawFilterBars();drawCal();drawAmyGraph();drawBath();scene3();drawImmGraph();drawHeat();}
+window.addEventListener('hashchange',route);
+window.addEventListener('resize',()=>{clearTimeout(window.__rz);window.__rz=setTimeout(redrawAll,120);});
+try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>setTimeout(()=>{redrawAll();renderTile();renderRuns();},30));}catch(e){}
+new MutationObserver(()=>setTimeout(()=>{redrawAll();renderTile();renderRuns();},30)).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+
+renderPrep();renderRack();renderLog();renderTile();renderScale();renderRuns();fillTanRuns();renderImmTable();renderAll3();renderPip();PL2.render();PL3.render();molInit();
+route();
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(redrawAll);
+})();
+</script>
