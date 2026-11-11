@@ -1,0 +1,113 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>IGCSE Biology Ch5 Enzymes Virtual Lab</title>
+<style>
+:root{--bg:#FAFAF7;--ink:#1F2937;--mute:#667080;--card:#fff;--line:#D9DEE5;--blue:#1D4ED8;--green:#15803D;--red:#B91C1C;--teal:#0F766E;--amber:#B45309}
+*{box-sizing:border-box}body{margin:0;font-family:Calibri,"PingFang SC",system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.45}
+header{background:#0B2161;color:#fff;padding:14px 18px}header h1{margin:0;font-size:22px}header p{margin:2px 0 0;opacity:.8;font-size:13px}
+main{max-width:980px;margin:0 auto;padding:14px}
+.tabs{display:flex;gap:8px;margin:6px 0 12px;flex-wrap:wrap}.tabs button{padding:10px 14px;border:2px solid var(--line);background:#fff;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer}
+.tabs button.on{border-color:var(--teal);background:#E6F4F1;color:var(--teal)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
+h2{margin:0 0 8px;font-size:18px}h3{margin:10px 0 4px;font-size:15px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:760px){.grid{grid-template-columns:1fr}}
+button.act{background:var(--blue);color:#fff;border:0;border-radius:8px;padding:10px 16px;font-size:15px;font-weight:700;cursor:pointer}button.act:disabled{opacity:.5}
+button.sec{background:#fff;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px 12px;cursor:pointer;font-size:14px}
+select,input[type=number]{font-size:16px;padding:6px;border:1px solid var(--line);border-radius:6px}
+table{border-collapse:collapse;width:100%;font-size:14px}th,td{border:1px solid #B8C0CC;padding:5px 6px;text-align:center}th{background:#E5E9F5}
+canvas{width:100%;max-width:100%;background:#fff;border:1px solid var(--line);border-radius:10px}
+.q{border-left:4px solid var(--teal);padding:6px 10px;margin:8px 0;background:#F3FAF8;border-radius:6px}.ans{display:none;color:var(--green);font-weight:600;margin-top:4px}
+.note{font-size:12.5px;color:var(--mute)}.tag{display:inline-block;background:#FEF3C7;color:var(--amber);border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700}
+.timer{font:700 28px/1 ui-monospace,monospace;background:#0B2161;color:#fff;display:inline-block;padding:6px 12px;border-radius:8px}
+footer{text-align:center;color:var(--mute);font-size:12px;padding:16px}
+</style></head><body>
+<header><h1>Enzyme Virtual Lab 酶虚拟实验</h1><p>Cambridge IGCSE Biology 0610 · Chapter 5 · Experimental skills 5.1 and 5.2 · works offline</p></header>
+<main>
+<div class="tabs"><button id="t1" class="on" onclick="show(1)">5.1 Catalase and pH</button><button id="t2" onclick="show(2)">5.2 Lipase and temperature</button></div>
+<p class="note"><span class="tag">Simulated data</span> The times come from a model with random variation, so they are realistic but not real measurements. Use them to practise the method, tables and graphs.</p>
+
+<section id="p1">
+<div class="card"><h2>Aim</h2>Investigate how pH affects the time for a catalase-soaked filter-paper disc to rise in hydrogen peroxide (H₂O₂ → water + oxygen).
+<h3>Variables</h3><div class="note">Independent: pH of buffer · Dependent: time to rise (s) · Controlled: 5 cm³ H₂O₂, 10 cm³ buffer, 5 × 5 mm paper, same catalase, temperature.</div></div>
+<div class="grid"><div class="card"><h2>Set up</h2>
+<label>Buffer pH: <select id="ph"><option>4</option><option>5</option><option>6</option><option selected>7</option><option>8</option><option>9</option><option>10</option></select></label>
+<p><button class="act" id="run1" onclick="run1()">Dip paper and start</button></p>
+<div class="timer" id="clk1">0.0 s</div> <span class="note">(sped up 3×)</span>
+<canvas id="cv1" width="420" height="300"></canvas></div>
+<div class="card"><h2>Results table: time / s</h2><table id="tb1"></table><p class="note">Each run adds a try for that pH. Mean is calculated automatically. Clear anomalies by reading the table first.</p>
+<button class="sec" onclick="clr(1)">Clear table</button></div></div>
+<div class="card"><h2>Graph: mean time against pH</h2><canvas id="g1" width="900" height="340"></canvas></div>
+<div class="card"><h2>Questions (coursebook Experimental skills 5.1)</h2>
+<div class="q">1 Write a word equation for the reaction. <button class="sec" onclick="rv(this)">Show answer</button><div class="ans">hydrogen peroxide → water + oxygen (catalase)</div></div>
+<div class="q">2 Why does the paper rise? <button class="sec" onclick="rv(this)">Show answer</button><div class="ans">catalase on the paper makes oxygen; the bubbles stick to the paper and lift it.</div></div>
+<div class="q">3 Describe the relationship between pH and time taken. <button class="sec" onclick="rv(this)">Show answer</button><div class="ans">Time falls as pH rises to about 7, then rises again above 7. Quote figures with units from your table.</div></div>
+<div class="q">4 Are there any anomalous results? <button class="sec" onclick="rv(this)">Show answer</button><div class="ans">An anomalous result does not fit the pattern (for example, one try far from the other two). Leave it out of the mean.</div></div>
+<div class="q">5 Estimate the optimum pH. <button class="sec" onclick="rv(this)">Show answer</button><div class="ans">The pH with the shortest time (about pH 7).</div></div>
+<div class="q">6 How could you find a more precise optimum? <button class="sec" onclick="rv(this)">Show answer</button><div class="ans">Test more pH values close to the estimate (for example 6.5, 7, 7.5).</div></div>
+<div class="q">7 Sources of error and improvements? <button class="sec" onclick="rv(this)">Show answer</button><div class="ans">Judging when the paper reaches the top by eye (use a video or a second observer); paper squares of different size (cut accurately); different amount of catalase on the paper (soak for the same time).</div></div></div>
+</section>
+
+<section id="p2" style="display:none">
+<div class="card"><h2>Aim</h2>Investigate how temperature affects the time for lipase to digest the fat in milk. Fatty acids lower the pH, so thymolphthalein changes from blue to colourless.
+<h3>Variables</h3><div class="note">Independent: temperature of water bath · Dependent: time for the blue to disappear (s) · Controlled: 5 cm³ milk, 7 cm³ sodium carbonate, 5 drops indicator, 1 cm³ lipase, same tube.</div></div>
+<div class="grid"><div class="card"><h2>Set up</h2>
+<label>Water bath: <select id="tp"><option>10</option><option>20</option><option>30</option><option selected>40</option><option>50</option><option>60</option><option>70</option></select> °C</label>
+<p><button class="act" id="run2" onclick="run2()">Add lipase and start</button></p>
+<div class="timer" id="clk2">0.0 s</div> <span class="note">(sped up 3×; stops at 300 s if there is no change)</span>
+<canvas id="cv2" width="420" height="300"></canvas></div>
+<div class="card"><h2>Results table: time / s</h2><table id="tb2"></table><p class="note">“No change” means no colour change in 300 s.</p>
+<button class="sec" onclick="clr(2)">Clear table</button></div></div>
+<div class="card"><h2>Graph: mean time against temperature</h2><canvas id="g2" width="900" height="340"></canvas></div>
+<div class="card"><h2>Questions (Experimental skills 5.2)</h2>
+<div class="q">1 Why does the blue colour disappear? <button class="sec" onclick="rv(this)">Show answer</button><div class="ans">Lipase breaks fat into fatty acids, which lower the pH; the indicator is colourless in lower pH.</div></div>
+<div class="q">2 Which temperature is closest to the optimum? <button class="sec" onclick="rv(this)">Show answer</button><div class="ans">The temperature with the shortest time (about 40 °C).</div></div>
+<div class="q">3 Explain the result at 60–70 °C. <button class="sec" onclick="rv(this)">Show answer</button><div class="ans">Too much kinetic energy; the lipase loses its shape and the active site is no longer complementary to the fat: enzyme denatured.</div></div>
+<div class="q">4 Explain the result at 10 °C. <button class="sec" onclick="rv(this)">Show answer</button><div class="ans">Low kinetic energy, so few effective collisions between enzyme and substrate (the enzyme is not denatured).</div></div></div>
+</section>
+</main><footer>Eko Febriadi · IGCSE Biology 0610 · Chapter 5 Enzymes</footer>
+<script>
+const $=id=>document.getElementById(id);
+function show(n){$('p1').style.display=n==1?'':'none';$('p2').style.display=n==2?'':'none';$('t1').classList.toggle('on',n==1);$('t2').classList.toggle('on',n==2);draw(n)}
+function rv(b){const a=b.nextElementSibling;a.style.display=a.style.display=='block'?'none':'block'}
+function rnd(){let u=0,v=0;while(!u)u=Math.random();while(!v)v=Math.random();return Math.sqrt(-2*Math.log(u))*Math.cos(6.283*v)}
+const D={1:{},2:{}};
+const K=['1','2'];
+// models
+function tcat(ph){const r=Math.exp(-Math.pow((ph-7)/1.5,2)/2);const base=9/Math.max(r,.02);return Math.max(6,base*(1+.08*rnd()))}
+function tlip(T){if(T>=70)return null;let r;if(T<=40)r=Math.exp(-Math.pow((T-40)/22,2));else r=Math.exp(-Math.pow((T-40)/11,2));const t=40/Math.max(r,.01)*(1+.07*rnd());return t>300?null:t}
+function tbl(n){const keys=Object.keys(D[n]).map(Number).sort((a,b)=>a-b);const h=n==1?'pH':'Temp / °C';
+ let s=`<tr><th>${h}</th><th>1st</th><th>2nd</th><th>3rd</th><th>Mean</th></tr>`;
+ for(const k of keys){const a=D[n][k];const nums=a.filter(x=>x!==null);const m=nums.length?(nums.reduce((p,c)=>p+c,0)/nums.length).toFixed(0):'no change';
+  s+=`<tr><td>${k}</td>`+[0,1,2].map(i=>`<td>${i<a.length?(a[i]===null?'no change':a[i].toFixed(0)):''}</td>`).join('')+`<td><b>${m}</b></td></tr>`}
+ $('tb'+n).innerHTML=s}
+function means(n){return Object.keys(D[n]).map(Number).sort((a,b)=>a-b).map(k=>{const nums=D[n][k].filter(x=>x!==null);return [k,nums.length?nums.reduce((p,c)=>p+c,0)/nums.length:null]})}
+function draw(n){const c=$('g'+n),x=c.getContext('2d');x.clearRect(0,0,c.width,c.height);
+ const L=70,R=20,T=20,B=55,W=c.width-L-R,H=c.height-T-B;
+ const xr=n==1?[3,11]:[0,80],xs=n==1?1:10;const pts=means(n);const ymax=Math.max(60,...pts.map(p=>p[1]||0))*1.1;const ym=Math.ceil(ymax/20)*20;
+ x.strokeStyle='#D9DEE5';x.fillStyle='#1F2937';x.font='14px Calibri';x.lineWidth=1;
+ for(let v=0;v<=ym;v+=20){const y=T+H-v/ym*H;x.beginPath();x.moveTo(L,y);x.lineTo(L+W,y);x.stroke();x.textAlign='right';x.fillText(v,L-6,y+4)}
+ for(let v=xr[0];v<=xr[1];v+=xs){const xx=L+(v-xr[0])/(xr[1]-xr[0])*W;x.beginPath();x.moveTo(xx,T+H);x.lineTo(xx,T+H+5);x.strokeStyle='#1F2937';x.stroke();x.textAlign='center';x.fillText(v,xx,T+H+20)}
+ x.strokeStyle='#1F2937';x.beginPath();x.moveTo(L,T);x.lineTo(L,T+H);x.lineTo(L+W,T+H);x.stroke();
+ x.textAlign='center';x.fillText(n==1?'pH':'Temperature / °C',L+W/2,c.height-8);x.save();x.translate(18,T+H/2);x.rotate(-Math.PI/2);x.fillText('mean time / s',0,0);x.restore();
+ const P=pts.filter(p=>p[1]!==null).map(p=>[L+(p[0]-xr[0])/(xr[1]-xr[0])*W,T+H-p[1]/ym*H]);
+ x.strokeStyle='#1D4ED8';x.lineWidth=2.2;x.beginPath();P.forEach((p,i)=>i?x.lineTo(p[0],p[1]):x.moveTo(p[0],p[1]));x.stroke();
+ x.fillStyle='#1D4ED8';P.forEach(p=>{x.beginPath();x.arc(p[0],p[1],5,0,7);x.fill()});
+ if(!P.length){x.fillStyle='#667080';x.textAlign='center';x.fillText('Run the experiment to plot points',L+W/2,T+H/2)}}
+function clr(n){D[n]={};tbl(n);draw(n)}
+// animation 1
+let busy=false;
+function run1(){if(busy)return;busy=true;$('run1').disabled=true;const ph=+$('ph').value;const t=tcat(ph);const c=$('cv1'),x=c.getContext('2d');let el=0;const t0=performance.now();
+ (function f(now){el=(performance.now()-t0)/1000*3;const done=el>=t;const e=Math.min(el,t);$('clk1').textContent=e.toFixed(1)+' s';
+  x.clearRect(0,0,c.width,c.height);x.strokeStyle='#1F2937';x.lineWidth=3;x.strokeRect(120,20,180,250);x.fillStyle='#BFE3F5';x.fillRect(122,70,176,198);
+  x.fillStyle='#1F2937';x.font='14px Calibri';x.textAlign='center';x.fillText('pH '+ph+' buffer + H2O2',210,290);
+  const y=250-(Math.min(e/t,1))*170;x.fillStyle='#F5E9C8';x.strokeStyle='#8A6D1E';x.lineWidth=1.5;x.fillRect(195,y,30,10);x.strokeRect(195,y,30,10);
+  x.fillStyle='rgba(255,255,255,.9)';const nb=Math.floor(e/t*14)+(e>0?2:0);for(let i=0;i<nb;i++){x.beginPath();x.arc(198+((i*13)%26),y+14+((i*17+Math.floor(e*4))%40),2.4,0,7);x.fill();x.strokeStyle='#5aa';x.stroke()}
+  if(!done)requestAnimationFrame(f);else{(D[1][ph]=D[1][ph]||[]);if(D[1][ph].length>=3)D[1][ph].shift();D[1][ph].push(Math.round(t));tbl(1);draw(1);busy=false;$('run1').disabled=false}})()}
+function run2(){if(busy)return;busy=true;$('run2').disabled=true;const T=+$('tp').value;const t=tlip(T);const lim=t||300;const c=$('cv2'),x=c.getContext('2d');const t0=performance.now();
+ (function f(){const el=Math.min((performance.now()-t0)/1000*3,lim);$('clk2').textContent=el.toFixed(1)+' s';const fr=t?el/t:Math.min(el/300*.05,.05);
+  x.clearRect(0,0,c.width,c.height);x.strokeStyle='#1F2937';x.lineWidth=3;x.strokeRect(40,150,340,120);x.fillStyle='#CDE9F6';x.fillRect(42,190,336,78);
+  x.fillStyle='#1F2937';x.font='14px Calibri';x.textAlign='center';x.fillText('water bath '+T+' °C',210,290);
+  x.strokeStyle='#1F2937';x.strokeRect(170,40,60,200);const a=1-fr;x.fillStyle=`rgba(${Math.round(230-195*a)},${Math.round(235-150*a)},${Math.round(245-20*a)},1)`;x.fillRect(172,100,56,138);
+  x.fillStyle='#1F2937';x.fillText('milk + indicator',210,30);
+  if(el<lim)requestAnimationFrame(f);else{(D[2][T]=D[2][T]||[]);if(D[2][T].length>=3)D[2][T].shift();D[2][T].push(t?Math.round(t):null);tbl(2);draw(2);busy=false;$('run2').disabled=false}})()}
+tbl(1);tbl(2);draw(1);draw(2);
+</script></body></html>
