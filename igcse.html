@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#123f3a">
+<meta name="description" content="Five interactive Cambridge IGCSE Biology virtual labs. Open a lab directly or scan its QR code.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23123f3a'/%3E%3Cpath d='M24 12h16M27 12v15L16 45c-2 4 1 7 5 7h22c4 0 7-3 5-7L37 27V12' fill='none' stroke='%23d5ed82' stroke-width='4' stroke-linecap='round'/%3E%3Cpath d='M21 41h22' stroke='%23d5ed82' stroke-width='4'/%3E%3C/svg%3E">
+<title>IGCSE Biology Virtual Labs · Eko Febriadi</title>
+<style>
+:root{
+  --pine-950:oklch(0.25 0.045 175);
+  --pine-900:oklch(0.31 0.055 175);
+  --pine-700:oklch(0.45 0.07 175);
+  --lime-300:oklch(0.88 0.16 125);
+  --paper:oklch(0.985 0.009 155);
+  --paper-deep:oklch(0.955 0.015 155);
+  --ink:oklch(0.25 0.025 175);
+  --muted:oklch(0.43 0.025 175);
+  --line:oklch(0.87 0.025 160);
+  --card:oklch(0.995 0.004 155);
+  --focus:oklch(0.62 0.17 125);
+  --bg:var(--paper);
+  --text:var(--ink);
+  --accent:var(--lime-300);
+  --radius-lg:24px;
+  --radius-md:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{min-height:100dvh;background:var(--bg);color:var(--text);font:16px/1.65 "Avenir Next","Trebuchet MS",sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+button{font:inherit}
+button,a{touch-action:manipulation}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--focus);outline-offset:4px}
+::selection{background:var(--lime-300);color:var(--pine-950)}
+.shell{width:min(1120px,calc(100% - 40px));margin-inline:auto}
+.hero{position:relative;overflow:hidden;background:var(--pine-950);color:var(--paper);border-radius:0 0 36px 36px}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 85% 30%,oklch(0.48 0.08 165 / .42),transparent 34%),linear-gradient(115deg,transparent 65%,oklch(0.85 0.14 125 / .06));pointer-events:none}
+.topbar{position:relative;display:flex;align-items:center;justify-content:space-between;gap:24px;padding-block:24px;border-bottom:1px solid oklch(0.8 0.04 160 / .2)}
+.brand{display:flex;align-items:center;gap:12px;font-weight:700;letter-spacing:.01em}
+.brand-mark{display:grid;place-items:center;width:42px;height:42px;border:1px solid oklch(0.85 0.08 145 / .35);border-radius:13px;color:var(--accent)}
+.brand small{display:block;color:oklch(0.82 0.025 165);font-size:12px;font-weight:500;letter-spacing:.12em;text-transform:uppercase}
+.library-label{display:flex;align-items:center;gap:8px;color:oklch(0.87 0.025 165);font-size:14px}
+.library-label::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 5px oklch(0.88 0.16 125 / .12)}
+.hero-grid{position:relative;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(250px,.7fr);gap:64px;align-items:center;padding-block:72px 80px}
+.kicker{margin-bottom:16px;color:var(--accent);font-size:13px;font-weight:700;letter-spacing:.16em;text-transform:uppercase}
+h1{max-width:760px;font-family:Georgia,"Times New Roman",serif;font-size:clamp(48px,7vw,84px);font-weight:400;line-height:.98;letter-spacing:-.045em;text-wrap:balance}
+h1 em{color:var(--accent);font-weight:400}
+.hero-copy{max-width:62ch;margin-top:24px;color:oklch(0.87 0.025 165);font-size:18px;line-height:1.65}
+.hero-actions{display:flex;flex-wrap:wrap;gap:16px;align-items:center;margin-top:32px}
+.primary-link,.print-button,.open-link{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;font-weight:700;transition:transform 180ms ease-out,background-color 180ms ease-out,color 180ms ease-out}
+.primary-link{padding:12px 20px;border-radius:14px;background:var(--accent);color:var(--pine-950)}
+.primary-link:hover,.print-button:hover,.open-link:hover{transform:translateY(-2px)}
+.primary-link:active,.print-button:active,.open-link:active{transform:translateY(0)}
+.hero-note{color:oklch(0.79 0.025 165);font-size:14px}
+.hero-figure{position:relative;display:grid;place-items:center;min-height:290px}
+.orbit{position:absolute;width:min(100%,300px);aspect-ratio:1;border:1px solid oklch(0.85 0.08 145 / .25);border-radius:50%;transform:rotate(-18deg)}
+.orbit::before,.orbit::after{content:"";position:absolute;inset:16%;border:1px solid oklch(0.85 0.08 145 / .18);border-radius:50%;transform:rotate(60deg)}
+.orbit::after{inset:32%;transform:rotate(-45deg)}
+.lab-count{position:relative;text-align:center}
+.lab-count strong{display:block;color:var(--accent);font-family:Georgia,"Times New Roman",serif;font-size:128px;font-weight:400;line-height:.8;letter-spacing:-.08em}
+.lab-count span{display:block;margin-top:20px;color:oklch(0.87 0.025 165);font-size:13px;font-weight:700;letter-spacing:.18em;text-transform:uppercase}
+.main{padding-block:56px 72px}
+.section-head{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:28px}
+.section-head h2{font-family:Georgia,"Times New Roman",serif;font-size:clamp(32px,4vw,46px);font-weight:400;line-height:1.15;letter-spacing:-.025em}
+.section-head p{max-width:60ch;margin-top:8px;color:var(--muted)}
+.print-button{flex:none;padding:10px 16px;border:1px solid var(--line);border-radius:13px;background:var(--card);color:var(--pine-900)}
+.print-button:hover{background:var(--paper-deep)}
+.lab-list{display:grid;gap:18px}
+.lab-card{display:grid;grid-template-columns:minmax(0,1fr) 142px;gap:28px;align-items:center;padding:28px 30px;border:1px solid var(--line);border-radius:var(--radius-lg);background:var(--card);box-shadow:0 10px 30px oklch(0.28 0.04 175 / .045);transition:transform 180ms ease-out,border-color 180ms ease-out,box-shadow 180ms ease-out}
+.lab-card:hover{transform:translateY(-3px);border-color:oklch(0.68 0.06 165);box-shadow:0 16px 36px oklch(0.28 0.04 175 / .08)}
+.lab-card:nth-child(even){margin-left:48px}
+.lab-card:nth-child(odd){margin-right:48px}
+.chapter{display:inline-flex;align-items:center;gap:8px;margin-bottom:10px;color:var(--pine-700);font-size:12px;font-weight:800;letter-spacing:.14em;text-transform:uppercase}
+.chapter::before{content:"";width:22px;height:2px;background:var(--pine-700)}
+.lab-card h3{font-family:Georgia,"Times New Roman",serif;font-size:30px;font-weight:400;line-height:1.15;letter-spacing:-.02em}
+.description{max-width:68ch;margin-top:10px;color:var(--muted);font-size:16px;line-height:1.6}
+.card-bottom{display:flex;flex-wrap:wrap;align-items:center;gap:16px;margin-top:20px}
+.open-link{min-height:46px;padding:9px 16px;border-radius:12px;background:var(--pine-900);color:var(--paper);font-size:15px}
+.open-link:hover{background:var(--pine-700)}
+.topics{color:var(--muted);font-size:13px}
+.qr-wrap{display:grid;justify-items:center;gap:8px}
+.qr-frame{width:142px;padding:10px;border:1px solid var(--line);border-radius:var(--radius-md);background:white}
+.qr-frame img{display:block;width:100%;height:auto;aspect-ratio:1}
+.qr-wrap figcaption{color:var(--muted);font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.footer{border-top:1px solid var(--line);background:var(--paper-deep)}
+.footer-inner{display:flex;justify-content:space-between;gap:24px;padding-block:28px;color:var(--muted);font-size:14px}
+.footer strong{color:var(--pine-900)}
+svg.icon{width:19px;height:19px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+@media(max-width:800px){
+  .hero-grid{grid-template-columns:1fr;gap:36px;padding-block:52px 60px}
+  .hero-figure{display:none}
+  .lab-card:nth-child(n){margin-inline:0}
+  .section-head{align-items:flex-start}
+}
+@media(max-width:560px){
+  .shell{width:min(100% - 28px,1120px)}
+  .hero{border-radius:0 0 26px 26px}
+  .topbar{padding-block:18px}
+  .brand-name{font-size:14px}
+  .brand small,.library-label{display:none}
+  .hero-grid{padding-block:42px 48px}
+  h1{font-size:48px}
+  .hero-copy{font-size:16px}
+  .hero-note{font-size:13px}
+  .main{padding-block:40px 52px}
+  .section-head{display:grid;gap:18px}
+  .print-button{justify-self:start}
+  .lab-card{grid-template-columns:minmax(0,1fr) 96px;gap:16px;padding:22px 18px;border-radius:20px}
+  .lab-card h3{font-size:24px}
+  .description{font-size:15px}
+  .card-bottom{align-items:flex-start;flex-direction:column;gap:12px}
+  .topics{font-size:12px}
+  .qr-frame{width:96px;padding:7px;border-radius:12px}
+  .qr-wrap figcaption{font-size:10px;letter-spacing:0;text-transform:none;text-align:center}
+  .footer-inner{flex-direction:column;gap:6px}
+}
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}
+}
+@media print{
+  @page{size:A4;margin:12mm}
+  body{background:white;color:#173d38;font-size:12px}
+  .shell{width:100%;max-width:none}
+  .hero{border-radius:0;background:white;color:#173d38}
+  .hero::before,.hero-figure,.hero-actions,.print-button,.library-label{display:none}
+  .topbar{padding-block:0 12px;border-color:#aac0b9}
+  .brand small,.hero-copy,.kicker{color:#355e57}
+  .brand-mark{color:#173d38;border-color:#aac0b9}
+  .hero-grid{display:block;padding-block:20px}
+  h1{font-size:38px;color:#173d38}
+  h1 em{color:#173d38}
+  .hero-copy{margin-top:12px;font-size:13px}
+  .main{padding-block:20px}
+  .section-head{margin-bottom:14px}
+  .section-head h2{font-size:26px}
+  .lab-list{gap:10px}
+  .lab-card,.lab-card:nth-child(n){grid-template-columns:1fr 92px;margin:0;padding:14px 16px;break-inside:avoid;box-shadow:none;border-color:#b9cac5}
+  .lab-card:hover{transform:none}
+  .chapter{margin-bottom:4px}
+  .lab-card h3{font-size:20px}
+  .description{margin-top:4px;font-size:12px}
+  .card-bottom{margin-top:8px}
+  .open-link{min-height:0;padding:0;background:none;color:#173d38;text-decoration:underline}
+  .open-link svg{display:none}
+  .topics{font-size:10px}
+  .qr-frame{width:92px;padding:6px}
+  .footer{background:white}
+  .footer-inner{padding-block:14px}
+}
+</style>
+</head>
+<body>
+<header class="hero">
+  <div class="shell">
+    <div class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M9 3h6M10 3v6l-5 8.5A3 3 0 0 0 7.6 22h8.8a3 3 0 0 0 2.6-4.5L14 9V3M7.5 16h9"/></svg>
+        </span>
+        <span class="brand-name">Biology Virtual Labs<small>with Eko Febriadi</small></span>
+      </div>
+      <span class="library-label">Five labs ready to use</span>
+    </div>
+    <div class="hero-grid">
+      <div>
+        <p class="kicker">Cambridge IGCSE · Biology 0610</p>
+        <h1>Virtual labs.<br><em>Real discoveries.</em></h1>
+        <p class="hero-copy">Choose an investigation, work through the experiment, and record your results like a scientist. Open a lab directly or point your camera at its QR code.</p>
+        <div class="hero-actions">
+          <a class="primary-link" href="https://numberone320-art.github.io/Biomolvlabs/ig_enzymes_vlab.html">Start with Enzymes
+            <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <span class="hero-note">No log-in · No installation · Works on tablets</span>
+        </div>
+      </div>
+      <div class="hero-figure" aria-hidden="true">
+        <div class="orbit"></div>
+        <div class="lab-count"><strong>05</strong><span>Practical topics</span></div>
+      </div>
+    </div>
+  </div>
+</header>
+<main class="shell main" id="labs">
+  <div class="section-head">
+    <div>
+      <h2>Choose your investigation</h2>
+      <p>Each lab opens in a new page. On a computer or projector, students can scan the QR code to join on their own device.</p>
+    </div>
+    <button class="print-button" type="button" id="print-menu">
+      <svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v8H6z"/></svg>
+      Print QR handout
+    </button>
+  </div>
+  <div class="lab-list">
+    <article class="lab-card">
+      <div>
+        <p class="chapter">Chapter 5</p>
+        <h3>Enzymes</h3>
+        <p class="description">Test how pH affects catalase and temperature affects lipase. Record observations, draw graphs, and explain your conclusions.</p>
+        <div class="card-bottom">
+          <a class="open-link" href="https://numberone320-art.github.io/Biomolvlabs/ig_enzymes_vlab.html">Open lab<svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <span class="topics">Catalase · Lipase · pH · Temperature</span>
+        </div>
+      </div>
+      <figure class="qr-wrap"><div class="qr-frame"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAa4AAAGuCAIAAABHl3XNAAAHzUlEQVR42u3dwW7rOBBE0fLg/f8ve3ZZDbIYPaqL5Dn7JLZkXzCAGv35fr8BuNs/LgGAFAJIIYAUAkghgBQCSCGAFAJIIYAUAkghgBQCSCGAFAJIIYAUAkghgBQCSCGAFAJIIYAUAkghgBQCSCGAFAJIIYAUAkghwG/+rPvVn8/nsIv1/X7/9/td97Pr7tHU+31yF6Y+k+vuke/gO9fZqRBACgGkEEAKAaQQQAoBpBBACgGkECAvTJvE0/kF8yQ7zqJ0ToxMTW6su5ImZJwKAaQQQAoBpBBACgGkEEAKAaQQQAoBUjVtkst2UHTuNlk39dE5ybDjHZy6krftgXEqBJBCACkEkEIAKQSQQgApBJBCACkESPm0SS6bRsiy5/7Pm1W4bXvJjpMbToUAUggghQBSCCCFAFIIIIUAUggghQAxbULmdkH8/nef7NxY97OdmzGmrkbnDIxTIYAUAkghgBQCSCGAFAJIIYAUAkghQEybZJ8dFLlst8m6azW1cWXqSnbun+n8Lty2NcWpEEAKAaQQQAoBpBBACgGkEEAKAaQQIOPTJudtbJjaX/Hk76Zy10fsJ3nl/tqa4lQIIIUAUggghQBSCCCFAFIIIIUAUgjwnz63bTA4b7pmahPIeddqx+kp31+nQgApBJBCACkEkEIAKQSQQgApBJBCgGy028ROhrwyM7Bu58a6SZXOvShT13nq7nfu6pmarnEqBJBCACkEkEIAKQSQQgApBJBCACkEyAvTJhl6Sn5qzmFqriPHzcDY9NJwj3Z8R06FAFIIIIUAUggghQBSCCCFAFIIIIUA2XraZGqeJJdtTTlvZqBz6uO2GZjOvTdOhQBSCCCFAFIIIIUAUggghQBSCCCFANl62iSVm0+evKqprSnrpgI631Eqpz6mppg6dwTtONPlVAgghQBSCCCFAFIIIIUAUggghQBSCJAXpk1umyiYes1TszfZcG+GrSn93+6pb6hTIYAUAkghgBQCSCGAFAJIIYAUAkghwI/PeU+NnzdBMbWtJZUTFDtu1Lnts7Hj3I5TIYAUAkghgBQCSCGAFAJIIYAUAkghQF7YbZINJwqm9kjs+HR+5y6Xzvt7mx13qjgVAkghgBQCSCGAFAJIIYAUAkghgBQC5IXdJjtOjJz3d3Pc1pTOHSNTkyrr7lHn7I1pEwD/IANIIYAUAkghgBQCSCGAFAJIIUAO3m2S4zaQ/P6bOzefPHlVrmT/5MaTV3XbHhinQgApBJBCACkEkEIAKQSQQgApBJBCgLyw26RzKmDH6ZonT/Z33t/OeaEd737n3516R06FAFIIIIUAUggghQBSCCCFAFIIIIUAKZ822fEJ+3V2nJ/pnEbo3JvROSGz49TH1Gt2KgSQQgApBJBCACkEkEIAKQSQQgApBPjxJ8ft6zhvY4MdFP3vd+o341QIIIUAUggghQBSCCCFAFIIIIUAUgiQjXab2IyRzacvbHrp3+ax46YXp0IAKQSQQgApBJBCACkEkEIAKQSQQoBcu9sklc+yTz0H37n7onNLzNQn57ZNL527iZwKAaQQQAoBpBBACgGkEEAKAaQQQAoBcvBuk84ZiWy4RWRqoiCVExRTm0BM16R+c5FTIYAUAkghgBQCSCGAFAJIIYAUAkghQMp3m0xNBaRyt0nnrELnNELnJ2fdFETnZ+PJb+6cYnIqBJBCACkEkEIAKQSQQgApBJBCACkEyPi0SSonKHbcQZHj9oSct+tjahvPjttLnAoBpBBACgGkEEAKAaQQQAoBpBBACgFi2iSnTAXkuAmKHe9v5xTE1HWeuhrrJmScCgGkEEAKAaQQQAoBpBBACgGkEEAKAWLaJKfMhKx7VZ1bNTr/7pMrOTXjNLVhZsfv4LpJFadCACkEkEIAKQSQQgApBJBCACkEkEKAH5+p7Qe3PUPfuc9hx3e07nPV+bOdO1U6v4NOhQBSCCCFAFIIIIUAUggghQBSCCCFALHbJH/76fzOrQtTczs7TsikcjKn8zebcXIqBJBCACkEkEIAKQSQQgApBJBCACkEyMvTJk+eC1/3TPnUTMiTVzU1T2IjR//7NePkVAgghQBSCCCFAFIIIIUAUggghQBSCJCNpk3O28kw9Rz8bVdyas5haqvGeXtC1k3m2G0C4B9kACkEkEIAKQSQQgApBJBCACkEyNbTJqmc3EjlXEfnPMm6uY4d51jW3cEdN5+cVwanQgApBJBCACkEkEIAKQSQQgApBJBCgIxPm+Sy5+87tz08+c3rruTU5MaTnz1vUqXz2223CYB/kAGkEEAKAaQQQAoBpBBACgGkECDXTpucZ91cx7pZlPMmgjo3n0xNqnROXk3NzzgVAkghgBQCSCGAFAJIIYAUAkghgBQCxLRJTnmGvnOeZGqCIpXzQlO/ufNVORUCSCGAFAJIIYAUAkghgBQCSCGAFALEtEn22bqQ4/aiTE0jTM0qdO6BOe/z3DkR5FQIIIUAUggghQBSCCCFAFIIIIUAUgjwV3w6N2PE9pKjr9VtMz+dP9s5tzM1EeRUCCCFAFIIIIUAUggghQBSCCCFAFIIkBemTQCcCgGkEEAKAaQQQAoBpBBACgGkEEAKAaQQQAoBpBBACgGkEEAKAaQQQAoBpBBACgGkEEAKAaQQQAoBpBBACgGkEEAKAaQQQAoBjvAv2tOWe4v1usUAAAAASUVORK5CYII=" alt="QR code for the Chapter 5 Enzymes virtual lab" width="256" height="256"></div><figcaption>Scan to open</figcaption></figure>
+    </article>
+    <article class="lab-card">
+      <div>
+        <p class="chapter">Chapter 6</p>
+        <h3>Plant Nutrition</h3>
+        <p class="description">Label a leaf, test for starch, investigate the requirements for photosynthesis, and explore limiting factors.</p>
+        <div class="card-bottom">
+          <a class="open-link" href="https://numberone320-art.github.io/Biomolvlabs/ig_plant_nutrition_vlab.html">Open lab<svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <span class="topics">Photosynthesis · Starch tests · Limiting factors</span>
+        </div>
+      </div>
+      <figure class="qr-wrap"><div class="qr-frame"><img src="data:image/png;base64,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" alt="QR code for the Chapter 6 Plant Nutrition virtual lab" width="256" height="256"></div><figcaption>Scan to open</figcaption></figure>
+    </article>
+    <article class="lab-card">
+      <div>
+        <p class="chapter">Chapter 7</p>
+        <h3>Human Nutrition</h3>
+        <p class="description">Journey through the digestive system, model digestion and absorption, and investigate enzymes, bile, and the villus.</p>
+        <div class="card-bottom">
+          <a class="open-link" href="https://numberone320-art.github.io/Biomolvlabs/ig_human_nutrition_vlab.html">Open lab<svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <span class="topics">Digestion · Enzymes · Bile · Absorption</span>
+        </div>
+      </div>
+      <figure class="qr-wrap"><div class="qr-frame"><img src="data:image/png;base64,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" alt="QR code for the Chapter 7 Human Nutrition virtual lab" width="256" height="256"></div><figcaption>Scan to open</figcaption></figure>
+    </article>
+    <article class="lab-card">
+      <div>
+        <p class="chapter">Chapter 8</p>
+        <h3>Transport in Plants</h3>
+        <p class="description">Investigate water uptake, coloured water in celery, transpiration with a potometer, and translocation.</p>
+        <div class="card-bottom">
+          <a class="open-link" href="https://numberone320-art.github.io/Biomolvlabs/ig_transport_plants_vlab.html">Open lab<svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <span class="topics">Xylem · Phloem · Potometer · Transpiration</span>
+        </div>
+      </div>
+      <figure class="qr-wrap"><div class="qr-frame"><img src="data:image/png;base64,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" alt="QR code for the Chapter 8 Transport in Plants virtual lab" width="256" height="256"></div><figcaption>Scan to open</figcaption></figure>
+    </article>
+    <article class="lab-card">
+      <div>
+        <p class="chapter">Chapter 9</p>
+        <h3>Transport in Animals</h3>
+        <p class="description">Measure a virtual student’s pulse before and after exercise, then graph recovery and evaluate the investigation.</p>
+        <div class="card-bottom">
+          <a class="open-link" href="https://numberone320-art.github.io/Biomolvlabs/ig_transport_animals_vlab.html">Open lab<svg class="icon" aria-hidden="true" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+          <span class="topics">Heart rate · Exercise · Pulse · Recovery graph</span>
+        </div>
+      </div>
+      <figure class="qr-wrap"><div class="qr-frame"><img src="data:image/png;base64,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" alt="QR code for the Chapter 9 Transport in Animals virtual lab" width="256" height="256"></div><figcaption>Scan to open</figcaption></figure>
+    </article>
+  </div>
+</main>
+<footer class="footer">
+  <div class="shell footer-inner">
+    <span><strong>Eko Febriadi</strong> · IGCSE Biology Virtual Lab Library</span>
+    <span>Scan · Open · Investigate</span>
+  </div>
+</footer>
+<script>
+document.getElementById('print-menu').addEventListener('click', () => window.print());
+</script>
+</body>
+</html>
