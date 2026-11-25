@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Characteristics & classification – virtual practical: measuring specimens and using a dichotomous key</title>
+<style>
+:root{--acc:#0F766E;--acc2:#115E59;--pale:#F0FDFA;--navy:#0B2161;--ink:#1A1A1A;--mute:#5E5E6E;--line:#D5E5E2;--ok:#DCFCE7;--bg:#F7FAF9}
+*{box-sizing:border-box}html,body{margin:0}
+body{font-family:Georgia,"Times New Roman","Songti SC",serif;background:var(--bg);color:var(--ink);line-height:1.5;font-size:16px}
+.sans,nav,header,.btn,.chip,table,.pill,.tag,button,select,input{font-family:"Segoe UI",Calibri,"PingFang SC",system-ui,sans-serif}
+header{background:#fff;border-bottom:4px solid var(--acc);padding:12px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+header h1{margin:0;font-size:22px;color:var(--acc);font-weight:normal}
+header p{margin:2px 0 0;font-size:13px;color:var(--mute)}
+.pill{background:var(--navy);color:#fff;border-radius:999px;padding:6px 14px;font-weight:700;font-size:14px}
+main{max-width:1180px;margin:0 auto;padding:16px}
+.es{background:#fff;border-left:3px solid var(--acc);border-right:3px solid var(--acc);border-bottom:3px solid var(--acc);margin-bottom:16px}
+.esbar{background:var(--acc);color:#fff;padding:9px 16px;font-size:19px;letter-spacing:.3px}
+.esbody{padding:14px 18px}
+.estitle{color:var(--acc);font-weight:bold;font-size:17px;margin:2px 0 8px}
+.need{background:var(--pale);border:1px solid #BEE3DE;padding:10px 16px;margin:10px 0}
+.need h4,.meth h4,.qs h4{color:var(--acc);margin:2px 0 6px;font-size:16px}
+.need ul{margin:0;padding-left:18px}.need li::marker{color:var(--acc)}
+.safety{border-left:4px solid var(--acc);background:#F0FBF9;padding:8px 12px;margin:10px 0;font-size:15px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}@media(max-width:900px){.cols{grid-template-columns:1fr}}
+.meth ol{list-style:none;padding:0;margin:0;counter-reset:s}
+.meth li{counter-increment:s;padding:6px 8px;border-radius:6px;margin:2px 0}
+.meth li::before{content:counter(s) "  ";color:var(--acc);font-weight:bold}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:14px}
+.btn{display:inline-block;border:none;border-radius:8px;padding:10px 18px;font-size:15px;font-weight:700;cursor:pointer;background:var(--acc);color:#fff;margin:4px 6px 4px 0}
+.btn:hover{background:var(--acc2)}
+.btn:disabled{background:#C9C2C2;cursor:not-allowed}
+.btn.sec{background:#fff;color:var(--acc);border:2px solid var(--acc)}
+.btn.sec:hover{background:var(--pale)}
+.btn.navy{background:var(--navy)}
+select,input[type=text],input[type=number]{font-size:15px;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:#fff}
+.big{font-size:44px;font-weight:700;color:var(--acc);font-family:"Segoe UI",Calibri,sans-serif}
+.unit{font-size:16px;color:var(--mute);font-weight:400}
+.tag{display:inline-block;background:var(--pale);border:1px solid #BEE3DE;color:var(--acc2);border-radius:999px;padding:3px 12px;font-size:13px;font-weight:600}
+.tag.on{background:var(--acc);color:#fff}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th{background:var(--navy);color:#fff;padding:7px 10px;text-align:left;font-weight:600}
+td{border:1px solid var(--line);padding:6px 10px}
+tr:nth-child(even) td{background:#F6FBFA}
+.qs .q{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin-bottom:12px}
+.q h4{margin:2px 0 6px;color:var(--navy);font-size:15.5px}
+.rev{margin-top:8px;background:var(--pale);border-left:4px solid var(--acc);padding:8px 12px;font-size:14.5px;display:none}
+.rev.on{display:block}
+.linkbtn{border:none;background:none;color:var(--acc);font-weight:700;cursor:pointer;font-size:13.5px;text-decoration:underline;padding:0}
+.tip{font-size:13.5px;color:var(--mute);font-style:italic}
+footer{padding:16px 20px;color:var(--mute);font-size:12.5px;text-align:center}
+.specgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+.speccard{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px;text-align:center}
+.speccard svg{width:100%;height:120px}
+.specname{font-weight:700;color:var(--navy);font-size:14.5px;margin-top:4px;font-family:"Segoe UI",sans-serif}
+.measurebox{background:var(--pale);border-radius:8px;padding:8px;margin-top:8px;display:none}
+.measurebox.on{display:block}
+.fb{font-size:13.5px;font-weight:700;margin-top:4px;font-family:"Segoe UI",sans-serif}
+.fb.good{color:#15803D}.fb.bad{color:#B91C1C}
+.keynode{background:#fff;border:2px solid var(--acc);border-radius:10px;padding:10px 14px;margin:8px auto;max-width:520px;text-align:center;font-size:15px}
+.keybtns{display:flex;gap:10px;justify-content:center;margin-top:8px;flex-wrap:wrap}
+.keypath{font-size:13.5px;color:var(--mute);text-align:center;margin:6px 0}
+.zoomsvg{width:100%;height:auto;display:block;background:#fff;border:1px solid var(--line);border-radius:8px}
+.feat{cursor:pointer}
+.feat:hover{opacity:.75}
+.featchip{display:inline-block;background:#fff;border:1.5px solid var(--acc);color:var(--acc2);border-radius:999px;padding:4px 12px;font-size:13px;font-weight:600;margin:3px;cursor:pointer;font-family:"Segoe UI",sans-serif}
+.featchip.on{background:var(--acc);color:#fff}
+.rulerwrap{position:relative;background:#fff;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+</style></head>
+<body>
+<header>
+  <div style="flex:1;min-width:220px">
+    <h1>Characteristics &amp; classification — virtual practical</h1>
+    <p>Cambridge IGCSE Biology 0610 · Chapter 1 · works offline · Eko Febriadi</p>
+  </div>
+  <span class="pill">0610 · Ch 1</span>
+</header>
+<main>
+
+<!-- ============ ES 1.1 MEASURING ============ -->
+<div class="es">
+  <div class="esbar">EXPERIMENTAL SKILLS 1.1</div>
+  <div class="esbody">
+    <p class="estitle">Measuring the size of specimens</p>
+    <p>Biologists record the size of organisms in <strong>millimetres (mm)</strong>. In this activity you will read a ruler placed against each specimen — exactly as you would with a real specimen in the lab.</p>
+    <div class="need sans">
+      <h4>You will need:</h4>
+      <ul><li>the on-screen ruler (already placed against each specimen)</li><li>your results table below</li></ul>
+    </div>
+    <div class="safety"><strong>How to read it:</strong> each long numbered line is 10&nbsp;mm (1&nbsp;cm). Each small line is 1&nbsp;mm. Read the mark level with the <em>longest point</em> of the organism.</div>
+
+    <div class="specgrid" id="specGrid"></div>
+
+    <div class="card">
+      <h4 style="margin:2px 0 8px;color:var(--acc)">Results table</h4>
+      <table id="resTable">
+        <tr><th>Specimen</th><th>Your measurement (mm)</th><th>Check</th></tr>
+      </table>
+      <p class="tip">Type your reading for each specimen, then press “Check all”. A correct reading is within ±1&nbsp;mm.</p>
+      <button class="btn" id="checkAll">Check all</button>
+      <span id="scoreLine" class="fb"></span>
+    </div>
+  </div>
+</div>
+
+<!-- ============ ES 1.2 FEATURES ============ -->
+<div class="es">
+  <div class="esbar">EXPERIMENTAL SKILLS 1.2</div>
+  <div class="esbody">
+    <p class="estitle">Observing features used in classification</p>
+    <p>Classification keys use <strong>observable features</strong> — things you can see: number of legs, wings, body covering. Click on each labelled feature of the specimen to observe it, then answer the questions below.</p>
+    <div class="cols">
+      <div>
+        <div class="card" style="margin-bottom:8px">
+          <svg class="zoomsvg" viewBox="0 0 460 300" id="zoomSvg" aria-label="insect specimen"></svg>
+          <p class="tip" style="text-align:center">Specimen: a beetle (insect). Click each glowing part to observe it.</p>
+        </div>
+        <div style="text-align:center" id="featChips"></div>
+      </div>
+      <div class="qs">
+        <h4>Observation questions</h4>
+        <div class="q"><h4>1. How many legs does the beetle have?</h4>
+          <input type="number" id="qLegs" style="width:80px"> <button class="linkbtn" data-a="legs">check</button>
+          <div class="rev" id="rev-legs">Six legs. <strong>All insects have exactly 6 legs</strong> — this is the fastest feature for recognising the group. Spiders (arachnids) have 8.</div></div>
+        <div class="q"><h4>2. How many body sections can you see?</h4>
+          <input type="number" id="qSeg" style="width:80px"> <button class="linkbtn" data-a="seg">check</button>
+          <div class="rev" id="rev-seg">Three: <strong>head, thorax and abdomen</strong>. The legs and wings are attached to the thorax.</div></div>
+        <div class="q"><h4>3. Why do biologists prefer visible features (not, for example, “it eats leaves”) for keys?</h4>
+          <button class="linkbtn" data-a="why">show answer</button>
+          <div class="rev" id="rev-why">A key must work on the specimen <em>in front of you</em> — even a dead one. Behaviour, diet and habitat often cannot be observed directly, but legs, wings and body covering always can.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ ES 1.3 KEY ============ -->
+<div class="es">
+  <div class="esbar">EXPERIMENTAL SKILLS 1.3</div>
+  <div class="esbody">
+    <p class="estitle">Using a dichotomous key to identify unknown specimens</p>
+    <p>A <strong>dichotomous key</strong> gives you two choices at each step (“dichotomous” = splitting in two). Choose the statement that matches your specimen and follow the key to its name.</p>
+    <div class="need sans">
+      <h4>Your four unknown specimens:</h4>
+      <div class="specgrid" id="unkGrid" style="margin-top:8px"></div>
+    </div>
+    <div class="cols">
+      <div class="card">
+        <h4 style="margin:2px 0 8px;color:var(--acc)">Step 1 — choose a specimen to identify</h4>
+        <div id="unkBtns" style="text-align:center"></div>
+        <div id="keyStage" style="margin-top:10px">
+          <p class="tip" style="text-align:center">Pick specimen A, B, C or D above to start the key.</p>
+        </div>
+      </div>
+      <div class="qs">
+        <h4>Key questions</h4>
+        <div class="q"><h4>1. Write the key route you took for specimen A (e.g. 1b → 3a)</h4>
+          <input type="text" id="qRoute" style="width:200px" placeholder="1? → ??"> <button class="linkbtn" data-a="route">check</button>
+          <div class="rev" id="rev-route">Specimen A is the beetle: <strong>1a (legs present) → 2a (six legs) → insect</strong>.</div></div>
+        <div class="q"><h4>2. A student writes a key step: “1a. It is cute … go to 2 / 1b. It is scary … go to 3”. Why would this key not work?</h4>
+          <button class="linkbtn" data-a="cute">show answer</button>
+          <div class="rev" id="rev-cute">Key statements must be <strong>observable and measurable</strong>, not opinions. “Cute” and “scary” depend on the person looking. A good pair would be “has wings / does not have wings”.</div></div>
+        <div class="q"><h4>3. Which feature separates the snake from the worm in this key?</h4>
+          <button class="linkbtn" data-a="skin">show answer</button>
+          <div class="rev" id="rev-skin">Body covering: the snake has <strong>dry scales</strong> (reptile), the worm has a <strong>moist skin</strong> (annelid). Both have no legs, so “no legs” alone cannot separate them — a key may need several steps.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="qs">
+  <div class="card">
+    <h4 style="margin:2px 0 8px;color:var(--acc)">Exit check — characteristics of living things</h4>
+    <p>Match each life process to its letter (MRS GREN). Click a process to reveal the answer.</p>
+    <div id="gren"></div>
+  </div>
+</div>
+
+</main>
+<footer>IGCSE Biology 0610 · Chapter 1 virtual practical · all simulation runs locally in this file</footer>
+
+<script>
+/* ---------------- specimen art (inline SVG) ---------------- */
+function svgFish(c){return `<svg viewBox="0 0 200 120"><g stroke="#1f2937" stroke-width="2.5" fill="${c}"><path d="M20 60 Q70 20 140 55 Q170 60 185 60 Q170 62 140 68 Q70 100 20 60Z"/><path d="M140 55 L185 35 L175 60 L185 85 L140 68" fill="${c}"/><path d="M80 38 Q95 22 110 40" fill="${c}"/><path d="M85 82 Q100 96 112 80" fill="${c}"/></g><circle cx="48" cy="55" r="5" fill="#111827"/><path d="M28 62 q8 4 14 1" stroke="#111827" stroke-width="2" fill="none"/></svg>`}
+function svgBird(c){return `<svg viewBox="0 0 200 120"><g stroke="#1f2937" stroke-width="2.5" fill="${c}"><ellipse cx="100" cy="66" rx="48" ry="32"/><circle cx="142" cy="38" r="18"/><path d="M60 55 Q30 40 22 55 Q40 66 62 68Z"/><path d="M158 36 L178 41 L158 47Z" fill="#F59E0B"/><path d="M92 95 L88 112 M110 95 L114 112" fill="none" stroke="#F59E0B"/><path d="M80 112 h16 M106 112 h16" fill="none" stroke="#F59E0B"/></g><circle cx="147" cy="34" r="3.5" fill="#111827"/><path d="M78 60 q24 -18 44 -4" stroke="#1f2937" stroke-width="2" fill="none"/></svg>`}
+function svgAnt(c){return `<svg viewBox="0 0 200 120"><g stroke="#1f2937" stroke-width="2.5" fill="${c}"><ellipse cx="132" cy="62" rx="34" ry="26"/><ellipse cx="88" cy="62" rx="18" ry="15"/><circle cx="56" cy="58" r="14"/></g><g stroke="#1f2937" stroke-width="2.5" fill="none"><path d="M80 50 L66 26 M90 50 L84 22 M100 52 L104 24"/><path d="M80 74 L66 98 M90 74 L84 102 M100 72 L104 100"/><path d="M46 48 Q34 30 26 32 M48 46 Q40 24 34 22"/></g><circle cx="51" cy="54" r="2.5" fill="#111827"/></svg>`}
+function svgSpider(c){return `<svg viewBox="0 0 200 120"><g stroke="#1f2937" stroke-width="2.5" fill="${c}"><ellipse cx="120" cy="60" rx="30" ry="24"/><ellipse cx="82" cy="60" rx="16" ry="13"/></g><g stroke="#1f2937" stroke-width="2.5" fill="none"><path d="M78 50 L56 22 M86 48 L78 16 M94 50 L100 18 M100 56 L118 30"/><path d="M78 70 L56 98 M86 72 L78 104 M94 70 L100 102 M100 64 L118 92"/></g><circle cx="77" cy="56" r="2.5" fill="#111827"/><circle cx="87" cy="56" r="2.5" fill="#111827"/></svg>`}
+function svgFern(c){return `<svg viewBox="0 0 200 120"><g stroke="${c}" stroke-width="3" fill="none"><path d="M100 112 L100 30"/><path d="M100 100 Q70 92 58 74 M100 100 Q130 92 142 74"/><path d="M100 82 Q76 76 66 60 M100 82 Q124 76 134 60"/><path d="M100 64 Q82 58 76 46 M100 64 Q118 58 124 46"/><path d="M100 48 Q88 44 84 34 M100 48 Q112 44 116 34"/></g><g fill="${c}"><ellipse cx="58" cy="72" rx="7" ry="4"/><ellipse cx="142" cy="72" rx="7" ry="4"/><ellipse cx="66" cy="58" rx="7" ry="4"/><ellipse cx="134" cy="58" rx="7" ry="4"/><ellipse cx="76" cy="44" rx="6" ry="3.5"/><ellipse cx="124" cy="44" rx="6" ry="3.5"/></g><circle cx="100" cy="26" r="7" fill="${c}"/></svg>`}
+function svgFlower(c){return `<svg viewBox="0 0 200 120"><path d="M100 118 L100 52" stroke="#15803D" stroke-width="4" fill="none"/><path d="M100 92 Q78 88 72 70 Q92 74 100 84Z" fill="#15803D"/><g fill="${c}" stroke="#1f2937" stroke-width="2"><ellipse cx="100" cy="26" rx="10" ry="16"/><ellipse cx="122" cy="40" rx="10" ry="16" transform="rotate(60 122 40)"/><ellipse cx="78" cy="40" rx="10" ry="16" transform="rotate(-60 78 40)"/><ellipse cx="114" cy="60" rx="10" ry="15" transform="rotate(130 114 60)"/><ellipse cx="86" cy="60" rx="10" ry="15" transform="rotate(-130 86 60)"/></g><circle cx="100" cy="44" r="11" fill="#F59E0B" stroke="#1f2937" stroke-width="2"/></svg>`}
+function svgBeetle(c){return `<svg viewBox="0 0 200 120"><g stroke="#1f2937" stroke-width="2.5" fill="${c}"><ellipse cx="118" cy="60" rx="36" ry="28"/><path d="M118 34 L118 86" fill="none"/><ellipse cx="78" cy="60" rx="16" ry="14"/><circle cx="56" cy="56" r="12"/></g><g stroke="#1f2937" stroke-width="2.5" fill="none"><path d="M76 48 L62 26 M84 48 L82 24 M92 50 L98 26"/><path d="M76 72 L62 94 M84 72 L82 96 M92 70 L98 94"/><path d="M48 48 Q38 32 30 34 M50 46 Q44 26 36 26"/></g><circle cx="52" cy="52" r="2.5" fill="#fff"/></svg>`}
+function svgSnake(c){return `<svg viewBox="0 0 200 120"><path d="M16 84 Q50 84 60 62 Q70 40 104 42 Q140 44 138 64 Q136 84 104 82 Q84 80 92 60 Q98 46 128 50 Q160 54 168 40" stroke="${c}" stroke-width="13" fill="none" stroke-linecap="round"/><g stroke="#1f2937" stroke-width="1.6" fill="none"><path d="M30 78 l6 8 M48 76 l6 8 M64 58 l8 6 M80 46 l4 9 M104 46 v9 M124 48 v9 M138 62 l9 3 M118 78 v-8 M96 66 l8 4 M150 50 l8 6"/></g><circle cx="168" cy="38" r="8" fill="${c}" stroke="#1f2937" stroke-width="2"/><circle cx="170" cy="36" r="2" fill="#111827"/><path d="M176 40 l10 2 m-10 2 l9 5" stroke="#DC2626" stroke-width="2"/></svg>`}
+function svgWorm(c){return `<svg viewBox="0 0 200 120"><path d="M14 84 Q60 60 100 76 Q140 92 186 66" stroke="${c}" stroke-width="15" fill="none" stroke-linecap="round"/><g stroke="#1f2937" stroke-width="1.6" fill="none"><path d="M34 74 l4 10 M54 70 l4 10 M74 70 l3 10 M94 74 l2 10 M114 80 l0 10 M134 82 l-2 10 M154 78 l-4 10 M172 70 l-5 9"/></g></svg>`}
+
+/* ---------------- ES 1.1 measuring ---------------- */
+/* ruler: 0 at viewBox x=8, 2.4 px per mm. Each organism is translated so its
+   leftmost point sits exactly on 0; mm = (rightmost viewBox x - 8) / 2.4. */
+function align(svgStr,tx){
+ return svgStr.replace('<svg viewBox="0 0 200 120">','<svg viewBox="0 0 200 120"><g transform="translate('+tx+',0)">').replace('</svg>','</g></svg>');
+}
+const SPECS=[
+ {id:'fish', name:'Fish', svg:align(svgFish('#7DD3FC'),-12), mm:70},   // spans x 8→177
+ {id:'bird', name:'Bird', svg:align(svgBird('#FCD34D'),-14), mm:65},   // spans x 8→164
+ {id:'ant', name:'Ant', svg:align(svgAnt('#B45309'),-18), mm:58},      // spans x 8→148
+ {id:'spider',name:'Spider', svg:align(svgSpider('#9CA3AF'),-48), mm:39}, // spans x 8→102
+ {id:'fern', name:'Fern frond', svg:align(svgFern('#16A34A'),-50), mm:35}, // spans x 8→92
+ {id:'flower',name:'Flower', svg:align(svgFlower('#F472B6'),-64), mm:25}  // spans x 8→68
+];
+/* ruler svg: 0..80mm across 200px wide viewBox aligned under specimen */
+function rulerSVG(){let ticks='';for(let m=0;m<=80;m++){const x=8+m*2.4;const big=m%10===0;ticks+=`<line x1="${x}" y1="0" x2="${x}" y2="${big?14:(m%5===0?10:7)}" stroke="#111827" stroke-width="${big?1.6:1}"/>${big?`<text x="${x}" y="24" font-size="8" text-anchor="middle" font-family="Segoe UI,sans-serif">${m}</text>`:''}`}return `<svg viewBox="0 0 200 28" style="width:100%;height:28px;background:linear-gradient(#FEF3C7,#FDE68A);border-top:1px solid #D4D4D8">${ticks}</svg>`}
+const grid=document.getElementById('specGrid');
+const tbl=document.getElementById('resTable');
+SPECS.forEach((s,i)=>{
+ const card=document.createElement('div');card.className='speccard';
+ card.innerHTML=`${s.svg}<div class="specname">${s.name}</div>${rulerSVG()}
+  <div class="measurebox on" style="display:block">
+   <input type="number" id="in-${s.id}" style="width:70px" placeholder="mm"> <span class="unit">mm</span>
+   <div class="fb" id="fb-${s.id}"></div>
+  </div>`;
+ grid.appendChild(card);
+ const tr=document.createElement('tr');
+ tr.innerHTML=`<td>${s.name}</td><td id="cell-${s.id}">—</td><td id="mark-${s.id}">—</td>`;
+ tbl.appendChild(tr);
+});
+document.getElementById('checkAll').onclick=()=>{
+ let good=0;
+ SPECS.forEach(s=>{
+  const v=parseFloat(document.getElementById('in-'+s.id).value);
+  const fb=document.getElementById('fb-'+s.id);
+  const cell=document.getElementById('cell-'+s.id);
+  const mark=document.getElementById('mark-'+s.id);
+  if(isNaN(v)){fb.textContent='enter a number';fb.className='fb bad';return}
+  cell.textContent=v+' mm';
+  if(Math.abs(v-s.mm)<=1){good++;fb.textContent='✓ correct ('+s.mm+' mm)';fb.className='fb good';mark.textContent='✓'}
+  else{fb.textContent='✗ actual '+s.mm+' mm — look again';fb.className='fb bad';mark.textContent='✗ '+s.mm+' mm'}
+ });
+ document.getElementById('scoreLine').textContent='  Score: '+good+' / '+SPECS.length;
+};
+
+/* ---------------- ES 1.2 feature observation ---------------- */
+const zoom=document.getElementById('zoomSvg');
+const parts={
+ head:{label:'Head',note:'Contains the eyes and antennae (sense organs).',art:`<circle class="feat" data-p="head" cx="120" cy="130" r="34" fill="#B45309" stroke="#1f2937" stroke-width="3"/><circle cx="112" cy="122" r="6" fill="#111827"/><path class="feat" data-p="head" d="M104 104 Q84 70 62 76 M112 100 Q96 60 72 58" stroke="#1f2937" stroke-width="4" fill="none"/>`},
+ thorax:{label:'Thorax',note:'Middle section — all 6 legs and the wings attach here.',art:`<ellipse class="feat" data-p="thorax" cx="205" cy="140" rx="45" ry="38" fill="#92400E" stroke="#1f2937" stroke-width="3"/>`},
+ abdomen:{label:'Abdomen',note:'Rear section, containing most of the gut. Covered by hard wing cases (elytra).',art:`<ellipse class="feat" data-p="abdomen" cx="320" cy="145" rx="80" ry="62" fill="#78350F" stroke="#1f2937" stroke-width="3"/><path d="M320 84 L320 206" stroke="#1f2937" stroke-width="3"/><g stroke="#451A03" stroke-width="2" fill="none"><path d="M268 108 q18 10 0 0 M280 150 q20 6 60 2 M270 180 q26 10 70 4"/></g>`},
+ legs:{label:'6 legs',note:'Count them: 3 on each side, all joined to the thorax. 6 legs = insect.',art:`<g class="feat" data-p="legs" stroke="#1f2937" stroke-width="6" fill="none" stroke-linecap="round"><path d="M185 112 L150 60 L120 62"/><path d="M205 106 L195 48 L168 40"/><path d="M225 110 L235 52 L262 44"/><path d="M185 168 L150 220 L120 218"/><path d="M205 174 L195 232 L168 240"/><path d="M225 170 L235 228 L262 236"/></g>`},
+ wings:{label:'Wings (under cases)',note:'Two pairs of wings folded under the hard cases — most insects have wings.',art:`<path class="feat" data-p="wings" d="M255 120 Q310 60 380 96 Q330 110 300 138Z" fill="#FDE68A" stroke="#B45309" stroke-width="2.5" opacity="0.9"/>`}
+};
+let zoomArt='';for(const k in parts)zoomArt+=parts[k].art;
+zoom.innerHTML=zoomArt;
+const chipsBox=document.getElementById('featChips');
+for(const k in parts){const c=document.createElement('span');c.className='featchip';c.id='chip-'+k;c.textContent=parts[k].label;chipsBox.appendChild(c)}
+const obsNote=document.createElement('p');obsNote.className='fb';obsNote.style.textAlign='center';chipsBox.appendChild(obsNote);
+zoom.addEventListener('click',e=>{
+ const t=e.target.closest('.feat');if(!t)return;
+ const p=parts[t.dataset.p];
+ for(const k in parts)document.getElementById('chip-'+k).classList.remove('on');
+ document.getElementById('chip-'+t.dataset.p).classList.add('on');
+ obsNote.textContent=p.label+': '+p.note;obsNote.className='fb good';obsNote.style.textAlign='center';
+});
+document.querySelectorAll('.linkbtn[data-a]').forEach(b=>b.onclick=()=>{
+ const map={legs:'rev-legs',seg:'rev-seg',why:'rev-why',route:'rev-route',cute:'rev-cute',skin:'rev-skin'};
+ const r=document.getElementById(map[b.dataset.a]);
+ if(b.dataset.a==='legs'){const v=document.getElementById('qLegs').value;r.classList.add('on');r.style.borderLeftColor=(v==='6')?'#15803D':'#B91C1C'}
+ else if(b.dataset.a==='seg'){const v=document.getElementById('qSeg').value;r.classList.add('on');r.style.borderLeftColor=(v==='3')?'#15803D':'#B91C1C'}
+ else if(b.dataset.a==='route'){const v=(document.getElementById('qRoute').value||'').replace(/\s/g,'').toLowerCase();r.classList.add('on');r.style.borderLeftColor=(v.includes('1a')&&v.includes('2a'))?'#15803D':'#B91C1C'}
+ else r.classList.toggle('on');
+});
+
+/* ---------------- ES 1.3 dichotomous key ---------------- */
+const UNKS=[
+ {id:'A',name:'Specimen A',svg:svgBeetle('#78716C'),route:['1a','2a'],answer:'an INSECT (beetle)',why:'legs present → six legs'},
+ {id:'B',name:'Specimen B',svg:svgSpider('#6B7280'),route:['1a','2b'],answer:'an ARACHNID (mite)',why:'legs present → eight legs'},
+ {id:'C',name:'Specimen C',svg:svgSnake('#65A30D'),route:['1b','3b'],answer:'a REPTILE (snake)',why:'no legs → dry scaly skin'},
+ {id:'D',name:'Specimen D',svg:svgWorm('#D6A08A'),route:['1b','3a'],answer:'an ANNELID (worm)',why:'no legs → moist skin'}
+];
+const unkGrid=document.getElementById('unkGrid');
+UNKS.forEach(u=>{const d=document.createElement('div');d.className='speccard';d.innerHTML=u.svg+`<div class="specname">${u.name}</div>`;unkGrid.appendChild(d)});
+const unkBtns=document.getElementById('unkBtns');
+const stage=document.getElementById('keyStage');
+UNKS.forEach(u=>{const b=document.createElement('button');b.className='btn sec';b.textContent=u.name;b.onclick=()=>startKey(u);unkBtns.appendChild(b)});
+const KEY={
+ 1:{q:'Does the specimen have legs?',a:{label:'1a. Legs present',go:2},b:{label:'1b. No legs',go:3}},
+ 2:{q:'How many legs?',a:{label:'2a. Six legs',end:'an INSECT (e.g. beetle, ant, butterfly)'},b:{label:'2b. Eight legs',end:'an ARACHNID (e.g. spider, mite)'}},
+ 3:{q:'What covers the body?',a:{label:'3a. Moist, soft skin',end:'an ANNELID worm (e.g. earthworm)'},b:{label:'3b. Dry scales',end:'a REPTILE (e.g. snake, lizard)'}}
+};
+let curUnk=null,path=[];
+function startKey(u){curUnk=u;path=[];showNode(1)}
+function showNode(n){
+ const node=KEY[n];
+ stage.innerHTML=`<div class="keypath">Identifying <strong>${curUnk.name}</strong> · route so far: ${path.join(' → ')||'start'}</div>
+ <div class="keynode"><strong>Step ${n}.</strong> ${node.q}
+  <div class="keybtns">
+   <button class="btn" id="ka">${node.a.label}</button>
+   <button class="btn" id="kb">${node.b.label}</button>
+  </div></div>`;
+ document.getElementById('ka').onclick=()=>choose('a',node.a);
+ document.getElementById('kb').onclick=()=>choose('b',node.b);
+}
+function choose(letter,opt){
+ const step=path.length+1;path.push(step+letter);
+ if(opt.go)showNode(opt.go);
+ else{
+  const ok=curUnk.answer.slice(3).toLowerCase()===opt.end.slice(3,3+curUnk.answer.length-3).toLowerCase();
+  const correct=opt.end.toLowerCase().includes(curUnk.answer.slice(3,10).toLowerCase());
+  stage.innerHTML=`<div class="keypath">${curUnk.name} · your route: ${path.join(' → ')}</div>
+   <div class="keynode" style="border-color:${correct?'#15803D':'#B91C1C'}">
+    <div class="big" style="font-size:26px">${correct?'✓ Identified!':'✗ Check your route'}</div>
+    <p>${curUnk.name} is <strong>${opt.end}</strong>.</p>
+    <p class="tip">Correct answer: ${curUnk.name} is ${curUnk.answer} — ${curUnk.why}.</p>
+    <button class="btn sec" onclick="startKey(curUnk)">try again</button>
+    <button class="btn sec" onclick="resetKey()">choose another specimen</button>
+   </div>`;
+ }
+}
+window.startKey=startKey;window.resetKey=()=>{stage.innerHTML='<p class="tip" style="text-align:center">Pick specimen A, B, C or D above to start the key.</p>';curUnk=null};
+
+/* ---------------- MRS GREN exit check ---------------- */
+const GREN=[['M','Movement','an action by an organism causing a change of position or place'],['R','Respiration','chemical reactions in cells that release energy from nutrient molecules'],['S','Sensitivity','the ability to detect and respond to changes in the environment'],['G','Growth','a permanent increase in size'],['R','Reproduction','processes that make more of the same kind of organism'],['E','Excretion','removal of waste products of metabolism and materials in excess of requirements'],['N','Nutrition','taking in of materials for energy, growth and development']];
+const gbox=document.getElementById('gren');
+GREN.forEach(g=>{
+ const d=document.createElement('div');d.style.cssText='border-bottom:1px dashed var(--line);padding:6px 2px;cursor:pointer';
+ d.innerHTML=`<strong style="color:var(--acc)">${g[0]}</strong> — ${g[1]} <span class="tip">(click to define)</span><div class="rev" style="display:none;margin-top:4px">${g[2]}</div>`;
+ d.onclick=()=>{const r=d.querySelector('.rev');r.style.display=r.style.display==='block'?'none':'block'};
+ gbox.appendChild(d);
+});
+</script>
+</body></html>
