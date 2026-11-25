@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Coordination & response – virtual practical: reaction time and the pupil reflex</title>
+<style>
+:root{--acc:#4F46E5;--acc2:#4338CA;--pale:#EEF2FF;--navy:#0B2161;--ink:#1A1A1A;--mute:#5E5E6E;--line:#DFDFF5;--bg:#F9F9FD}
+*{box-sizing:border-box}html,body{margin:0}
+body{font-family:Georgia,"Times New Roman","Songti SC",serif;background:var(--bg);color:var(--ink);line-height:1.5;font-size:16px}
+.sans,nav,header,.btn,.chip,table,.pill,.tag,button,select,input{font-family:"Segoe UI",Calibri,"PingFang SC",system-ui,sans-serif}
+header{background:#fff;border-bottom:4px solid var(--acc);padding:12px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+header h1{margin:0;font-size:22px;color:var(--acc);font-weight:normal}
+header p{margin:2px 0 0;font-size:13px;color:var(--mute)}
+.pill{background:var(--navy);color:#fff;border-radius:999px;padding:6px 14px;font-weight:700;font-size:14px}
+main{max-width:1180px;margin:0 auto;padding:16px}
+.es{background:#fff;border-left:3px solid var(--acc);border-right:3px solid var(--acc);border-bottom:3px solid var(--acc);margin-bottom:16px}
+.esbar{background:var(--acc);color:#fff;padding:9px 16px;font-size:19px;letter-spacing:.3px}
+.esbody{padding:14px 18px}
+.estitle{color:var(--acc);font-weight:bold;font-size:17px;margin:2px 0 8px}
+.safety{border-left:4px solid var(--acc);background:#F0F0FE;padding:8px 12px;margin:10px 0;font-size:15px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}@media(max-width:900px){.cols{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:14px}
+.btn{display:inline-block;border:none;border-radius:8px;padding:10px 18px;font-size:15px;font-weight:700;cursor:pointer;background:var(--acc);color:#fff;margin:4px 6px 4px 0}
+.btn:hover{background:var(--acc2)}
+.btn:disabled{background:#C9C9DC;cursor:not-allowed}
+.btn.sec{background:#fff;color:var(--acc);border:2px solid var(--acc)}
+.btn.sec:hover{background:var(--pale)}
+.btn.navy{background:var(--navy)}
+select,input[type=text],input[type=number]{font-size:15px;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:#fff}
+.big{font-size:40px;font-weight:700;color:var(--acc);font-family:"Segoe UI",Calibri,sans-serif}
+.tag{display:inline-block;background:var(--pale);border:1px solid #DFDFF5;color:var(--acc2);border-radius:999px;padding:3px 12px;font-size:13px;font-weight:600}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th{background:var(--navy);color:#fff;padding:7px 10px;text-align:left;font-weight:600}
+td{border:1px solid var(--line);padding:6px 10px}
+tr:nth-child(even) td{background:#F5F5FD}
+.qs .q{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin-bottom:12px}
+.q h4{margin:2px 0 6px;color:var(--navy);font-size:15.5px}
+.rev{margin-top:8px;background:var(--pale);border-left:4px solid var(--acc);padding:8px 12px;font-size:14.5px;display:none}
+.rev.on{display:block}
+.linkbtn{border:none;background:none;color:var(--acc);font-weight:700;cursor:pointer;font-size:13.5px;text-decoration:underline;padding:0}
+.tip{font-size:13.5px;color:var(--mute);font-style:italic}
+footer{padding:16px 20px;color:var(--mute);font-size:12.5px;text-align:center}
+.fb{font-size:13.5px;font-weight:700;margin-top:4px;font-family:"Segoe UI",sans-serif}
+.fb.good{color:#15803D}.fb.bad{color:#B91C1C}
+#dropzone{position:relative;width:220px;height:400px;margin:0 auto;background:linear-gradient(#EEF2FF,#E0E7FF);border:1px solid var(--line);border-radius:10px;overflow:hidden;cursor:pointer;user-select:none;touch-action:none}
+#ruler{position:absolute;left:88px;top:10px;transition:none}
+#catchzone{position:absolute;left:0;right:0;bottom:0;height:90px;border-top:2px dashed var(--acc);display:flex;align-items:center;justify-content:center;font-family:Segoe UI;font-size:13px;color:var(--acc2)}
+.arcchip{display:inline-block;border:2px solid var(--acc);background:#fff;color:var(--acc2);border-radius:999px;padding:5px 13px;font-size:13.5px;font-weight:700;margin:3px;cursor:pointer;font-family:"Segoe UI",sans-serif}
+.arcchip.on{background:var(--acc);color:#fff}
+.arcchip:disabled{opacity:.4}
+input[type=range]{width:220px;accent-color:var(--acc)}
+</style></head>
+<body>
+<header>
+  <div style="flex:1;min-width:220px">
+    <h1>Coordination &amp; response — virtual practical</h1>
+    <p>Cambridge IGCSE Biology 0610 · Chapter 14 · works offline · Eko Febriadi</p>
+  </div>
+  <span class="pill">0610 · Ch 14</span>
+</header>
+<main>
+
+<!-- ============ ES 14.1 REACTION TIME ============ -->
+<div class="es">
+  <div class="esbar">EXPERIMENTAL SKILLS 14.1</div>
+  <div class="esbody">
+    <p class="estitle">Measuring reaction time — the ruler-drop test</p>
+    <p>Your nervous system is fast — but not instant. Press <strong>start</strong>: the ruler will fall after a random delay. <strong>Click the catch zone</strong> the instant you see it move. The distance it falls tells us your reaction time. Do 5 trials, then try the distracted version!</p>
+    <div class="cols">
+      <div>
+        <div id="dropzone">
+          <svg id="ruler" width="44" height="300" viewBox="0 0 44 300">
+            <rect x="4" y="0" width="36" height="300" rx="4" fill="#FDE68A" stroke="#B45309" stroke-width="2"/>
+            <g id="rticks"></g>
+          </svg>
+          <div id="catchzone">catch zone — click here when the ruler falls!</div>
+        </div>
+        <div style="text-align:center;margin-top:8px">
+          <button class="btn" id="startDrop">▶ start trial</button>
+          <label class="tag" style="cursor:pointer"><input type="checkbox" id="distract"> 🎧 add distraction</label>
+        </div>
+        <div class="big" style="text-align:center" id="reactRead">— ms</div>
+      </div>
+      <div>
+        <div class="card">
+          <h4 style="margin:2px 0 8px;color:var(--acc)">Results</h4>
+          <table id="reactTable"><tr><th>Trial</th><th>Reaction time (ms)</th><th>Condition</th></tr></table>
+          <p class="fb" id="avgFb"></p>
+          <p class="tip">A typical human reaction time to a visual signal is about 200–250 ms. F1 drivers manage ≈ 180 ms!</p>
+        </div>
+        <div class="qs">
+          <div class="q"><h4>1. Trace the path of the impulse in this test: eye → …? → finger muscles.</h4>
+            <button class="linkbtn" data-r="c1">show answer</button>
+            <div class="rev" id="c1">Receptor cells in the <strong>eye</strong> → sensory neurone → <strong>CNS (brain)</strong> → motor neurone → <strong>effector</strong> (muscles in the hand) → response (fingers click). Unlike a simple reflex, the brain is involved because you consciously decide to click.</div></div>
+          <div class="q"><h4>2. What happened to your reaction time with distraction? Explain.</h4>
+            <button class="linkbtn" data-r="c2">show answer</button>
+            <div class="rev" id="c2">It got <strong>slower (longer)</strong> — the brain must share attention between two tasks, so the signal takes longer to process. This is why using a phone while driving is so dangerous.</div></div>
+          <div class="q"><h4>3. Why do we do several trials and average them?</h4>
+            <button class="linkbtn" data-r="c3">show answer</button>
+            <div class="rev" id="c3">Single measurements vary randomly (blinks, anticipation). <strong>Repeats and a mean</strong> make the result more reliable and let us spot anomalous trials.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ ES 14.2 PUPIL REFLEX ============ -->
+<div class="es">
+  <div class="esbar">EXPERIMENTAL SKILLS 14.2</div>
+  <div class="esbody">
+    <p class="estitle">The pupil reflex — measuring pupil diameter</p>
+    <p>The pupil reflex is a <strong>reflex action</strong>: fast, automatic, and protective — no conscious thought needed. Drag the light slider and measure the pupil with the ruler beside the eye.</p>
+    <div class="cols">
+      <div style="text-align:center">
+        <svg id="eyeSvg" width="360" height="240" viewBox="0 0 360 240"></svg>
+        <div>
+          <span class="tag">💡 light intensity</span><br>
+          <input type="range" id="lightSlider" min="0" max="100" value="50"><br>
+          <span id="lightLab">medium light</span>
+        </div>
+        <div style="margin-top:6px">
+          pupil diameter: <input type="number" id="pupilIn" style="width:70px"> mm
+          <button class="btn" id="pupilRec">record</button>
+          <span class="fb" id="pupilFb"></span>
+        </div>
+      </div>
+      <div>
+        <div class="card">
+          <h4 style="margin:2px 0 8px;color:var(--acc)">Results</h4>
+          <table id="pupilTable"><tr><th>Light</th><th>Pupil diameter (mm)</th></tr></table>
+        </div>
+        <div class="qs">
+          <div class="q"><h4>Put the pupil reflex arc in order — click the steps in sequence:</h4>
+            <div id="arcBox"></div>
+            <p>Your sequence: <span class="fb" id="arcPath"></span></p>
+            <button class="btn sec" id="arcReset">reset</button>
+            <div class="rev" id="rev-arc">stimulus (bright light) → receptor (retina) → sensory neurone → CNS → motor neurone → effector (circular muscles of the iris) → response (pupil constricts). This protects the retina from damage by bright light.</div>
+          </div>
+          <div class="q"><h4>2. Which iris muscles contract in bright light — and what do antagonistic muscles do in dim light?</h4>
+            <button class="linkbtn" data-r="p1">show answer</button>
+            <div class="rev" id="p1">In bright light the <strong>circular muscles contract</strong> (radial muscles relax) → pupil gets smaller. In dim light the opposite: <strong>radial muscles contract</strong>, circular relax → pupil dilates to let in more light. Muscle pairs that oppose each other are called <strong>antagonistic</strong>.</div></div>
+          <div class="q"><h4>3. Reflex vs conscious action: give one feature that makes the pupil reflex a reflex.</h4>
+            <button class="linkbtn" data-r="p2">show answer</button>
+            <div class="rev" id="p2">It is <strong>automatic and involuntary</strong> — you cannot stop your pupil constricting by willpower, and it does not involve the conscious parts of the brain. This makes it fast and protective.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+<footer>IGCSE Biology 0610 · Chapter 14 virtual practical · all simulation runs locally in this file</footer>
+
+<script>
+/* ---------- ES 14.1 ruler drop ---------- */
+/* ruler ticks 0-28 cm */
+let ticks='';for(let cm=0;cm<=28;cm+=2){ticks+=`<line x1="4" y1="${6+cm*10}" x2="${cm%4===0?20:12}" y2="${6+cm*10}" stroke="#92400E" stroke-width="1.6"/><text x="24" y="${10+cm*10}" font-size="9" font-family="Segoe UI" fill="#92400E">${cm}</text>`}
+document.getElementById('rticks').innerHTML=ticks;
+const ruler=document.getElementById('ruler'),zone=document.getElementById('dropzone');
+let waiting=false,falling=false,fallStart=0,trialN=0,rAF=null,extraDelay=0;
+document.getElementById('startDrop').onclick=()=>{
+ if(waiting||falling)return;
+ waiting=true;
+ ruler.style.top='10px';
+ document.getElementById('reactRead').textContent='wait for it…';
+ const distracted=document.getElementById('distract').checked;
+ /* with distraction, the brain processes slower -> we ADD to the measured time below */
+ extraDelay=distracted?60+Math.random()*60:0;
+ const delay=1200+Math.random()*2800;
+ setTimeout(()=>{
+  waiting=false;falling=true;fallStart=performance.now();
+  let y=10;
+  const fall=()=>{
+   y+=14;if(y>330){y=330;cancelAnimationFrame(rAF);falling=false;
+    document.getElementById('reactRead').textContent='missed! the ruler escaped 😅';
+    ruler.style.top=y+'px';return}
+   ruler.style.top=y+'px';
+   if(falling)rAF=requestAnimationFrame(fall);
+  };
+  rAF=requestAnimationFrame(fall);
+ },delay);
+};
+zone.addEventListener('pointerdown',()=>{
+ if(falling){
+  falling=false;cancelAnimationFrame(rAF);
+  trialN++;
+  let ms=performance.now()-fallStart+extraDelay;
+  ms=Math.round(ms);
+  /* distance fallen: ruler top from 10px, 10px per cm */
+  const distCm=((parseFloat(ruler.style.top)||10)-10)/10;
+  document.getElementById('reactRead').textContent=ms+' ms';
+  const t=document.getElementById('reactTable');
+  const tr=document.createElement('tr');
+  tr.innerHTML=`<td>${trialN}</td><td><strong>${ms}</strong></td><td>${extraDelay?'🎧 distracted':'focused'}</td>`;
+  t.appendChild(tr);
+  updateAvg();
+ }else if(!waiting){
+  document.getElementById('reactRead').textContent='press start first!';
+ }
+});
+zone.addEventListener('contextmenu',e=>e.preventDefault());
+function updateAvg(){
+ const rows=[...document.querySelectorAll('#reactTable tr')].slice(1);
+ const vals=rows.map(r=>+r.cells[1].textContent);
+ if(vals.length>=3){
+  const avg=vals.reduce((a,b)=>a+b,0)/vals.length;
+  const best=Math.min(...vals);
+  document.getElementById('avgFb').textContent=`mean: ${avg.toFixed(0)} ms over ${vals.length} trials · your best: ${best} ms`;
+  document.getElementById('avgFb').className='fb '+(avg<280?'good':'');
+ }
+}
+/* ---------- ES 14.2 pupil reflex ---------- */
+const eye=document.getElementById('eyeSvg');
+let pupilMm=6; /* true pupil diameter mm at current light */
+function drawEye(level){ /* level 0..1 light */
+ pupilMm=Math.round((7.5-5.5*level)*2)/2; /* 7.5mm dark -> 2mm bright */
+ const glow=Math.round(255*(0.55+0.45*level));
+ eye.innerHTML=`
+ <rect width="360" height="240" fill="rgb(${glow},${glow},${Math.min(255,glow+8)})"/>
+ <ellipse cx="150" cy="120" rx="120" ry="78" fill="#fff" stroke="#94A3B8" stroke-width="3"/>
+ <circle cx="150" cy="120" r="52" fill="#7C5A3A" stroke="#4A3520" stroke-width="3"/>
+ <circle cx="150" cy="120" r="${pupilMm*9}" fill="#111827" style="transition:r .3s"/>
+ <circle cx="${150-pupilMm*4}" cy="${120-pupilMm*4}" r="6" fill="rgba(255,255,255,.85)"/>
+ <!-- ruler beside eye -->
+ <rect x="300" y="30" width="34" height="184" rx="4" fill="#FDE68A" stroke="#B45309" stroke-width="2"/>
+ ${[...Array(10)].map((_,i)=>`<line x1="300" y1="${40+i*18}" x2="${i%2===0?316:308}" y2="${40+i*18}" stroke="#92400E" stroke-width="1.4"/>${i%2===0?`<text x="318" y="${44+i*18}" font-size="8.5" font-family="Segoe UI" fill="#92400E">${i}</text>`:''}`).join('')}
+ <text x="317" y="228" font-size="9" text-anchor="middle" font-family="Segoe UI" fill="#92400E">mm</text>`;
+}
+drawEye(0.5);
+const LAB=['dark','dim','medium light','bright','very bright'];
+document.getElementById('lightSlider').oninput=e=>{
+ const v=+e.target.value;drawEye(v/100);
+ document.getElementById('lightLab').textContent=LAB[Math.min(4,Math.floor(v/20))];
+};
+document.getElementById('pupilRec').onclick=()=>{
+ const v=+document.getElementById('pupilIn').value;
+ const fb=document.getElementById('pupilFb');
+ if(isNaN(v)){fb.textContent='enter a reading';fb.className='fb bad';return}
+ const ok=Math.abs(v-pupilMm)<=1;
+ const lv=document.getElementById('lightSlider').value;
+ const t=document.getElementById('pupilTable');
+ const tr=document.createElement('tr');
+ tr.innerHTML=`<td>${LAB[Math.min(4,Math.floor(lv/20))]}</td><td>${v} mm ${ok?'✓':'(true ≈ '+pupilMm+' mm)'}</td>`;
+ t.appendChild(tr);
+ fb.textContent=ok?'✓ good reading!':'⚠ more than 1 mm out — look at the ruler carefully';
+ fb.className='fb '+(ok?'good':'bad');
+};
+/* reflex arc ordering */
+const ARC=['effector (iris muscles)','stimulus (bright light)','motor neurone','receptor (retina)','response (pupil constricts)','sensory neurone','CNS (brain & spinal cord)'];
+const RIGHT=['stimulus (bright light)','receptor (retina)','sensory neurone','CNS (brain & spinal cord)','motor neurone','effector (iris muscles)','response (pupil constricts)'];
+let picked=[];
+const arcBox=document.getElementById('arcBox');
+ARC.forEach(a=>{
+ const b=document.createElement('span');b.className='arcchip';b.textContent=a;
+ b.onclick=()=>{
+  if(picked.includes(a))return;
+  picked.push(a);b.classList.add('on');
+  document.getElementById('arcPath').textContent=picked.map(p=>p.split(' (')[0]).join(' → ');
+  if(picked.length===7){
+   const ok=picked.join()===RIGHT.join();
+   const r=document.getElementById('rev-arc');r.classList.add('on');
+   r.style.borderLeftColor=ok?'#15803D':'#B91C1C';
+   document.getElementById('arcPath').className='fb '+(ok?'good':'bad');
+  }
+ };
+ arcBox.appendChild(b);
+});
+document.getElementById('arcReset').onclick=()=>{
+ picked=[];
+ arcBox.querySelectorAll('.arcchip').forEach(c=>c.classList.remove('on'));
+ document.getElementById('arcPath').textContent='';
+ document.getElementById('rev-arc').classList.remove('on');
+};
+document.querySelectorAll('.linkbtn[data-r]').forEach(b=>b.onclick=()=>document.getElementById(b.dataset.r).classList.toggle('on'));
+</script>
+</body></html>
