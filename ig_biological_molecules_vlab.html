@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Biological molecules – virtual practical: food tests</title>
+<style>
+:root{--acc:#C2410C;--acc2:#9A3412;--pale:#FFF7ED;--navy:#0B2161;--ink:#1A1A1A;--mute:#5E5E6E;--line:#F0DFD3;--ok:#DCFCE7;--bg:#FDFAF7}
+*{box-sizing:border-box}html,body{margin:0}
+body{font-family:Georgia,"Times New Roman","Songti SC",serif;background:var(--bg);color:var(--ink);line-height:1.5;font-size:16px}
+.sans,nav,header,.btn,.chip,table,.pill,.tag,button,select,input{font-family:"Segoe UI",Calibri,"PingFang SC",system-ui,sans-serif}
+header{background:#fff;border-bottom:4px solid var(--acc);padding:12px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+header h1{margin:0;font-size:22px;color:var(--acc);font-weight:normal}
+header p{margin:2px 0 0;font-size:13px;color:var(--mute)}
+.pill{background:#0B2161;color:#fff;border-radius:999px;padding:6px 14px;font-weight:700;font-size:14px}
+main{max-width:1180px;margin:0 auto;padding:16px}
+.es{background:#fff;border-left:3px solid var(--acc);border-right:3px solid var(--acc);border-bottom:3px solid var(--acc);margin-bottom:16px}
+.esbar{background:var(--acc);color:#fff;padding:9px 16px;font-size:19px;letter-spacing:.3px}
+.esbody{padding:14px 18px}
+.estitle{color:var(--acc);font-weight:bold;font-size:17px;margin:2px 0 8px}
+.safety{border-left:4px solid var(--acc);background:#FFF4EA;padding:8px 12px;margin:10px 0;font-size:15px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}@media(max-width:900px){.cols{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:14px}
+.btn{display:inline-block;border:none;border-radius:8px;padding:10px 18px;font-size:15px;font-weight:700;cursor:pointer;background:var(--acc);color:#fff;margin:4px 6px 4px 0}
+.btn:hover{background:var(--acc2)}
+.btn:disabled{background:#CFC9C5;cursor:not-allowed}
+.btn.sec{background:#fff;color:var(--acc);border:2px solid var(--acc)}
+.btn.sec:hover{background:var(--pale)}
+.btn.navy{background:var(--navy)}
+select,input[type=text],input[type=number]{font-size:15px;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:#fff}
+.tag{display:inline-block;background:var(--pale);border:1px solid #F3D9C4;color:var(--acc2);border-radius:999px;padding:3px 12px;font-size:13px;font-weight:600}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th{background:var(--navy);color:#fff;padding:7px 10px;text-align:left;font-weight:600}
+td{border:1px solid var(--line);padding:6px 10px}
+tr:nth-child(even) td{background:#FDF6F0}
+.qs .q{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin-bottom:12px}
+.q h4{margin:2px 0 6px;color:var(--navy);font-size:15.5px}
+.rev{margin-top:8px;background:var(--pale);border-left:4px solid var(--acc);padding:8px 12px;font-size:14.5px;display:none}
+.rev.on{display:block}
+.linkbtn{border:none;background:none;color:var(--acc);font-weight:700;cursor:pointer;font-size:13.5px;text-decoration:underline;padding:0}
+.tip{font-size:13.5px;color:var(--mute);font-style:italic}
+footer{padding:16px 20px;color:var(--mute);font-size:12.5px;text-align:center}
+.fb{font-size:13.5px;font-weight:700;margin-top:4px;font-family:"Segoe UI",sans-serif}
+.fb.good{color:#15803D}.fb.bad{color:#B91C1C}
+.stepmsg{background:var(--pale);border:2px solid var(--acc);border-radius:8px;padding:8px 12px;font-size:14.5px;font-family:"Segoe UI",sans-serif;font-weight:600;margin-bottom:10px}
+.bench{position:relative;background:linear-gradient(#FBEADD,#F6DEC9);border:1px solid var(--line);border-radius:10px;height:560px;overflow:hidden;user-select:none;touch-action:none}
+.reagent{position:absolute;cursor:pointer;text-align:center;transition:transform .15s,filter .15s}
+.reagent:hover{transform:scale(1.06)}
+.reagent.picked{filter:drop-shadow(0 0 8px var(--acc));transform:scale(1.12)}
+.tube{position:absolute;cursor:pointer;transition:transform .15s}
+.tube:hover{transform:scale(1.05)}
+.droplet{position:absolute;width:10px;height:14px;border-radius:50% 50% 50% 50%/60% 60% 40% 40%;animation:fall .5s ease-in forwards;z-index:9;pointer-events:none}
+@keyframes fall{0%{transform:translateY(-30px);opacity:1}90%{opacity:1}100%{transform:translateY(34px);opacity:0}}
+.pourline{position:absolute;width:5px;border-radius:3px;animation:pl .3s linear infinite alternate;z-index:9;pointer-events:none}
+@keyframes pl{from{opacity:.5}to{opacity:1}}
+.bathwrap{position:absolute;left:352px;top:195px;text-align:center;z-index:2}
+.logbook{background:#fff;border:2px solid var(--acc);border-radius:10px;padding:10px 14px;font-size:13.5px;font-family:"Segoe UI",sans-serif;max-height:220px;overflow:auto;margin-top:10px}
+.logbook h5{margin:2px 0 6px;color:var(--acc);font-size:14px}
+.logbook div{border-bottom:1px dashed var(--line);padding:3px 0}
+.shake{animation:shk .1s linear 6}
+@keyframes shk{0%{transform:translateX(-4px) rotate(-3deg)}50%{transform:translateX(4px) rotate(3deg)}100%{transform:translateX(0)}}
+</style></head>
+<body>
+<header>
+  <div style="flex:1;min-width:220px">
+    <h1>Biological molecules — virtual practical</h1>
+    <p>Cambridge IGCSE Biology 0610 · Chapter 4 · works offline · Eko Febriadi</p>
+  </div>
+  <span class="pill">0610 · Ch 4</span>
+</header>
+<main>
+
+<div class="es">
+  <div class="esbar">EXPERIMENTAL SKILLS 4.1</div>
+  <div class="esbody">
+    <p class="estitle">Testing foods for starch, reducing sugar, protein and fat</p>
+    <p>Work like a real food scientist: <strong>click a reagent</strong> to pick it up, then <strong>click a test tube</strong> to add it. The Benedict’s test needs heating — <strong>drag the tube into the water bath</strong>. Every observation is written in your log, then use your results to identify the <strong>unknown food</strong>.</p>
+    <p class="tip">Good lab practice: in the real lab you would use a <em>fresh portion</em> of each food for every test, so reagents never mix. Your log below keeps each result safe even when you reuse a virtual tube.</p>
+    <div class="safety"><strong>Real-lab safety:</strong> Benedict’s solution and Biuret reagent are harmful — wear eye protection. The water bath is at 80&nbsp;°C — use tongs, never fingers. Ethanol is flammable — no flames near the emulsion test.</div>
+
+    <div class="stepmsg" id="stepmsg">Step 1 — click a reagent bottle or dropper on the shelf below.</div>
+    <div class="bench" id="bench">
+      <div class="bathwrap" id="bath">
+        <svg width="150" height="92" viewBox="0 0 180 110">
+          <rect x="10" y="20" width="160" height="80" rx="8" fill="#9CA3AF" stroke="#4B5563" stroke-width="2.5"/>
+          <rect x="16" y="30" width="148" height="64" rx="5" fill="#7DD3FC"/>
+          <text x="90" y="70" font-size="14" text-anchor="middle" font-family="Segoe UI" fill="#075985">water bath 80 °C</text>
+          <rect x="30" y="6" width="120" height="14" rx="4" fill="#6B7280"/>
+        </svg>
+      </div>
+    </div>
+    <div class="logbook" id="logbook"><h5>📝 observation log</h5><div id="logempty" class="tip">No tests done yet. Pick a reagent, click a tube.</div></div>
+
+    <div class="stage" style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:10px 0">
+      <button class="btn sec" id="resetBtn">↺ fresh tubes</button>
+      <button class="btn navy" id="newUnknown">🎲 new unknown food</button>
+    </div>
+
+    <div class="cols">
+      <div class="card">
+        <h4 style="margin:2px 0 8px;color:var(--acc)">Results table — what do the colours mean?</h4>
+        <table>
+          <tr><th>Test</th><th>Reagent</th><th>Positive result</th><th>Negative result</th></tr>
+          <tr><td>starch</td><td>iodine solution</td><td>blue-black</td><td>stays orange-brown</td></tr>
+          <tr><td>reducing sugar</td><td>Benedict’s + heat 80 °C</td><td>green → yellow → orange → brick-red</td><td>stays blue</td></tr>
+          <tr><td>protein</td><td>Biuret (NaOH then CuSO₄)</td><td>purple / lilac</td><td>stays blue</td></tr>
+          <tr><td>fat / oil</td><td>ethanol, then pour into water</td><td>cloudy white emulsion</td><td>stays clear</td></tr>
+        </table>
+      </div>
+      <div class="qs">
+        <h4>Identify the unknown food</h4>
+        <div class="q"><h4>Test tube U with all four tests. Which nutrients does the unknown contain?</h4>
+          <div id="unkChoices">
+            <label><input type="checkbox" id="u-starch"> starch</label><br>
+            <label><input type="checkbox" id="u-sugar"> reducing sugar</label><br>
+            <label><input type="checkbox" id="u-protein"> protein</label><br>
+            <label><input type="checkbox" id="u-fat"> fat</label><br>
+          </div>
+          <button class="btn" id="unkCheck">check my identification</button>
+          <span class="fb" id="unkFb"></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="qs">
+      <h4>Method questions</h4>
+      <div class="q"><h4>1. Why must the Benedict’s test be heated — and why a <em>water bath</em> rather than a flame?</h4>
+        <button class="linkbtn" data-r="f1">show answer</button>
+        <div class="rev" id="f1">The reaction between reducing sugar and Benedict’s reagent only happens at high temperature. A water bath keeps the temperature <strong>constant (80&nbsp;°C) and safe</strong> — an open flame could overheat or crack the tube.</div></div>
+      <div class="q"><h4>2. In the Biuret test, why is NaOH added <em>before</em> the copper sulfate?</h4>
+        <button class="linkbtn" data-r="f2">show answer</button>
+        <div class="rev" id="f2">NaOH makes the solution <strong>alkaline</strong> — the Cu²⁺ ions only form the purple complex with peptide bonds in alkaline conditions.</div></div>
+      <div class="q"><h4>3. Why do we shake the food with <em>ethanol first</em> in the emulsion test, instead of adding water directly?</h4>
+        <button class="linkbtn" data-r="f3">show answer</button>
+        <div class="rev" id="f3">Fat dissolves in ethanol but not in water. When the ethanol solution is poured into water, any dissolved fat comes out of solution as tiny droplets — the <strong>cloudy white emulsion</strong>. No fat = stays clear.</div></div>
+      <div class="q"><h4>4. A student tests biscuit crumbs and gets a brick-red Benedict’s result AND a blue-black iodine result. What does the biscuit contain?</h4>
+        <button class="linkbtn" data-r="f4">show answer</button>
+        <div class="rev" id="f4"><strong>Both reducing sugar and starch.</strong> Foods are mixtures — a food can give positive results for several tests. (Biscuit = flour starch + added sugar.)</div></div>
+    </div>
+  </div>
+</div>
+
+</main>
+<footer>IGCSE Biology 0610 · Chapter 4 virtual practical · all simulation runs locally in this file</footer>
+
+<script>
+const bench=document.getElementById('bench');
+const stepmsg=document.getElementById('stepmsg');
+const logbook=document.getElementById('logbook');
+function say(t){stepmsg.innerHTML=t}
+function log(t){const e=document.getElementById('logempty');if(e)e.remove();
+ const d=document.createElement('div');d.innerHTML=t;logbook.appendChild(d);logbook.scrollTop=1e6}
+
+/* ---------- samples ---------- */
+const SAMPLES=[
+ {id:'A',name:'Tube A',content:['starch'],liq:'#F5F0E6',desc:'starch'},
+ {id:'B',name:'Tube B',content:['sugar'],liq:'#F8FAFC',desc:'glucose'},
+ {id:'C',name:'Tube C',content:['protein'],liq:'#FDFCF5',desc:'albumin'},
+ {id:'D',name:'Tube D',content:['fat'],liq:'#FEF9C3',desc:'oil'},
+ {id:'U',name:'Tube U (unknown)',content:[],liq:'#F8FAFC',desc:'unknown'}
+];
+const COMBOS=[['starch','sugar'],['starch','protein'],['sugar','protein'],['fat','sugar'],['starch','fat'],['protein','fat']];
+function rollUnknown(){SAMPLES[4].content=COMBOS[Math.floor(Math.random()*COMBOS.length)].slice();
+ document.getElementById('unkFb').textContent='';
+ ['u-starch','u-sugar','u-protein','u-fat'].forEach(i=>document.getElementById(i).checked=false);
+ log('🎲 New unknown food in tube U. Run the four tests!');}
+rollUnknown();logbook.querySelectorAll('div').forEach(d=>{if(d.textContent.includes('New unknown'))d.remove()});
+
+/* ---------- tube drawing ---------- */
+function tubeSVG(s,fillColor,fillH){
+ return `<svg width="52" height="140" viewBox="0 0 56 150">
+ <path d="M8 8 h40 v105 a20 20 0 0 1 -40 0 z" fill="rgba(255,255,255,.5)" stroke="#78716C" stroke-width="2.5"/>
+ <path d="M12 ${118-fillH} h32 v${fillH-8} a16 16 0 0 1 -32 0 z" fill="${fillColor}" style="transition:all .8s"/>
+ <text x="28" y="145" font-size="13" text-anchor="middle" font-family="Segoe UI" font-weight="700" fill="#44403C">${s.id}</text></svg>`;
+}
+const tubes={};
+SAMPLES.forEach((s,i)=>{
+ const t=document.createElement('div');t.className='tube';t.id='tube'+s.id;
+ t.style.left=(24+i*66)+'px';t.style.top='24px';
+ t.innerHTML=tubeSVG(s,s.liq,55);
+ t.title=s.name;
+ bench.appendChild(t);
+ tubes[s.id]={el:t,s,fill:55,color:s.liq,stage:[],inBath:false,heated:false};
+ t.onclick=()=>tubeClicked(s.id);
+ const lb=document.createElement('div');
+ lb.style.cssText=`position:absolute;left:${14+i*66}px;top:166px;width:74px;text-align:center;font-size:10.5px;font-family:Segoe UI;color:#57534E`;
+ lb.textContent=s.desc;bench.appendChild(lb);
+});
+
+/* ---------- reagents (two rows of three) ---------- */
+const REAGENTS=[
+ {id:'iodine',label:'iodine solution',kind:'dropper',liqCol:'#B45309',x:30,y:300},
+ {id:'benedict',label:'Benedict’s',kind:'bottle',liqCol:'#3B82F6',x:150,y:300},
+ {id:'naoh',label:'NaOH (Biuret A)',kind:'bottle',liqCol:'#E5E7EB',x:262,y:300},
+ {id:'cuso4',label:'CuSO₄ (Biuret B)',kind:'bottle',liqCol:'#22D3EE',x:30,y:430},
+ {id:'ethanol',label:'ethanol',kind:'bottle',liqCol:'#C4B5FD',x:150,y:430},
+ {id:'waterj',label:'water (pour)',kind:'bottle',liqCol:'#7DD3FC',x:262,y:430}
+];
+function reagentSVG(r){
+ if(r.kind==='dropper')return `<svg width="46" height="86" viewBox="0 0 46 90"><rect x="14" y="2" width="18" height="14" rx="4" fill="#92400E"/><path d="M17 16 h12 l5 24 v30 a10 10 0 0 1 -22 0 v-30 z" fill="${r.liqCol}" stroke="#44403C" stroke-width="1.8"/><path d="M21 74 v8" stroke="#44403C" stroke-width="2.5"/></svg><div style="font-size:10.5px;font-family:Segoe UI;max-width:80px">${r.label}</div>`;
+ return `<svg width="52" height="86" viewBox="0 0 52 90"><rect x="17" y="2" width="18" height="12" rx="3" fill="#44403C"/><path d="M14 14 h24 l5 16 v44 a9 9 0 0 1 -9 9 h-16 a9 9 0 0 1 -9 -9 v-44 z" fill="#F5F5F4" stroke="#44403C" stroke-width="1.8"/><rect x="12" y="40" width="28" height="34" rx="5" fill="${r.liqCol}"/></svg><div style="font-size:10.5px;font-family:Segoe UI;max-width:84px">${r.label}</div>`;
+}
+let picked=null;
+REAGENTS.forEach(r=>{
+ const el=document.createElement('div');el.className='reagent';el.id='rg-'+r.id;
+ el.style.left=r.x+'px';el.style.top=r.y+'px';
+ el.innerHTML=reagentSVG(r);
+ bench.appendChild(el);
+ el.onclick=()=>{
+  document.querySelectorAll('.reagent').forEach(x=>x.classList.remove('picked'));
+  picked=r.id;el.classList.add('picked');
+  say('Holding <strong>'+r.label+'</strong> — now click a test tube (A, B, C, D or U).');
+ };
+});
+/* pipette decoration */
+const pip=document.createElement('div');
+pip.style.cssText='position:absolute;left:395px;top:430px;font-size:11px;font-family:Segoe UI;color:#57534E;text-align:center';
+pip.innerHTML='<svg width="30" height="86" viewBox="0 0 30 90"><path d="M13 4 h4 v40 l6 30 a8 8 0 0 1 -16 0 l6 -30 z" fill="rgba(219,234,254,.7)" stroke="#64748B" stroke-width="1.6"/></svg>measuring<br>pipette';
+bench.appendChild(pip);
+
+/* ---------- effects helpers ---------- */
+function dropAt(tubeId,col){
+ const t=tubes[tubeId].el;
+ const d=document.createElement('div');d.className='droplet';d.style.background=col;
+ d.style.left=(+t.style.left.replace('px','')+22)+'px';
+ d.style.top=(+t.style.top.replace('px','')-6)+'px';
+ bench.appendChild(d);setTimeout(()=>d.remove(),520);
+}
+function pourAt(tubeId,col){
+ const t=tubes[tubeId].el;
+ const p=document.createElement('div');p.className='pourline';p.style.background=col;
+ p.style.left=(+t.style.left.replace('px','')+24)+'px';
+ p.style.top=(+t.style.top.replace('px','')-26)+'px';p.style.height='40px';
+ bench.appendChild(p);setTimeout(()=>p.remove(),700);
+}
+function setLiquid(id,col,h){
+ const t=tubes[id];t.color=col;if(h!==undefined)t.fill=h;
+ t.el.innerHTML=tubeSVG(t.s,col,t.fill);
+}
+
+/* ---------- test logic ---------- */
+function tubeClicked(id){
+ if(!picked)return say('First <strong>click a reagent</strong> on the shelf, then click this tube.');
+ const t=tubes[id];const s=t.s;
+ if(t.inBath)return say('That tube is in the water bath — wait for the colour change.');
+ const apply=(effect,logText)=>{
+  const r=REAGENTS.find(r=>r.id===picked);
+  if(r.kind==='dropper')dropAt(id,r.liqCol);else pourAt(id,r.liqCol);
+  document.getElementById('rg-'+picked).classList.remove('picked');
+  picked=null;
+  setTimeout(()=>{effect();log(logText);},650);
+ };
+ switch(picked){
+  case 'iodine':
+   if(t.stage.includes('iodine'))return say('Iodine already added to tube '+id+'.');
+   t.stage.push('iodine');
+   apply(()=>{
+    const pos=s.content.includes('starch');
+    setLiquid(id,pos?'#1E293B':'#D97706');
+    say(pos?'Tube '+id+': <strong>blue-black!</strong> Starch is present.':'Tube '+id+': stays orange-brown — no starch.');
+   },(s.content.includes('starch')?'✅':'❌')+' Iodine → tube '+id+': <strong>'+(s.content.includes('starch')?'blue-black — starch present':'stays orange-brown — no starch')+'</strong>');
+   break;
+  case 'benedict':
+   if(t.stage.includes('benedict'))return say('Benedict’s already added — drag tube '+id+' into the water bath to heat it.');
+   t.stage.push('benedict');
+   apply(()=>{
+    setLiquid(id,'#3B82F6');
+    say('Benedict’s added to tube '+id+'. <strong>Now drag the tube into the 80 °C water bath</strong> (2 min).');
+   },'🧪 Benedict’s added to tube '+id+' — needs heating…');
+   break;
+  case 'naoh':
+   if(t.stage.includes('naoh'))return say('NaOH already added to tube '+id+'.');
+   t.stage.push('naoh');
+   apply(()=>{
+    setLiquid(id,'#93C5FD');
+    say('NaOH added to tube '+id+'. Biuret step 2: add <strong>CuSO₄</strong> drops.');
+   },'🧪 NaOH added to tube '+id);
+   break;
+  case 'cuso4':
+   if(!t.stage.includes('naoh'))return say('Biuret needs <strong>NaOH first</strong>, then CuSO₄ — order matters!');
+   if(t.stage.includes('cuso4'))return say('CuSO₄ already added to tube '+id+'.');
+   t.stage.push('cuso4');
+   apply(()=>{
+    const pos=s.content.includes('protein');
+    setLiquid(id,pos?'#A855F7':'#3B82F6');
+    say(pos?'Tube '+id+': <strong>purple!</strong> Protein is present.':'Tube '+id+': stays blue — no protein.');
+   },(s.content.includes('protein')?'✅':'❌')+' Biuret → tube '+id+': <strong>'+(s.content.includes('protein')?'purple — protein present':'stays blue — no protein')+'</strong>');
+   break;
+  case 'ethanol':
+   if(t.stage.includes('ethanol'))return say('Ethanol already added to tube '+id+'. Now add water (pour).');
+   t.stage.push('ethanol');
+   apply(()=>{
+    t.el.classList.add('shake');
+    setLiquid(id,s.content.includes('fat')?'#FDE68A':'#F8FAFC');
+    setTimeout(()=>t.el.classList.remove('shake'),700);
+    say('Shaking tube '+id+' with ethanol… Now click the <strong>water bottle</strong> and pour it into the tube.');
+   },'🧪 Ethanol added to tube '+id+' and shaken');
+   break;
+  case 'waterj':
+   if(!t.stage.includes('ethanol'))return say('The emulsion test needs <strong>ethanol first</strong> — dissolve the food in ethanol, then pour into water.');
+   if(t.stage.includes('waterj'))return say('Water already added to tube '+id+'.');
+   t.stage.push('waterj');
+   apply(()=>{
+    const pos=s.content.includes('fat');
+    setLiquid(id,pos?'#F5F0DC':'#F0F9FF',70);
+    say(pos?'Tube '+id+': <strong>cloudy white emulsion!</strong> Fat is present.':'Tube '+id+': stays clear — no fat.');
+   },(s.content.includes('fat')?'✅':'❌')+' Emulsion → tube '+id+': <strong>'+(s.content.includes('fat')?'cloudy white — fat present':'stays clear — no fat')+'</strong>');
+   break;
+ }
+}
+/* ---------- drag tube to water bath ---------- */
+Object.values(tubes).forEach(t=>{
+ t.homeX=+t.el.style.left.replace('px','');t.homeY=+t.el.style.top.replace('px','');
+ const el=t.el;
+ el.onpointerdown=e=>{
+  if(!t.stage.includes('benedict')||t.heated||t.inBath)return;
+  e.preventDefault();
+  const br=bench.getBoundingClientRect();
+  const ox=e.clientX-+el.style.left.replace('px',''),oy=e.clientY-+el.style.top.replace('px','');
+  el.style.zIndex=10;el.setPointerCapture(e.pointerId);
+  el.onpointermove=ev=>{el.style.left=(ev.clientX-ox)+'px';el.style.top=(ev.clientY-oy)+'px'};
+  el.onpointerup=ev=>{
+   el.onpointermove=null;el.onpointerup=null;
+   const x=ev.clientX-br.left,y=ev.clientY-br.top;
+   if(x>330&&x<520&&y>170&&y<300){startHeating(t)}
+   else{el.style.left=t.homeX+'px';el.style.top=t.homeY+'px';el.style.zIndex=1;say('Not in the bath — drag the tube into the blue water bath.');}
+  };
+ };
+});
+function startHeating(t){
+ t.inBath=true;
+ t.el.style.left=(368+Math.random()*50)+'px';t.el.style.top='212px';
+ say('Heating tube '+t.s.id+' at 80 °C… (fast-forward 2 minutes)');
+ setTimeout(()=>{
+  t.heated=true;t.inBath=false;
+  const pos=t.s.content.includes('sugar');
+  setLiquid(t.s.id,pos?'#C2410C':'#3B82F6');
+  t.el.style.left=t.homeX+'px';t.el.style.top=t.homeY+'px';t.el.style.zIndex=1;
+  say(pos?'Tube '+t.s.id+': <strong>brick-red precipitate!</strong> Reducing sugar present.':'Tube '+t.s.id+': stays blue — no reducing sugar.');
+  log((pos?'✅':'❌')+' Benedict’s (heated) → tube '+t.s.id+': <strong>'+(pos?'brick-red — reducing sugar present':'stays blue — no reducing sugar')+'</strong>');
+ },2600);
+}
+
+/* ---------- unknown ID check ---------- */
+document.getElementById('unkCheck').onclick=()=>{
+ const u=SAMPLES[4].content;
+ const guess={starch:document.getElementById('u-starch').checked,sugar:document.getElementById('u-sugar').checked,
+  protein:document.getElementById('u-protein').checked,fat:document.getElementById('u-fat').checked};
+ const names={starch:'starch',sugar:'reducing sugar',protein:'protein',fat:'fat'};
+ const want=u.slice().sort().join(),got=Object.keys(guess).filter(k=>guess[k]).sort().join();
+ const fb=document.getElementById('unkFb');
+ if(want===got){fb.textContent='✓ Correct! The unknown contains '+u.map(k=>names[k]).join(' + ')+'.';fb.className='fb good'}
+ else{fb.textContent='✗ Not quite — check your observation log colours for tube U and try again.';fb.className='fb bad'}
+};
+document.getElementById('newUnknown').onclick=rollUnknown;
+document.getElementById('resetBtn').onclick=()=>{
+ Object.values(tubes).forEach(t=>{
+  t.stage=[];t.heated=false;t.inBath=false;
+  t.el.style.left=t.homeX+'px';t.el.style.top=t.homeY+'px';t.el.style.zIndex=1;
+  setLiquid(t.s.id,t.s.liq,55);
+ });
+ say('Fresh tubes ready. Click a reagent to begin.');
+ log('↺ Fresh tubes prepared.');
+};
+document.querySelectorAll('.linkbtn[data-r]').forEach(b=>b.onclick=()=>document.getElementById(b.dataset.r).classList.toggle('on'));
+</script>
+</body></html>
