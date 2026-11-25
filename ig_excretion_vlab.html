@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Excretion in humans – virtual practical: urine tests and dialysis tubing</title>
+<style>
+:root{--acc:#0891B2;--acc2:#0E7490;--pale:#ECFEFF;--navy:#0B2161;--ink:#1A1A1A;--mute:#5E5E6E;--line:#CDEBF0;--bg:#F6FBFC}
+*{box-sizing:border-box}html,body{margin:0}
+body{font-family:Georgia,"Times New Roman","Songti SC",serif;background:var(--bg);color:var(--ink);line-height:1.5;font-size:16px}
+.sans,nav,header,.btn,.chip,table,.pill,.tag,button,select,input{font-family:"Segoe UI",Calibri,"PingFang SC",system-ui,sans-serif}
+header{background:#fff;border-bottom:4px solid var(--acc);padding:12px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+header h1{margin:0;font-size:22px;color:var(--acc);font-weight:normal}
+header p{margin:2px 0 0;font-size:13px;color:var(--mute)}
+.pill{background:var(--navy);color:#fff;border-radius:999px;padding:6px 14px;font-weight:700;font-size:14px}
+main{max-width:1180px;margin:0 auto;padding:16px}
+.es{background:#fff;border-left:3px solid var(--acc);border-right:3px solid var(--acc);border-bottom:3px solid var(--acc);margin-bottom:16px}
+.esbar{background:var(--acc);color:#fff;padding:9px 16px;font-size:19px;letter-spacing:.3px}
+.esbody{padding:14px 18px}
+.estitle{color:var(--acc);font-weight:bold;font-size:17px;margin:2px 0 8px}
+.safety{border-left:4px solid var(--acc);background:#EBFAFD;padding:8px 12px;margin:10px 0;font-size:15px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}@media(max-width:900px){.cols{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:14px}
+.btn{display:inline-block;border:none;border-radius:8px;padding:10px 18px;font-size:15px;font-weight:700;cursor:pointer;background:var(--acc);color:#fff;margin:4px 6px 4px 0}
+.btn:hover{background:var(--acc2)}
+.btn:disabled{background:#C2D5D9;cursor:not-allowed}
+.btn.sec{background:#fff;color:var(--acc);border:2px solid var(--acc)}
+.btn.sec:hover{background:var(--pale)}
+.btn.navy{background:var(--navy)}
+select,input[type=text],input[type=number]{font-size:15px;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:#fff}
+.tag{display:inline-block;background:var(--pale);border:1px solid #CDEBF0;color:var(--acc2);border-radius:999px;padding:3px 12px;font-size:13px;font-weight:600}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th{background:var(--navy);color:#fff;padding:7px 10px;text-align:left;font-weight:600}
+td{border:1px solid var(--line);padding:6px 10px}
+tr:nth-child(even) td{background:#F3FAFB}
+.qs .q{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin-bottom:12px}
+.q h4{margin:2px 0 6px;color:var(--navy);font-size:15.5px}
+.rev{margin-top:8px;background:var(--pale);border-left:4px solid var(--acc);padding:8px 12px;font-size:14.5px;display:none}
+.rev.on{display:block}
+.linkbtn{border:none;background:none;color:var(--acc);font-weight:700;cursor:pointer;font-size:13.5px;text-decoration:underline;padding:0}
+.tip{font-size:13.5px;color:var(--mute);font-style:italic}
+footer{padding:16px 20px;color:var(--mute);font-size:12.5px;text-align:center}
+.fb{font-size:13.5px;font-weight:700;margin-top:4px;font-family:"Segoe UI",sans-serif}
+.fb.good{color:#15803D}.fb.bad{color:#B91C1C}
+.cup{position:absolute;cursor:pointer;text-align:center;transition:transform .15s}
+.cup:hover{transform:scale(1.05)}
+.strip{cursor:grab;position:absolute;z-index:6;transition:transform .15s}
+.bench{position:relative;background:linear-gradient(#E0F5F9,#D0EEF4);border:1px solid var(--line);border-radius:10px;height:480px;overflow:hidden;user-select:none;touch-action:none}
+.diagbtn{border:2px solid var(--acc);background:#fff;color:var(--acc2);border-radius:8px;padding:6px 12px;font-weight:700;cursor:pointer;font-family:"Segoe UI",sans-serif;margin:2px}
+.diagbtn.on{background:var(--acc);color:#fff}
+</style></head>
+<body>
+<header>
+  <div style="flex:1;min-width:220px">
+    <h1>Excretion in humans — virtual practical</h1>
+    <p>Cambridge IGCSE Biology 0610 · Chapter 13 · works offline · Eko Febriadi</p>
+  </div>
+  <span class="pill">0610 · Ch 13</span>
+</header>
+<main>
+
+<!-- ============ ES 13.1 URINE TESTS ============ -->
+<div class="es">
+  <div class="esbar">EXPERIMENTAL SKILLS 13.1</div>
+  <div class="esbody">
+    <p class="estitle">Diagnosing patients with urine test strips</p>
+    <p>Your kidneys filter the blood and remove <strong>urea</strong>, excess water and salts as urine. Doctors can spot disease from what appears in urine. Dip a test strip into each patient’s sample, read the two pads against the colour chart, and diagnose each patient.</p>
+    <div class="safety"><strong>Real-lab safety:</strong> treat all body-fluid samples as potentially infectious — gloves, no eating in the lab, disinfect spills.</div>
+
+    <div class="bench" id="bench">
+      <!-- chart -->
+      <div style="position:absolute;right:10px;top:10px;width:216px;background:rgba(255,255,255,.95);border:2px solid var(--acc);border-radius:10px;padding:8px;font-size:12px;font-family:Segoe UI">
+        <strong style="color:var(--acc)">colour chart</strong>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:4px">
+          <span style="width:90px">glucose pad:</span>
+          <span style="display:inline-block;width:20px;height:14px;background:#A3E635;border:1px solid #666"></span> none
+          <span style="display:inline-block;width:20px;height:14px;background:#92400E;border:1px solid #666"></span> high
+        </div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:4px">
+          <span style="width:90px">protein pad:</span>
+          <span style="display:inline-block;width:20px;height:14px;background:#FDE68A;border:1px solid #666"></span> none
+          <span style="display:inline-block;width:20px;height:14px;background:#15803D;border:1px solid #666"></span> present
+        </div>
+      </div>
+      <div class="stepmsg" id="stepmsg" style="position:absolute;left:10px;bottom:10px;right:240px;background:rgba(255,255,255,.94);border:2px solid var(--acc);border-radius:8px;padding:8px 12px;font-size:14px;font-family:Segoe UI;font-weight:600">
+        Drag a test strip into a patient’s cup.</div>
+    </div>
+
+    <div class="cols" style="margin-top:12px">
+      <div class="card">
+        <h4 style="margin:2px 0 8px;color:var(--acc)">Results</h4>
+        <table id="urineTable"><tr><th>Patient</th><th>Glucose pad</th><th>Protein pad</th></tr></table>
+      </div>
+      <div class="card">
+        <h4 style="margin:2px 0 8px;color:var(--acc)">Your diagnoses</h4>
+        <div id="diagArea"></div>
+      </div>
+    </div>
+
+    <div class="qs">
+      <h4>Analysis questions</h4>
+      <div class="q"><h4>1. Glucose should never appear in urine — it is small enough to be filtered, but what normally happens to it in the kidney tubules?</h4>
+        <button class="linkbtn" data-r="u1">show answer</button>
+        <div class="rev" id="u1">All glucose is normally <strong>reabsorbed</strong> back into the blood. Glucose in urine means the blood glucose was so high the tubules could not reabsorb it all — a sign of <strong>diabetes</strong> (too little insulin).</div></div>
+      <div class="q"><h4>2. Why does protein in urine suggest kidney damage?</h4>
+        <button class="linkbtn" data-r="u2">show answer</button>
+        <div class="rev" id="u2">Protein molecules are <strong>too large</strong> to pass through a healthy filter (the glomerulus). If protein appears in urine, the filter is leaking — the kidney is damaged.</div></div>
+      <div class="q"><h4>3. Where is urea made, and from what?</h4>
+        <button class="linkbtn" data-r="u3">show answer</button>
+        <div class="rev" id="u3">In the <strong>liver</strong>, from excess <strong>amino acids</strong> (deamination). The amino group, which contains nitrogen, becomes urea; the rest of the molecule is respired or stored.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ ES 13.2 DIALYSIS TUBING ============ -->
+<div class="es">
+  <div class="esbar">EXPERIMENTAL SKILLS 13.2</div>
+  <div class="esbody">
+    <p class="estitle">Dialysis tubing: a model of the kidney’s partially permeable membrane</p>
+    <p>Dialysis (Visking) tubing has tiny pores: <strong>small molecules pass through, large ones cannot</strong> — just like the kidney filter. Fill the tubing with a mixture of <strong>starch</strong> (large) and <strong>glucose</strong> (small), seal it, and place it in pure water. After 20 minutes, test the water around it.</p>
+    <div class="cols">
+      <div style="text-align:center">
+        <svg id="dialSvg" width="380" height="300" viewBox="0 0 380 300" style="max-width:100%"></svg>
+        <div>
+          <button class="btn" id="fillTube" >🧪 fill tubing with starch + glucose</button>
+          <button class="btn navy" id="dialRun" disabled>⏱ leave 20 minutes</button>
+        </div>
+        <div style="margin-top:8px">
+          <button class="btn sec" id="testIodine" disabled>test water: add iodine</button>
+          <button class="btn sec" id="testBenedict" disabled>test water: Benedict’s + heat</button>
+        </div>
+        <div class="fb" id="dialFb"></div>
+      </div>
+      <div class="qs">
+        <h4>Results and analysis</h4>
+        <table id="dialTable">
+          <tr><th>Test on the water</th><th>Result</th><th>Conclusion</th></tr>
+          <tr><td>iodine (tests starch)</td><td id="diI">—</td><td id="diIc">—</td></tr>
+          <tr><td>Benedict’s (tests glucose)</td><td id="diB">—</td><td id="diBc">—</td></tr>
+        </table>
+        <div class="q"><h4>1. Which substance passed through the tubing, and which stayed inside? Explain using molecule size.</h4>
+          <button class="linkbtn" data-r="d1">show answer</button>
+          <div class="rev" id="d1"><strong>Glucose passed out</strong> (small molecule — fits through the pores); <strong>starch stayed in</strong> (large molecule — too big for the pores). The tubing is <strong>partially permeable</strong>.</div></div>
+        <div class="q"><h4>2. How is this similar to what the kidney does — and how is it different?</h4>
+          <button class="linkbtn" data-r="d2">show answer</button>
+          <div class="rev" id="d2">Similar: the kidney filters <strong>small molecules</strong> (urea, glucose, salts, water) out of the blood while keeping <strong>large ones</strong> (proteins) and blood cells in. Different: the living kidney also <strong>reabsorbs</strong> useful substances (all glucose, some water and salts) — tubing cannot do that.</div></div>
+        <div class="q"><h4>3. In kidney dialysis for patients, what must be true about the dialysis fluid?</h4>
+          <button class="linkbtn" data-r="d3">show answer</button>
+          <div class="rev" id="d3">It must contain the <strong>correct levels of glucose and salts</strong> (so these are not lost from the blood) but <strong>no urea</strong> — so urea diffuses out of the blood down its concentration gradient.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+<footer>IGCSE Biology 0610 · Chapter 13 virtual practical · all simulation runs locally in this file</footer>
+
+<script>
+/* ---------- ES 13.1 urine dipsticks ---------- */
+const bench=document.getElementById('bench');
+const stepmsg=document.getElementById('stepmsg');
+function say(t){stepmsg.innerHTML=t}
+const PATIENTS=[
+ {id:'P1',name:'Patient 1',glu:false,pro:false,truth:'healthy'},
+ {id:'P2',name:'Patient 2',glu:true,pro:false,truth:'diabetes'},
+ {id:'P3',name:'Patient 3',glu:false,pro:true,truth:'kidney damage'}
+];
+const tested={};
+/* cups */
+PATIENTS.forEach((p,i)=>{
+ const c=document.createElement('div');c.className='cup';c.id='cup'+p.id;
+ c.style.left=(30+i*130)+'px';c.style.top='120px';
+ c.innerHTML=`<svg width="90" height="150" viewBox="0 0 90 150">
+  <path d="M10 20 h70 v95 a18 18 0 0 1 -18 18 h-34 a18 18 0 0 1 -18 -18 z" fill="rgba(255,255,255,.55)" stroke="#64748B" stroke-width="3"/>
+  <path d="M14 60 h62 v56 a14 14 0 0 1 -14 14 h-34 a14 14 0 0 1 -14 -14 z" fill="#FDE68A" opacity=".8"/>
+  <text x="45" y="146" font-size="13" text-anchor="middle" font-family="Segoe UI" font-weight="700">${p.name}</text></svg>`;
+ bench.appendChild(c);
+});
+/* strips */
+const strips=[];
+for(let i=0;i<3;i++){
+ const s=document.createElement('div');s.className='strip';s.id='strip'+i;
+ s.style.left=(60+i*130)+'px';s.style.top='300px';
+ s.innerHTML=`<svg width="26" height="120" viewBox="0 0 26 120">
+  <rect x="4" y="0" width="18" height="120" rx="3" fill="#fff" stroke="#9CA3AF" stroke-width="1.5"/>
+  <rect id="padG${i}" x="7" y="78" width="12" height="16" fill="#A3E635" stroke="#9CA3AF"/>
+  <rect id="padP${i}" x="7" y="98" width="12" height="16" fill="#FDE68A" stroke="#9CA3AF"/>
+  <text x="13" y="12" font-size="7" text-anchor="middle" font-family="Segoe UI" fill="#6B7280">strip</text></svg>`;
+ bench.appendChild(s);strips.push(s);
+ /* drag */
+ s.onpointerdown=e=>{
+  e.preventDefault();s.setPointerCapture(e.pointerId);s.style.zIndex=9;
+  const br=bench.getBoundingClientRect();
+  const ox=e.clientX-+s.style.left.replace('px',''),oy=e.clientY-+s.style.top.replace('px','');
+  s.onpointermove=ev=>{s.style.left=(ev.clientX-ox)+'px';s.style.top=(ev.clientY-oy)+'px'};
+  s.onpointerup=ev=>{
+   s.onpointermove=null;s.onpointerup=null;
+   const x=ev.clientX-br.left,y=ev.clientY-br.top;
+   const p=PATIENTS.find((p,idx)=>Math.abs(x-(75+idx*130))<70&&y>110&&y<300);
+   if(p)dipStrip(+s.id.replace('strip',''),p);
+   else{s.style.left=(60+ +s.id.replace('strip','')*130)+'px';s.style.top='300px'}
+  };
+ };
+}
+function dipStrip(si,p){
+ const s=strips[si];
+ s.style.left=(62+PATIENTS.indexOf(p)*130)+'px';s.style.top='150px';
+ say('Dipping strip in '+p.name+'’s sample… read the pads against the chart.');
+ setTimeout(()=>{
+  document.getElementById('padG'+si).setAttribute('fill',p.glu?'#92400E':'#A3E635');
+  document.getElementById('padP'+si).setAttribute('fill',p.pro?'#15803D':'#FDE68A');
+  tested[p.id]=true;
+  s.style.top='300px';
+  /* record */
+  const t=document.getElementById('urineTable');
+  if(![...t.rows].some(r=>r.cells[0].textContent===p.name)){
+   const tr=document.createElement('tr');
+   tr.innerHTML=`<td>${p.name}</td><td style="font-weight:700;color:${p.glu?'#92400E':'#4D7C0F'}">${p.glu?'brown — glucose present':'green — none'}</td><td style="font-weight:700;color:${p.pro?'#15803D':'#A16207'}">${p.pro?'green — protein present':'yellow — none'}</td>`;
+   t.appendChild(tr);
+   buildDiag();
+  }
+  say(p.name+' tested. '+(Object.keys(tested).length<3?'Test the other patients.':'All patients tested — make your diagnoses below!'));
+ },900);
+}
+function buildDiag(){
+ const area=document.getElementById('diagArea');area.innerHTML='';
+ const opts=['healthy','diabetes','kidney damage'];
+ PATIENTS.filter(p=>tested[p.id]).forEach(p=>{
+  const d=document.createElement('div');d.style.marginBottom='8px';
+  d.innerHTML=`<strong>${p.name}:</strong> `;
+  opts.forEach(o=>{
+   const b=document.createElement('button');b.className='diagbtn';b.textContent=o;
+   b.onclick=()=>{
+    d.querySelectorAll('.diagbtn').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    const ok=o===p.truth;
+    const fb=document.createElement('span');fb.className='fb '+(ok?'good':'bad');
+    fb.style.marginLeft='8px';
+    fb.textContent=ok?'✓ correct':'✗ check the pads again';
+    d.querySelectorAll('.fb').forEach(x=>x.remove());
+    d.appendChild(fb);
+   };
+   d.appendChild(b);
+  });
+  area.appendChild(d);
+ });
+ if(!area.children.length)area.innerHTML='<p class="tip">Test a patient first.</p>';
+}
+buildDiag();
+
+/* ---------- ES 13.2 dialysis tubing ---------- */
+const dsvg=document.getElementById('dialSvg');
+let dState='empty'; /* empty -> filled -> run -> tested */
+function drawDial(){
+ dsvg.innerHTML=`
+ <path d="M40 50 h300 v190 a26 26 0 0 1 -26 26 h-248 a26 26 0 0 1 -26 -26 z" fill="rgba(224,242,254,.5)" stroke="#64748B" stroke-width="3"/>
+ <path d="M46 100 h288 v138 a20 20 0 0 1 -20 20 h-248 a20 20 0 0 1 -20 -20 z" fill="#BAE6FD" opacity=".55"/>
+ <text x="190" y="86" font-size="13" text-anchor="middle" font-family="Segoe UI" fill="#075985">pure water</text>
+ ${dState!=='empty'?`
+ <path d="M150 110 q-6 60 0 120 q40 16 80 0 q6 -60 0 -120 z" fill="#FEF3C7" stroke="#B45309" stroke-width="3"/>
+ <path d="M150 110 q40 14 80 0" fill="none" stroke="#B45309" stroke-width="3"/>
+ <text x="190" y="180" font-size="12" text-anchor="middle" font-family="Segoe UI" fill="#78350F">starch +</text>
+ <text x="190" y="196" text-anchor="middle" font-size="12" font-family="Segoe UI" fill="#78350F">glucose</text>
+ ${dState!=='filled'?[...Array(14)].map((_,i)=>`<circle cx="${70+Math.random()*240}" cy="${130+Math.random()*90}" r="3.5" fill="#F59E0B"/>`).join(''):''}`:''}
+ ${dState==='run'?`<text x="190" y="288" font-size="12" text-anchor="middle" font-family="Segoe UI" fill="#334155">orange dots = glucose molecules that escaped into the water</text>`:''}`;
+}
+drawDial();
+document.getElementById('fillTube').onclick=()=>{dState='filled';drawDial();
+ document.getElementById('dialRun').disabled=false;
+ document.getElementById('dialFb').textContent='Tubing filled and sealed. Now leave it for 20 minutes.';
+ document.getElementById('dialFb').className='fb';};
+document.getElementById('dialRun').onclick=()=>{
+ dState='run';drawDial();
+ document.getElementById('dialRun').disabled=true;
+ document.getElementById('testIodine').disabled=false;
+ document.getElementById('testBenedict').disabled=false;
+ document.getElementById('dialFb').textContent='20 minutes later — glucose molecules (orange) have moved into the water. Now test the water!';
+ document.getElementById('dialFb').className='fb good';
+};
+document.getElementById('testIodine').onclick=()=>{
+ document.getElementById('diI').textContent='stays orange-brown (negative)';
+ document.getElementById('diIc').textContent='no starch left the tubing — starch molecules are TOO BIG';
+ document.getElementById('testIodine').disabled=true;
+};
+document.getElementById('testBenedict').onclick=()=>{
+ document.getElementById('diB').textContent='brick-red (positive)';
+ document.getElementById('diBc').textContent='glucose DID leave the tubing — small molecules pass through';
+ document.getElementById('testBenedict').disabled=true;
+};
+document.querySelectorAll('.linkbtn[data-r]').forEach(b=>b.onclick=()=>document.getElementById(b.dataset.r).classList.toggle('on'));
+</script>
+</body></html>
