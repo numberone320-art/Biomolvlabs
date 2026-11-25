@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Organisation of the organism – virtual practical: microscope skills and measuring cells</title>
+<style>
+:root{--acc:#7C3AED;--acc2:#5B21B6;--pale:#F5F3FF;--navy:#0B2161;--ink:#1A1A1A;--mute:#5E5E6E;--line:#E2DCF5;--ok:#DCFCE7;--bg:#FAF9FC}
+*{box-sizing:border-box}html,body{margin:0}
+body{font-family:Georgia,"Times New Roman","Songti SC",serif;background:var(--bg);color:var(--ink);line-height:1.5;font-size:16px}
+.sans,nav,header,.btn,.chip,table,.pill,.tag,button,select,input{font-family:"Segoe UI",Calibri,"PingFang SC",system-ui,sans-serif}
+header{background:#fff;border-bottom:4px solid var(--acc);padding:12px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+header h1{margin:0;font-size:22px;color:var(--acc);font-weight:normal}
+header p{margin:2px 0 0;font-size:13px;color:var(--mute)}
+.pill{background:var(--navy);color:#fff;border-radius:999px;padding:6px 14px;font-weight:700;font-size:14px}
+main{max-width:1180px;margin:0 auto;padding:16px}
+.es{background:#fff;border-left:3px solid var(--acc);border-right:3px solid var(--acc);border-bottom:3px solid var(--acc);margin-bottom:16px}
+.esbar{background:var(--acc);color:#fff;padding:9px 16px;font-size:19px;letter-spacing:.3px}
+.esbody{padding:14px 18px}
+.estitle{color:var(--acc);font-weight:bold;font-size:17px;margin:2px 0 8px}
+.need{background:var(--pale);border:1px solid #D9CCF2;padding:10px 16px;margin:10px 0}
+.need h4,.meth h4,.qs h4{color:var(--acc);margin:2px 0 6px;font-size:16px}
+.need ul{margin:0;padding-left:18px}.need li::marker{color:var(--acc)}
+.safety{border-left:4px solid var(--acc);background:#F7F2FF;padding:8px 12px;margin:10px 0;font-size:15px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}@media(max-width:900px){.cols{grid-template-columns:1fr}}
+.meth ol{list-style:none;padding:0;margin:0;counter-reset:s}
+.meth li{counter-increment:s;padding:6px 8px;border-radius:6px;margin:2px 0}
+.meth li::before{content:counter(s) "  ";color:var(--acc);font-weight:bold}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:14px}
+.btn{display:inline-block;border:none;border-radius:8px;padding:10px 18px;font-size:15px;font-weight:700;cursor:pointer;background:var(--acc);color:#fff;margin:4px 6px 4px 0}
+.btn:hover{background:var(--acc2)}
+.btn:disabled{background:#C9C2C9;cursor:not-allowed}
+.btn.sec{background:#fff;color:var(--acc);border:2px solid var(--acc)}
+.btn.sec:hover{background:var(--pale)}
+.btn.navy{background:var(--navy)}
+select,input[type=text],input[type=number]{font-size:15px;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:#fff}
+.big{font-size:44px;font-weight:700;color:var(--acc);font-family:"Segoe UI",Calibri,sans-serif}
+.unit{font-size:16px;color:var(--mute);font-weight:400}
+.tag{display:inline-block;background:var(--pale);border:1px solid #D9CCF2;color:var(--acc2);border-radius:999px;padding:3px 12px;font-size:13px;font-weight:600}
+.tag.on{background:var(--acc);color:#fff}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th{background:var(--navy);color:#fff;padding:7px 10px;text-align:left;font-weight:600}
+td{border:1px solid var(--line);padding:6px 10px}
+tr:nth-child(even) td{background:#F8F6FD}
+.qs .q{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin-bottom:12px}
+.q h4{margin:2px 0 6px;color:var(--navy);font-size:15.5px}
+.rev{margin-top:8px;background:var(--pale);border-left:4px solid var(--acc);padding:8px 12px;font-size:14.5px;display:none}
+.rev.on{display:block}
+.linkbtn{border:none;background:none;color:var(--acc);font-weight:700;cursor:pointer;font-size:13.5px;text-decoration:underline;padding:0}
+.tip{font-size:13.5px;color:var(--mute);font-style:italic}
+footer{padding:16px 20px;color:var(--mute);font-size:12.5px;text-align:center}
+.fb{font-size:13.5px;font-weight:700;margin-top:4px;font-family:"Segoe UI",sans-serif}
+.fb.good{color:#15803D}.fb.bad{color:#B91C1C}
+.bench{position:relative;background:linear-gradient(#E7E0F5,#DCD2F0);border:1px solid var(--line);border-radius:10px;height:380px;overflow:hidden;touch-action:none}
+.tool{position:absolute;cursor:grab;user-select:none;transition:filter .15s}
+.tool:hover{filter:brightness(1.08)}
+.tool svg{display:block}
+.sstep{font-family:"Segoe UI",sans-serif;font-size:14px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:6px 10px;margin:4px 0}
+.sstep.done{border-color:#15803D;background:#F0FDF4}
+.sstep.cur{border-color:var(--acc);box-shadow:0 0 0 2px var(--pale)}
+.viewwrap{position:relative;width:340px;height:340px;margin:0 auto}
+#eyepiece{width:340px;height:340px;border-radius:50%;border:10px solid #374151;background:#fff;display:block}
+.grat{position:absolute;inset:10px;border-radius:50%;pointer-events:none}
+.knobrow{display:flex;gap:10px;align-items:center;justify-content:center;margin-top:10px;flex-wrap:wrap}
+input[type=range]{width:200px;accent-color:var(--acc)}
+.objbtn{border:2px solid var(--acc);background:#fff;color:var(--acc2);border-radius:8px;padding:6px 12px;font-weight:700;cursor:pointer;font-family:"Segoe UI",sans-serif}
+.objbtn.on{background:var(--acc);color:#fff}
+</style></head>
+<body>
+<header>
+  <div style="flex:1;min-width:220px">
+    <h1>Organisation of the organism — virtual practical</h1>
+    <p>Cambridge IGCSE Biology 0610 · Chapter 2 · works offline · Eko Febriadi</p>
+  </div>
+  <span class="pill">0610 · Ch 2</span>
+</header>
+<main>
+
+<!-- ============ ES 2.1 SLIDE PREP ============ -->
+<div class="es">
+  <div class="esbar">EXPERIMENTAL SKILLS 2.1</div>
+  <div class="esbody">
+    <p class="estitle">Preparing a slide of onion epidermis</p>
+    <p>Prepare the slide in the correct order. <strong>Drag</strong> each piece of equipment with your mouse (or finger) onto the slide, just like handling the real apparatus.</p>
+    <div class="safety"><strong>Real-lab safety:</strong> take care with scalpel blades and glass slides; iodine stains skin and clothes — wear eye protection.</div>
+    <div class="cols">
+      <div>
+        <div class="bench" id="bench">
+          <!-- slide target -->
+          <div id="slide" style="position:absolute;left:170px;top:150px;width:220px;height:80px;background:rgba(255,255,255,.75);border:2px solid #9CA3AF;border-radius:6px">
+            <div id="dropWater" style="position:absolute;left:96px;top:30px;width:28px;height:20px;border-radius:50%;background:rgba(147,197,253,.85);display:none"></div>
+            <div id="epi" style="position:absolute;left:88px;top:24px;width:44px;height:32px;background:rgba(253,230,138,.55);border:1.5px dashed #B45309;display:none"></div>
+            <div id="cover" style="position:absolute;left:78px;top:14px;width:64px;height:52px;background:rgba(219,234,254,.55);border:1.5px solid #60A5FA;display:none"></div>
+            <div id="stain" style="position:absolute;left:60px;top:34px;width:14px;height:12px;border-radius:50%;background:rgba(146,64,14,.8);display:none"></div>
+          </div>
+          <!-- tools -->
+          <div class="tool" id="t-water" style="left:20px;top:30px" title="distilled water"></div>
+          <div class="tool" id="t-onion" style="left:20px;top:150px" title="onion epidermis"></div>
+          <div class="tool" id="t-cover" style="left:440px;top:30px" title="coverslip"></div>
+          <div class="tool" id="t-iodine" style="left:440px;top:150px" title="iodine dropper"></div>
+          <div class="tool" id="t-blot" style="left:440px;top:250px" title="blotting paper"></div>
+          <div id="dragGhost" style="position:absolute;pointer-events:none;display:none;z-index:9"></div>
+        </div>
+        <p class="tip">Drag each item onto the slide in the order shown on the right.</p>
+      </div>
+      <div>
+        <h4 style="color:var(--acc);margin:2px 0 6px">Method — follow the steps</h4>
+        <div id="steps"></div>
+        <div class="card" style="margin-top:10px">
+          <h4 style="margin:2px 0 6px;color:var(--navy);font-size:15.5px">Why each step?</h4>
+          <div class="q" style="margin-bottom:6px"><button class="linkbtn" data-r="r-water">why water, not sucrose solution?</button>
+            <div class="rev" id="r-water">Water keeps the cells <strong>turgid and natural-looking</strong>. A concentrated solution would shrink the cytoplasm away from the cell wall (plasmolysis).</div></div>
+          <div class="q" style="margin-bottom:6px"><button class="linkbtn" data-r="r-cover">why lower the coverslip slowly with a mounted needle?</button>
+            <div class="rev" id="r-cover">To <strong>avoid air bubbles</strong>, which look like dark rings under the microscope and hide the cells.</div></div>
+          <div class="q"><button class="linkbtn" data-r="r-iodine">why add iodine stain?</button>
+            <div class="rev" id="r-iodine">Onion cells are almost transparent. Iodine <strong>stains the nucleus and starch grains</strong> dark, so structures become visible. Staining = adding a dye to make structures show up.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ ES 2.2 USING THE MICROSCOPE ============ -->
+<div class="es">
+  <div class="esbar">EXPERIMENTAL SKILLS 2.2</div>
+  <div class="esbody">
+    <p class="estitle">Using the microscope: objective lenses and focusing</p>
+    <p>You are looking down the eyepiece at your onion slide. Choose an <strong>objective lens</strong>, then use the <strong>focus knob</strong> until the cells are sharp. Notice what happens to the field of view as magnification increases.</p>
+    <div class="cols">
+      <div>
+        <div class="viewwrap">
+          <canvas id="eyepiece" width="340" height="340"></canvas>
+          <svg class="grat" id="gratSvg" viewBox="0 0 320 320"></svg>
+        </div>
+        <div class="knobrow">
+          <button class="objbtn on" data-obj="4">×4</button>
+          <button class="objbtn" data-obj="10">×10</button>
+          <button class="objbtn" data-obj="40">×40</button>
+        </div>
+        <div class="knobrow">
+          <span class="tag">focus</span>
+          <input type="range" id="focus" min="0" max="100" value="20">
+          <span class="fb" id="focusFb">blurry…</span>
+        </div>
+        <div class="knobrow">
+          <span class="tag">light</span>
+          <input type="range" id="light" min="30" max="100" value="85">
+          <span class="tip">iris diaphragm</span>
+        </div>
+      </div>
+      <div class="qs">
+        <h4>Think like a microscopist</h4>
+        <div class="q"><h4>1. Total magnification = eyepiece × objective. The eyepiece here is ×10. What is the total magnification with the ×40 objective?</h4>
+          <input type="number" id="qMag" style="width:90px"> <button class="linkbtn" data-c="mag">check</button>
+          <div class="rev" id="rev-mag">×10 × ×40 = <strong>×400</strong>. The image is 400 times larger than the real specimen.</div></div>
+        <div class="q"><h4>2. What happens to the number of cells you can see as you switch from ×4 to ×40?</h4>
+          <button class="linkbtn" data-c="fov">show answer</button>
+          <div class="rev" id="rev-fov">You see <strong>fewer cells, but larger</strong>. Higher magnification = smaller field of view. This is why you always <em>start on low power</em> to find the specimen, then zoom in.</div></div>
+        <div class="q"><h4>3. Which knob (coarse or fine) should you use with the ×40 objective — and why?</h4>
+          <button class="linkbtn" data-c="knob">show answer</button>
+          <div class="rev" id="rev-knob">Only the <strong>fine</strong> focus knob. At high power the objective is very close to the slide; the coarse knob could push the lens through the coverslip and crack it.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ ES 2.3 MEASURING CELLS ============ -->
+<div class="es">
+  <div class="esbar">EXPERIMENTAL SKILLS 2.3</div>
+  <div class="esbody">
+    <p class="estitle">Measuring cell size with an eyepiece graticule</p>
+    <p>The circle now shows the view at <strong>×100 total</strong> with a ruler (graticule) across it: <strong>0 to 100 eyepiece units</strong>. Calibration: at this magnification, <strong>100 eyepiece units = 1 mm (1000 µm)</strong>, so 1 unit = 10 µm.</p>
+    <div class="cols">
+      <div class="card">
+        <p style="margin-top:2px">Look at the eyepiece view (set to ×10 objective = ×100 total). One onion cell spans about <strong>10 eyepiece units</strong>.</p>
+        <p>1. Length of one cell = <input type="number" id="qUnits" style="width:70px"> units &nbsp;<button class="linkbtn" data-c="units">check</button></p>
+        <p>2. Convert to micrometres (1 unit = 10 µm): <input type="number" id="qUm" style="width:70px"> µm &nbsp;<button class="linkbtn" data-c="um">check</button></p>
+        <div class="rev" id="rev-units">One cell ≈ <strong>10 units</strong> (accept 9–11 — estimating to the nearest unit is normal).</div>
+        <div class="rev" id="rev-um">10 units × 10 µm = <strong>100 µm</strong>. A typical onion epidermis cell is about 100–400 µm long.</div>
+        <p class="tip">µm = micrometre. 1000 µm = 1 mm. Cells are measured in µm because they are far too small for millimetres.</p>
+      </div>
+      <div class="card">
+        <h4 style="margin:2px 0 8px;color:var(--acc)">Magnification calculation</h4>
+        <p>A student draws one cell. The <strong>drawing is 50 mm</strong> wide. The <strong>real cell is 100 µm</strong> wide.</p>
+        <p>Step 1 — same units: 50 mm = <input type="number" id="qConv" style="width:90px"> µm &nbsp;<button class="linkbtn" data-c="conv">check</button></p>
+        <p>Step 2 — magnification = image ÷ actual = <input type="number" id="qM2" style="width:80px"> &nbsp;<button class="linkbtn" data-c="m2">check</button></p>
+        <div class="rev" id="rev-conv">50 mm × 1000 = <strong>50 000 µm</strong>.</div>
+        <div class="rev" id="rev-m2">M = 50 000 ÷ 100 = <strong>×500</strong>. Remember: <em>magnification = image size ÷ actual size</em> — with both in the same units.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="qs">
+  <div class="card">
+    <h4 style="margin:2px 0 8px;color:var(--acc)">Exit check — levels of organisation</h4>
+    <p>Put these in order from smallest to largest. Click them in order: <strong>cell → tissue → organ → organ system → organism</strong>.</p>
+    <div id="orgBtns" style="margin:8px 0"></div>
+    <p>Your order: <span id="orgPath" class="fb"></span></p>
+    <button class="btn sec" id="orgReset">reset</button>
+    <div class="rev" id="rev-org">Correct order: <strong>cell → tissue → organ → organ system → organism</strong>. Example: muscle cell → muscle tissue → heart → circulatory system → human.</div>
+  </div>
+</div>
+
+</main>
+<footer>IGCSE Biology 0610 · Chapter 2 virtual practical · all simulation runs locally in this file</footer>
+
+<script>
+/* ============ tool art ============ */
+const ART={
+ 't-water':`<svg width="90" height="110" viewBox="0 0 90 110"><rect x="28" y="8" width="34" height="12" rx="3" fill="#6B7280"/><path d="M30 20 h30 v70 a15 15 0 0 1 -30 0 z" fill="#DBEAFE" stroke="#6B7280" stroke-width="2"/><path d="M32 45 h26 v45 a13 13 0 0 1 -26 0 z" fill="#93C5FD"/><text x="45" y="108" font-size="10" text-anchor="middle" font-family="Segoe UI" fill="#1F2937">water</text></svg>`,
+ 't-onion':`<svg width="90" height="110" viewBox="0 0 90 110"><ellipse cx="45" cy="60" rx="32" ry="38" fill="#FDE68A" stroke="#B45309" stroke-width="2"/><path d="M45 22 q4 -12 0 -16 M38 24 q-6 -10 -2 -16 M52 24 q6 -10 2 -16" stroke="#B45309" stroke-width="2.5" fill="none"/><path d="M20 55 q25 -14 50 0 M20 70 q25 -14 50 0" stroke="#D97706" stroke-width="1.5" fill="none"/><text x="45" y="108" font-size="10" text-anchor="middle" font-family="Segoe UI" fill="#1F2937">onion</text></svg>`,
+ 't-cover':`<svg width="90" height="70" viewBox="0 0 90 70"><rect x="10" y="20" width="70" height="30" rx="3" fill="rgba(219,234,254,.8)" stroke="#60A5FA" stroke-width="2"/><text x="45" y="64" font-size="10" text-anchor="middle" font-family="Segoe UI" fill="#1F2937">coverslip</text></svg>`,
+ 't-iodine':`<svg width="70" height="110" viewBox="0 0 70 110"><rect x="25" y="4" width="20" height="16" rx="4" fill="#92400E"/><path d="M28 20 h14 l6 30 v40 a12 12 0 0 1 -26 0 v-40 z" fill="#B45309" stroke="#78350F" stroke-width="2"/><path d="M33 96 v8" stroke="#78350F" stroke-width="3"/><text x="35" y="109" font-size="10" text-anchor="middle" font-family="Segoe UI" fill="#1F2937">iodine</text></svg>`,
+ 't-blot':`<svg width="90" height="60" viewBox="0 0 90 60"><rect x="8" y="12" width="74" height="34" rx="2" fill="#F5F5F4" stroke="#A8A29E" stroke-width="2"/><text x="45" y="33" font-size="10" text-anchor="middle" font-family="Segoe UI" fill="#57534E">blotting</text><text x="45" y="44" font-size="10" text-anchor="middle" font-family="Segoe UI" fill="#57534E">paper</text></svg>`
+};
+for(const id in ART)document.getElementById(id).innerHTML=ART[id];
+
+/* ============ ES 2.1 slide prep drag sequence ============ */
+const STEPS=[
+ {tool:'t-water', text:'Add one drop of distilled water to the centre of the slide.',done:()=>show('dropWater')},
+ {tool:'t-onion', text:'Peel a thin piece of onion epidermis and place it in the water drop.',done:()=>show('epi')},
+ {tool:'t-cover', text:'Lower a coverslip slowly over the specimen (no air bubbles!).',done:()=>show('cover')},
+ {tool:'t-iodine', text:'Add a drop of iodine at the edge of the coverslip to stain the cells.',done:()=>show('stain')},
+ {tool:'t-blot', text:'Draw the stain under the coverslip with blotting paper. Slide ready!',done:finishPrep}
+];
+let stepIdx=0;
+const stepsBox=document.getElementById('steps');
+STEPS.forEach((s,i)=>{
+ const d=document.createElement('div');d.className='sstep'+(i===0?' cur':'');
+ d.id='step'+i;d.textContent=(i+1)+'. '+s.text;stepsBox.appendChild(d);
+});
+const doneMsg=document.createElement('p');doneMsg.className='fb good';stepsBox.appendChild(doneMsg);
+function show(id){const el=document.getElementById(id);el.style.display='block';
+ if(id==='stain'){setTimeout(()=>{el.style.transition='left 1.2s';el.style.left='96px'},50)}}
+function finishPrep(){
+ document.getElementById('stain').style.left='96px';
+ document.getElementById('epi').style.background='rgba(217,119,6,.35)';
+ doneMsg.textContent='✓ Slide prepared! Move to Experimental Skills 2.2 to view it.';
+}
+/* simple pointer dragging */
+const bench=document.getElementById('bench');
+const ghost=document.getElementById('dragGhost');
+let dragId=null;
+for(const id in ART){
+ const el=document.getElementById(id);
+ el.addEventListener('pointerdown',e=>{
+  dragId=id;ghost.innerHTML=ART[id];ghost.style.display='block';
+  ghost.style.opacity=.9;moveGhost(e);el.setPointerCapture(e.pointerId);
+ });
+ el.addEventListener('pointermove',e=>{if(dragId===id)moveGhost(e)});
+ el.addEventListener('pointerup',e=>{
+  ghost.style.display='none';
+  if(dragId!==id)return;dragId=null;
+  const r=document.getElementById('slide').getBoundingClientRect();
+  const br=bench.getBoundingClientRect();
+  const x=e.clientX-br.left,y=e.clientY-br.top;
+  const sl={x:r.left-br.left,y:r.top-br.top};
+  const over=x>sl.x-10&&x<sl.x+r.width+10&&y>sl.y-30&&y<sl.y+r.height+30;
+  if(over)tryDrop(id);else flash(id,'Drag it onto the slide area');
+ });
+}
+function moveGhost(e){
+ const br=bench.getBoundingClientRect();
+ ghost.style.left=(e.clientX-br.left-40)+'px';
+ ghost.style.top=(e.clientY-br.top-40)+'px';
+}
+function tryDrop(id){
+ const cur=STEPS[stepIdx];
+ if(!cur)return;
+ if(id===cur.tool){
+  cur.done();
+  const d=document.getElementById('step'+stepIdx);
+  d.classList.remove('cur');d.classList.add('done');d.textContent='✓ '+STEPS[stepIdx].text;
+  stepIdx++;
+  if(stepIdx<STEPS.length)document.getElementById('step'+stepIdx).classList.add('cur');
+ }else{
+  flash(id,'Not yet — follow the numbered order');
+ }
+}
+function flash(id,msg){
+ doneMsg.textContent='⚠ '+msg;doneMsg.className='fb bad';
+ setTimeout(()=>{doneMsg.textContent='';doneMsg.className='fb good'},1600);
+}
+
+/* ============ ES 2.2 microscope view ============ */
+const cv=document.getElementById('eyepiece'),ctx=cv.getContext('2d');
+let obj=4,light=0.85;
+const OBJSCALE={4:0.55,10:1.0,40:2.6};
+function drawCells(){
+ const w=340,cx=170,cy=170;
+ ctx.clearRect(0,0,w,w);
+ ctx.save();
+ ctx.beginPath();ctx.arc(cx,cy,160,0,7);ctx.clip();
+ ctx.fillStyle=`rgb(${Math.round(255*light+40)},${Math.round(255*light+30)},${Math.round(245*light+20)})`;
+ ctx.fillRect(0,0,w,w);
+ const s=OBJSCALE[obj];
+ const cw=95*s,ch=52*s;
+ ctx.strokeStyle='#92400E';ctx.lineWidth=2.2;ctx.fillStyle='rgba(252,211,77,.25)';
+ const cols=Math.ceil(340/cw)+2,rows=Math.ceil(340/ch)+2;
+ for(let r=-1;r<rows;r++)for(let c=-1;c<cols;c++){
+  const x=c*cw+((r%2)?cw/2:0)+((170-cw*1.5)%cw),y=r*ch+20;
+  ctx.beginPath();
+  if(ctx.roundRect)ctx.roundRect(x,y,cw-4,ch-4,10);else ctx.rect(x,y,cw-4,ch-4);
+  ctx.fill();ctx.stroke();
+  ctx.beginPath();ctx.arc(x+cw*0.55,y+ch*0.5,Math.max(3,6*s),0,7);
+  ctx.fillStyle='#78350F';ctx.fill();ctx.fillStyle='rgba(252,211,77,.25)';
+ }
+ ctx.restore();
+ /* dark vignette */
+ const g=ctx.createRadialGradient(cx,cy,120,cx,cy,168);
+ g.addColorStop(0,'rgba(0,0,0,0)');g.addColorStop(1,'rgba(0,0,0,'+(0.5*(1-light)+0.15)+')');
+ ctx.fillStyle=g;ctx.beginPath();ctx.arc(cx,cy,168,0,7);ctx.fill();
+}
+drawCells();
+document.getElementById('focus').oninput=e=>{
+ const v=+e.target.value;const blur=Math.abs(v-80)/9;
+ cv.style.filter=`blur(${blur.toFixed(1)}px)`;
+ document.getElementById('focusFb').textContent=blur<0.8?'✓ sharp!':(v<80?'blurry… (turn up)':'blurry… (turn down)');
+ document.getElementById('focusFb').className='fb '+(blur<0.8?'good':'bad');
+};
+document.getElementById('light').oninput=e=>{light=e.target.value/100;drawCells()};
+document.querySelectorAll('.objbtn').forEach(b=>b.onclick=()=>{
+ document.querySelectorAll('.objbtn').forEach(x=>x.classList.remove('on'));
+ b.classList.add('on');obj=+b.dataset.obj;drawCells();
+ document.getElementById('gratSvg').style.display=(obj===10)?'block':'none';
+});
+/* graticule overlay (visible at ×10 objective) */
+const grat=document.getElementById('gratSvg');
+let gt='<line x1="20" y1="160" x2="300" y2="160" stroke="#111827" stroke-width="1.6"/>';
+for(let u=0;u<=100;u+=5){const x=20+u*2.8;const big=u%10===0;
+ gt+=`<line x1="${x}" y1="${big?148:153}" x2="${x}" y2="160" stroke="#111827" stroke-width="${big?1.6:1}"/>${big?`<text x="${x}" y="144" font-size="9" text-anchor="middle" font-family="Segoe UI" fill="#111827">${u}</text>`:''}`}
+grat.innerHTML=gt;grat.style.display='none';
+
+/* ============ checks ============ */
+const CHK={mag:()=>[document.getElementById('qMag').value==='400','rev-mag'],
+ units:()=>{const v=+document.getElementById('qUnits').value;return[v>=9&&v<=11,'rev-units']},
+ um:()=>[document.getElementById('qUm').value==='100','rev-um'],
+ conv:()=>[document.getElementById('qConv').value==='50000','rev-conv'],
+ m2:()=>[document.getElementById('qM2').value==='500','rev-m2']};
+document.querySelectorAll('.linkbtn[data-c]').forEach(b=>b.onclick=()=>{
+ const[ok,rev]=CHK[b.dataset.c]();const r=document.getElementById(rev);
+ r.classList.add('on');r.style.borderLeftColor=ok?'#15803D':'#B91C1C';
+});
+document.querySelectorAll('.linkbtn[data-r]').forEach(b=>b.onclick=()=>{
+ document.getElementById(b.dataset.r).classList.toggle('on');
+});
+/* levels of organisation */
+const ORG=['organism','tissue','organ system','cell','organ'];
+const RIGHT=['cell','tissue','organ','organ system','organism'];
+let picked=[];
+const orgBtns=document.getElementById('orgBtns');
+ORG.forEach(o=>{const b=document.createElement('button');b.className='btn sec';b.textContent=o;
+ b.onclick=()=>{if(picked.includes(o))return;picked.push(o);b.disabled=true;
+  document.getElementById('orgPath').textContent=picked.join(' → ');
+  if(picked.length===5){const ok=picked.join()===RIGHT.join();
+   const r=document.getElementById('rev-org');r.classList.add('on');
+   r.style.borderLeftColor=ok?'#15803D':'#B91C1C';
+   document.getElementById('orgPath').className='fb '+(ok?'good':'bad');}};
+ orgBtns.appendChild(b);});
+document.getElementById('orgReset').onclick=()=>{picked=[];
+ orgBtns.querySelectorAll('button').forEach(b=>b.disabled=false);
+ document.getElementById('orgPath').textContent='';
+ document.getElementById('rev-org').classList.remove('on');};
+</script>
+</body></html>
