@@ -1,0 +1,355 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Diseases & immunity – virtual practical: testing antiseptics and vaccination</title>
+<style>
+:root{--acc:#BE185D;--acc2:#9D174D;--pale:#FDF2F8;--navy:#0B2161;--ink:#1A1A1A;--mute:#5E5E6E;--line:#F3D9E5;--bg:#FCF9FB}
+*{box-sizing:border-box}html,body{margin:0}
+body{font-family:Georgia,"Times New Roman","Songti SC",serif;background:var(--bg);color:var(--ink);line-height:1.5;font-size:16px}
+.sans,nav,header,.btn,.chip,table,.pill,.tag,button,select,input{font-family:"Segoe UI",Calibri,"PingFang SC",system-ui,sans-serif}
+header{background:#fff;border-bottom:4px solid var(--acc);padding:12px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+header h1{margin:0;font-size:22px;color:var(--acc);font-weight:normal}
+header p{margin:2px 0 0;font-size:13px;color:var(--mute)}
+.pill{background:var(--navy);color:#fff;border-radius:999px;padding:6px 14px;font-weight:700;font-size:14px}
+main{max-width:1180px;margin:0 auto;padding:16px}
+.es{background:#fff;border-left:3px solid var(--acc);border-right:3px solid var(--acc);border-bottom:3px solid var(--acc);margin-bottom:16px}
+.esbar{background:var(--acc);color:#fff;padding:9px 16px;font-size:19px;letter-spacing:.3px}
+.esbody{padding:14px 18px}
+.estitle{color:var(--acc);font-weight:bold;font-size:17px;margin:2px 0 8px}
+.safety{border-left:4px solid var(--acc);background:#FDF0F6;padding:8px 12px;margin:10px 0;font-size:15px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}@media(max-width:900px){.cols{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:14px}
+.btn{display:inline-block;border:none;border-radius:8px;padding:10px 18px;font-size:15px;font-weight:700;cursor:pointer;background:var(--acc);color:#fff;margin:4px 6px 4px 0}
+.btn:hover{background:var(--acc2)}
+.btn:disabled{background:#D5C9CF;cursor:not-allowed}
+.btn.sec{background:#fff;color:var(--acc);border:2px solid var(--acc)}
+.btn.sec:hover{background:var(--pale)}
+.btn.navy{background:var(--navy)}
+select,input[type=text],input[type=number]{font-size:15px;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:#fff}
+.tag{display:inline-block;background:var(--pale);border:1px solid #F3D9E5;color:var(--acc2);border-radius:999px;padding:3px 12px;font-size:13px;font-weight:600}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th{background:var(--navy);color:#fff;padding:7px 10px;text-align:left;font-weight:600}
+td{border:1px solid var(--line);padding:6px 10px}
+tr:nth-child(even) td{background:#FDF5F9}
+.qs .q{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin-bottom:12px}
+.q h4{margin:2px 0 6px;color:var(--navy);font-size:15.5px}
+.rev{margin-top:8px;background:var(--pale);border-left:4px solid var(--acc);padding:8px 12px;font-size:14.5px;display:none}
+.rev.on{display:block}
+.linkbtn{border:none;background:none;color:var(--acc);font-weight:700;cursor:pointer;font-size:13.5px;text-decoration:underline;padding:0}
+.tip{font-size:13.5px;color:var(--mute);font-style:italic}
+footer{padding:16px 20px;color:var(--mute);font-size:12.5px;text-align:center}
+.fb{font-size:13.5px;font-weight:700;margin-top:4px;font-family:"Segoe UI",sans-serif}
+.fb.good{color:#15803D}.fb.bad{color:#B91C1C}
+#plateCv{display:block;margin:0 auto;max-width:100%;cursor:crosshair;touch-action:none}
+.discbtn{display:inline-block;border:2px solid var(--acc);background:#fff;border-radius:8px;padding:6px 12px;margin:3px;font-weight:700;cursor:pointer;font-family:"Segoe UI",sans-serif;font-size:13.5px;color:var(--acc2)}
+.discbtn.on{background:var(--acc);color:#fff}
+.discbtn:disabled{opacity:.35;cursor:not-allowed}
+#vacCv{width:100%;height:auto;display:block;background:#fff;border:1px solid var(--line);border-radius:8px}
+input[type=range]{width:220px;accent-color:var(--acc)}
+</style></head>
+<body>
+<header>
+  <div style="flex:1;min-width:220px">
+    <h1>Diseases &amp; immunity — virtual practical</h1>
+    <p>Cambridge IGCSE Biology 0610 · Chapter 10 · works offline · Eko Febriadi</p>
+  </div>
+  <span class="pill">0610 · Ch 10</span>
+</header>
+<main>
+
+<!-- ============ ES 10.1 ANTISEPTICS ============ -->
+<div class="es">
+  <div class="esbar">EXPERIMENTAL SKILLS 10.1</div>
+  <div class="esbody">
+    <p class="estitle">Which antiseptic works best? Zones of inhibition</p>
+    <p>Spread bacteria over the agar, add paper discs soaked in different antiseptics, incubate, then <strong>measure the clear zones</strong> where bacteria could not grow. The bigger the zone, the more effective the chemical.</p>
+    <div class="safety"><strong>Real-lab safety:</strong> treat all bacterial cultures as harmful: work near a flame, tape the lid shut, never open it after incubation, and wash hands afterwards. Incubate school cultures at 25&nbsp;°C, never 37&nbsp;°C (why? see Q4).</div>
+    <div class="cols">
+      <div style="text-align:center">
+        <canvas id="plateCv" width="440" height="440"></canvas>
+        <p class="tip" id="plateTip">Step 1 — rub the swab back and forth over the agar to spread the bacteria.</p>
+      </div>
+      <div>
+        <div class="card">
+          <h4 style="margin:2px 0 8px;color:var(--acc)">Your equipment</h4>
+          <div id="swabState"><span class="tag">🧫 sterile swab</span> → rub it on the plate</div>
+          <div style="margin-top:10px">
+            <p style="margin:4px 0"><strong>Step 2</strong> — pick a disc, then click the plate to place it:</p>
+            <button class="discbtn" data-d="dettol" disabled>Dettol disc</button>
+            <button class="discbtn" data-d="tcp" disabled>TCP disc</button>
+            <button class="discbtn" data-d="pen" disabled>Penicillin disc</button>
+            <button class="discbtn" data-d="water" disabled>Water disc (control)</button>
+          </div>
+          <p style="margin:8px 0 2px"><strong>Step 3</strong> — incubate:</p>
+          <button class="btn" id="incubate" disabled>🌡 incubate 24 h at 25 °C</button>
+          <p style="margin:8px 0 2px"><strong>Step 4</strong> — measure: click a disc, drag the two markers to the edges of its clear zone, then record.</p>
+          <button class="btn sec" id="recZone" disabled>record zone diameter</button>
+          <span class="fb" id="zoneFb"></span>
+        </div>
+        <div class="card">
+          <h4 style="margin:2px 0 8px;color:var(--acc)">Results</h4>
+          <table id="zoneTable"><tr><th>Disc</th><th>Zone diameter (mm)</th></tr></table>
+        </div>
+      </div>
+    </div>
+    <div class="qs">
+      <h4>Analysis questions</h4>
+      <div class="q"><h4>1. Which disc was most effective against the bacteria? How do you know from your measurements?</h4>
+        <button class="linkbtn" data-r="a1">show answer</button>
+        <div class="rev" id="a1">The disc with the <strong>largest clear zone</strong> (usually penicillin in this simulation). A larger zone of inhibition means the chemical diffused into the agar and killed or stopped bacteria further from the disc.</div></div>
+      <div class="q"><h4>2. Why include a disc soaked in sterile water?</h4>
+        <button class="linkbtn" data-r="a2">show answer</button>
+        <div class="rev" id="a2">It is the <strong>control</strong>. It proves that any clear zone is caused by the antiseptic/antibiotic and not by the paper disc or the water itself. The water disc should have no zone.</div></div>
+      <div class="q"><h4>3. Give two variables that must be kept the same for a fair test.</h4>
+        <button class="linkbtn" data-r="a3">show answer</button>
+        <div class="rev" id="a3">Same <strong>species and amount of bacteria</strong>; same <strong>size/concentration of discs</strong>; same incubation <strong>temperature and time</strong>; same agar depth. (Any two.)</div></div>
+      <div class="q"><h4>4. Why are school cultures incubated at 25 °C and not 37 °C?</h4>
+        <button class="linkbtn" data-r="a4">show answer</button>
+        <div class="rev" id="a4">37 °C is human body temperature — ideal for growing <strong>pathogens that infect humans</strong>. 25 °C slows growth and makes dangerous human pathogens much less likely to thrive.</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ ES 10.2 VACCINATION ============ -->
+<div class="es">
+  <div class="esbar">EXPERIMENTAL SKILLS 10.2</div>
+  <div class="esbody">
+    <p class="estitle">Herd immunity: what happens when we vaccinate?</p>
+    <p>This model has 100 people. One infected person (red) arrives. Choose the <strong>percentage of vaccinated people</strong>, run the outbreak, and count how many become infected. Vaccinated people (green) cannot catch or pass on the disease.</p>
+    <div class="cols">
+      <div>
+        <canvas id="vacCv" width="520" height="300"></canvas>
+        <div style="margin:8px 0">
+          <span class="tag">vaccinated: <span id="vacPct">0%</span></span><br>
+          <input type="range" id="vacSlider" min="0" max="100" value="0" step="5">
+        </div>
+        <button class="btn" id="runOutbreak">▶ run outbreak</button>
+        <span class="fb" id="vacFb"></span>
+      </div>
+      <div>
+        <div class="card">
+          <h4 style="margin:2px 0 8px;color:var(--acc)">Your data</h4>
+          <table id="vacTable"><tr><th>% vaccinated</th><th>people infected (of 100)</th></tr></table>
+        </div>
+        <div class="qs">
+          <div class="q"><h4>1. Describe the pattern in your data.</h4>
+            <button class="linkbtn" data-r="v1">show answer</button>
+            <div class="rev" id="v1">The more people vaccinated, the <strong>fewer people infected</strong>. Above roughly 80–90% vaccinated, outbreaks usually die out almost immediately — there are too few unprotected people for the disease to spread through.</div></div>
+          <div class="q"><h4>2. How does vaccination protect people who are <em>not</em> vaccinated (e.g. babies, people with weak immune systems)?</h4>
+            <button class="linkbtn" data-r="v2">show answer</button>
+            <div class="rev" id="v2"><strong>Herd immunity.</strong> When most people are immune, the pathogen cannot find enough susceptible hosts to keep spreading, so chains of infection break — and even unvaccinated people are unlikely to meet the disease.</div></div>
+          <div class="q"><h4>3. How does a vaccine create immunity without causing the disease?</h4>
+            <button class="linkbtn" data-r="v3">show answer</button>
+            <div class="rev" id="v3">A vaccine introduces a <strong>weakened or inactive form of the pathogen</strong> (or its antigens). Lymphocytes respond by making <strong>antibodies</strong> and memory cells. If the real pathogen arrives later, the memory cells trigger a fast, strong response.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+<footer>IGCSE Biology 0610 · Chapter 10 virtual practical · all simulation runs locally in this file</footer>
+
+<script>
+/* ================= ES 10.1 petri dish ================= */
+const cv=document.getElementById('plateCv'),ctx=cv.getContext('2d');
+const SCALE=4; /* 4 px = 1 mm */
+let swabbed=false,incubated=false,pickDisc=null;
+let discs=[]; /* {x,y,type,zoneR(true mm)} */
+const DTYPE={
+ dettol:{label:'Dettol',col:'#F59E0B',zone:[18,24]},
+ tcp:{label:'TCP',col:'#0EA5E9',zone:[12,18]},
+ pen:{label:'Penicillin',col:'#8B5CF6',zone:[26,34]},
+ water:{label:'Water (control)',col:'#94A3B8',zone:[0,0]}
+};
+let lawn=[];
+for(let i=0;i<420;i++){const a=Math.random()*6.283,r=Math.sqrt(Math.random())*180;
+ lawn.push({x:220+Math.cos(a)*r,y:220+Math.sin(a)*r})}
+function drawPlate(){
+ ctx.clearRect(0,0,440,440);
+ /* dish */
+ ctx.beginPath();ctx.arc(220,220,205,0,7);ctx.fillStyle='#FDF6EC';ctx.fill();
+ ctx.lineWidth=5;ctx.strokeStyle='#9CA3AF';ctx.stroke();
+ /* agar rim */
+ ctx.beginPath();ctx.arc(220,220,195,0,7);ctx.strokeStyle='#E7D9BE';ctx.lineWidth=2;ctx.stroke();
+ /* bacteria lawn */
+ if(swabbed){
+  ctx.fillStyle=incubated?'rgba(180,160,60,.55)':'rgba(200,180,90,.28)';
+  for(const p of lawn){ctx.beginPath();ctx.arc(p.x,p.y,incubated?2.6:1.8,0,7);ctx.fill()}
+ }
+ /* zones + discs */
+ for(const d of discs){
+  if(incubated&&d.zone>0){
+   ctx.beginPath();ctx.arc(d.x,d.y,d.zone*SCALE/2+8,0,7);
+   ctx.fillStyle='#FFFDF7';ctx.fill();
+   ctx.setLineDash([3,4]);ctx.strokeStyle='#BE185D';ctx.lineWidth=1.5;ctx.stroke();ctx.setLineDash([]);
+  }
+  ctx.beginPath();ctx.arc(d.x,d.y,10,0,7);
+  ctx.fillStyle='#fff';ctx.fill();ctx.lineWidth=2.5;ctx.strokeStyle=DTYPE[d.type].col;ctx.stroke();
+  ctx.fillStyle=DTYPE[d.type].col;ctx.font='bold 10px Segoe UI';ctx.textAlign='center';
+  ctx.fillText({dettol:'D',tcp:'T',pen:'P',water:'W'}[d.type],d.x,d.y+3);
+ }
+ /* measuring markers */
+ if(measuring){
+  ctx.strokeStyle='#0B2161';ctx.lineWidth=2;
+  ctx.beginPath();ctx.moveTo(mkA.x,mkA.y);ctx.lineTo(mkB.x,mkB.y);ctx.stroke();
+  for(const m of [mkA,mkB]){
+   ctx.beginPath();ctx.arc(m.x,m.y,7,0,7);ctx.fillStyle='#0B2161';ctx.fill();
+   ctx.fillStyle='#fff';ctx.font='bold 9px Segoe UI';ctx.fillText('↔',m.x,m.y+3);
+  }
+  const mm=Math.hypot(mkA.x-mkB.x,mkA.y-mkB.y)/SCALE;
+  ctx.fillStyle='#0B2161';ctx.font='bold 15px Segoe UI';
+  ctx.fillText(mm.toFixed(1)+' mm',(mkA.x+mkB.x)/2,(mkA.y+mkB.y)/2-12);
+ }
+}
+/* swab interaction */
+let swabbing=false,swabStrokes=0;
+cv.addEventListener('pointerdown',e=>{
+ if(!swabbed){
+  swabbing=true;cv.setPointerCapture(e.pointerId);
+ }else if(measuring){
+  const p=evtPos(e);
+  const nearA=Math.hypot(p.x-mkA.x,p.y-mkA.y)<16,nearB=Math.hypot(p.x-mkB.x,p.y-mkB.y)<16;
+  dragMk=nearA?'A':nearB?'B':null;
+  if(dragMk)cv.setPointerCapture(e.pointerId);
+ }
+});
+cv.addEventListener('pointermove',e=>{
+ if(swabbing&&!swabbed){
+  const p=evtPos(e);
+  for(let i=0;i<6;i++)lawn.push({x:p.x+(Math.random()-0.5)*36,y:p.y+(Math.random()-0.5)*36});
+  swabStrokes++;
+  drawPlate();
+  if(swabStrokes>10){
+   swabbed=true;swabbing=false;
+   document.getElementById('plateTip').textContent='Step 2 — place your four discs on the agar.';
+   document.querySelectorAll('.discbtn').forEach(b=>b.disabled=false);
+   drawPlate();
+  }
+ }else if(dragMk){
+  const p=evtPos(e);
+  if(dragMk==='A'){mkA=p}else{mkB=p}
+  drawPlate();
+ }
+});
+cv.addEventListener('pointerup',e=>{
+ swabbing=false;dragMk=null;
+ if(swabbed&&!incubated&&pickDisc){
+  const p=evtPos(e);
+  const dist=Math.hypot(p.x-220,p.y-220);
+  if(dist>175)return tip('Place the disc inside the agar');
+  if(discs.some(d=>Math.hypot(d.x-p.x,d.y-p.y)<52))return tip('Too close to another disc — space them out');
+  const z=DTYPE[pickDisc].zone;
+  discs.push({x:p.x,y:p.y,type:pickDisc,zone:z[0]+Math.random()*(z[1]-z[0])});
+  document.querySelector(`.discbtn[data-d="${pickDisc}"]`).disabled=true;
+  document.querySelectorAll('.discbtn').forEach(b=>b.classList.remove('on'));
+  pickDisc=null;
+  if(discs.length===4)document.getElementById('incubate').disabled=false;
+  tip(discs.length===4?'Step 3 — incubate the plate!':'Place the remaining discs ('+discs.length+'/4 placed)');
+  drawPlate();
+ }
+});
+function evtPos(e){const r=cv.getBoundingClientRect();
+ return{x:(e.clientX-r.left)*440/r.width,y:(e.clientY-r.top)*440/r.height}}
+function tip(t){document.getElementById('plateTip').textContent=t}
+document.querySelectorAll('.discbtn').forEach(b=>b.onclick=()=>{
+ if(b.disabled)return;
+ document.querySelectorAll('.discbtn').forEach(x=>x.classList.remove('on'));
+ b.classList.add('on');pickDisc=b.dataset.d;
+ tip('Click on the agar to place the '+DTYPE[pickDisc].label+' disc');
+});
+document.getElementById('incubate').onclick=()=>{
+ incubated=true;document.getElementById('incubate').disabled=true;
+ tip('24 h later: clear zones have appeared! Step 4 — click a disc to measure its zone.');
+ drawPlate();
+};
+/* measuring */
+let measuring=null,mkA=null,mkB=null,dragMk=null;
+cv.addEventListener('click',e=>{
+ if(!incubated)return;
+ const p=evtPos(e);
+ const d=discs.find(d=>Math.hypot(d.x-p.x,d.y-p.y)<14);
+ if(d){
+  measuring=d;
+  mkA={x:d.x-(d.zone*SCALE/2+8),y:d.y};
+  mkB={x:d.x+(d.zone*SCALE/2+8),y:d.y};
+  document.getElementById('recZone').disabled=false;
+  tip('Drag the two markers to the edges of the clear zone around '+DTYPE[d.type].label+', then record.');
+  drawPlate();
+ }
+});
+document.getElementById('recZone').onclick=()=>{
+ if(!measuring)return;
+ const mm=Math.hypot(mkA.x-mkB.x,mkA.y-mkB.y)/SCALE;
+ const true_mm=measuring.zone+4; /* zone radius in mm -> diameter + disc */
+ const t=document.getElementById('zoneTable');
+ if(![...t.rows].some(r=>r.cells[0].textContent===DTYPE[measuring.type].label)){
+  const tr=document.createElement('tr');
+  tr.innerHTML=`<td>${DTYPE[measuring.type].label}</td><td>${mm.toFixed(1)} mm ${Math.abs(mm-true_mm)<=3?'✓':'(true ≈ '+true_mm.toFixed(0)+' mm)'}</td>`;
+  t.appendChild(tr);
+  document.getElementById('zoneFb').textContent=Math.abs(mm-true_mm)<=3?'✓ good measurement!':'⚠ more than 3 mm out — measure to the zone edge';
+  document.getElementById('zoneFb').className='fb '+(Math.abs(mm-true_mm)<=3?'good':'bad');
+ }else tip('Already recorded that disc — measure another one.');
+};
+drawPlate();
+/* ================= ES 10.2 vaccination model ================= */
+const vcv=document.getElementById('vacCv'),vctx=vcv.getContext('2d');
+let people=[],vacPct=0;
+function vacInit(){
+ people=[];
+ const nVac=Math.round(vacPct);
+ const idx=[...Array(100).keys()].sort(()=>Math.random()-0.5);
+ const vacSet=new Set(idx.slice(0,nVac));
+ for(let i=0;i<100;i++){
+  people.push({x:20+(i%10)*48,y:24+Math.floor(i/10)*26,state:vacSet.has(i)?'vac':'ok'});
+ }
+ people[Math.floor(Math.random()*100)].state='inf';
+ drawVac();
+}
+function drawVac(){
+ vctx.clearRect(0,0,520,300);
+ for(const p of people){
+  vctx.beginPath();vctx.arc(p.x,p.y,9,0,7);
+  vctx.fillStyle=p.state==='vac'?'#22C55E':p.state==='inf'?'#EF4444':'#CBD5E1';
+  vctx.fill();
+ }
+ vctx.font='12px Segoe UI';vctx.fillStyle='#57534E';
+ vctx.fillText('● vaccinated   ● infected   ● susceptible',20,292);
+ vctx.fillStyle='#22C55E';vctx.beginPath();vctx.arc(26,288,5,0,7);vctx.fill();
+ vctx.fillStyle='#EF4444';vctx.beginPath();vctx.arc(112,288,5,0,7);vctx.fill();
+ vctx.fillStyle='#CBD5E1';vctx.beginPath();vctx.arc(178,288,5,0,7);vctx.fill();
+}
+document.getElementById('vacSlider').oninput=e=>{
+ vacPct=+e.target.value;
+ document.getElementById('vacPct').textContent=vacPct+'%';
+ vacInit();
+};
+document.getElementById('runOutbreak').onclick=()=>{
+ let rounds=0;
+ const iv=setInterval(()=>{
+  const newInf=[];
+  for(const p of people){
+   if(p.state!=='inf')continue;
+   for(const q of people){
+    if(q.state!=='ok')continue;
+    const d=Math.hypot(p.x-q.x,p.y-q.y);
+    if(d<60&&Math.random()<0.55)newInf.push(q);
+   }
+  }
+  newInf.forEach(q=>q.state='inf');
+  drawVac();rounds++;
+  if(rounds>=8||newInf.length===0&&rounds>2){
+   clearInterval(iv);
+   const n=people.filter(p=>p.state==='inf').length;
+   document.getElementById('vacFb').textContent='outbreak over: '+n+' / 100 infected';
+   document.getElementById('vacFb').className='fb '+(n<15?'good':'bad');
+   const t=document.getElementById('vacTable');
+   const tr=document.createElement('tr');
+   tr.innerHTML=`<td>${vacPct}%</td><td>${n}</td>`;
+   t.appendChild(tr);
+  }
+ },420);
+};
+vacInit();
+document.querySelectorAll('.linkbtn[data-r]').forEach(b=>b.onclick=()=>document.getElementById(b.dataset.r).classList.toggle('on'));
+</script>
+</body></html>
