@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Drugs – virtual practical: caffeine and heart rate, alcohol and reactions</title>
+<style>
+:root{--acc:#B45309;--acc2:#92400E;--pale:#FFFBEB;--navy:#0B2161;--ink:#1A1A1A;--mute:#5E5E6E;--line:#EFE3CE;--bg:#FCFAF5}
+*{box-sizing:border-box}html,body{margin:0}
+body{font-family:Georgia,"Times New Roman","Songti SC",serif;background:var(--bg);color:var(--ink);line-height:1.5;font-size:16px}
+.sans,nav,header,.btn,.chip,table,.pill,.tag,button,select,input{font-family:"Segoe UI",Calibri,"PingFang SC",system-ui,sans-serif}
+header{background:#fff;border-bottom:4px solid var(--acc);padding:12px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+header h1{margin:0;font-size:22px;color:var(--acc);font-weight:normal}
+header p{margin:2px 0 0;font-size:13px;color:var(--mute)}
+.pill{background:var(--navy);color:#fff;border-radius:999px;padding:6px 14px;font-weight:700;font-size:14px}
+main{max-width:1180px;margin:0 auto;padding:16px}
+.es{background:#fff;border-left:3px solid var(--acc);border-right:3px solid var(--acc);border-bottom:3px solid var(--acc);margin-bottom:16px}
+.esbar{background:var(--acc);color:#fff;padding:9px 16px;font-size:19px;letter-spacing:.3px}
+.esbody{padding:14px 18px}
+.estitle{color:var(--acc);font-weight:bold;font-size:17px;margin:2px 0 8px}
+.safety{border-left:4px solid var(--acc);background:#FDF6E9;padding:8px 12px;margin:10px 0;font-size:15px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}@media(max-width:900px){.cols{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:14px}
+.btn{display:inline-block;border:none;border-radius:8px;padding:10px 18px;font-size:15px;font-weight:700;cursor:pointer;background:var(--acc);color:#fff;margin:4px 6px 4px 0}
+.btn:hover{background:var(--acc2)}
+.btn:disabled{background:#D5CCBF;cursor:not-allowed}
+.btn.sec{background:#fff;color:var(--acc);border:2px solid var(--acc)}
+.btn.sec:hover{background:var(--pale)}
+.btn.navy{background:var(--navy)}
+select,input[type=text],input[type=number]{font-size:15px;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:#fff}
+.big{font-size:40px;font-weight:700;color:var(--acc);font-family:"Segoe UI",Calibri,sans-serif}
+.tag{display:inline-block;background:var(--pale);border:1px solid #EFE3CE;color:var(--acc2);border-radius:999px;padding:3px 12px;font-size:13px;font-weight:600}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th{background:var(--navy);color:#fff;padding:7px 10px;text-align:left;font-weight:600}
+td{border:1px solid var(--line);padding:6px 10px}
+tr:nth-child(even) td{background:#FBF6EC}
+.qs .q{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin-bottom:12px}
+.q h4{margin:2px 0 6px;color:var(--navy);font-size:15.5px}
+.rev{margin-top:8px;background:var(--pale);border-left:4px solid var(--acc);padding:8px 12px;font-size:14.5px;display:none}
+.rev.on{display:block}
+.linkbtn{border:none;background:none;color:var(--acc);font-weight:700;cursor:pointer;font-size:13.5px;text-decoration:underline;padding:0}
+.tip{font-size:13.5px;color:var(--mute);font-style:italic}
+footer{padding:16px 20px;color:var(--mute);font-size:12.5px;text-align:center}
+.fb{font-size:13.5px;font-weight:700;margin-top:4px;font-family:"Segoe UI",sans-serif}
+.fb.good{color:#15803D}.fb.bad{color:#B91C1C}
+.concbtn{border:2px solid var(--acc);background:#fff;color:var(--acc2);border-radius:8px;padding:6px 12px;font-weight:700;cursor:pointer;font-family:"Segoe UI",sans-serif;margin:2px}
+.concbtn.on{background:var(--acc);color:#fff}
+#lightbox{width:280px;height:150px;margin:0 auto;border-radius:12px;display:flex;align-items:center;justify-content:center;border:3px solid #57534E;cursor:pointer;user-select:none;font-family:Segoe UI;font-weight:700;font-size:20px;transition:background .1s}
+</style></head>
+<body>
+<header>
+  <div style="flex:1;min-width:220px">
+    <h1>Drugs — virtual practical</h1>
+    <p>Cambridge IGCSE Biology 0610 · Chapter 15 · works offline · Eko Febriadi</p>
+  </div>
+  <span class="pill">0610 · Ch 15</span>
+</header>
+<main>
+
+<!-- ============ ES 15.1 DAPHNIA ============ -->
+<div class="es">
+  <div class="esbar">EXPERIMENTAL SKILLS 15.1</div>
+  <div class="esbody">
+    <p class="estitle">Does caffeine increase heart rate? Investigating with <em>Daphnia</em></p>
+    <p><em>Daphnia</em> (water flea) is transparent — you can watch its tiny heart beating under the microscope. Choose a caffeine solution, watch the heart (the pulsing red dot), and <strong>click the counter every time you see a beat</strong> for 15 seconds. Repeat for each concentration.</p>
+    <div class="safety"><strong>Real-lab care:</strong> Daphnia are living animals — return them to the pond water afterwards, and keep concentrations low. Ethics apply to invertebrates too.</div>
+    <div class="cols">
+      <div style="text-align:center">
+        <svg id="daphSvg" width="340" height="260" viewBox="0 0 340 260" style="background:radial-gradient(circle at 170px 130px,#fff 55%,#E7E5E4 100%);border-radius:50%;border:8px solid #57534E;max-width:100%"></svg>
+        <div style="margin:8px 0">
+          <button class="concbtn on" data-c="0">0% (control)</button>
+          <button class="concbtn" data-c="0.1">0.1%</button>
+          <button class="concbtn" data-c="0.5">0.5%</button>
+          <button class="concbtn" data-c="1">1.0%</button>
+        </div>
+        <button class="btn" id="startCount">▶ start 15 s count</button>
+        <button class="btn navy" id="beatBtn" disabled>💓 click each beat</button>
+        <div><span class="big" id="countRead">0</span> <span class="tip">beats you counted</span>
+        &nbsp; <span class="big" id="timerRead" style="font-size:26px">15.0 s</span></div>
+        <span class="fb" id="daphFb"></span>
+      </div>
+      <div>
+        <div class="card">
+          <h4 style="margin:2px 0 8px;color:var(--acc)">Results</h4>
+          <table id="daphTable"><tr><th>Caffeine (%)</th><th>Your count (15 s)</th><th>Heart rate (beats/min)</th></tr></table>
+          <canvas id="daphGraph" width="480" height="280" style="width:100%;height:auto;margin-top:8px"></canvas>
+        </div>
+        <div class="qs">
+          <div class="q"><h4>1. Describe the effect of caffeine on heart rate. What type of drug is caffeine?</h4>
+            <button class="linkbtn" data-r="g1">show answer</button>
+            <div class="rev" id="g1">Heart rate <strong>increases</strong> with caffeine concentration. Caffeine is a <strong>stimulant</strong> — it speeds up the transmission of signals in the nervous system.</div></div>
+          <div class="q"><h4>2. Why use 0% caffeine as one of the treatments?</h4>
+            <button class="linkbtn" data-r="g2">show answer</button>
+            <div class="rev" id="g2">It is the <strong>control</strong> — it shows the natural resting heart rate, so any increase can be attributed to the caffeine and not to handling or the microscope light warming the slide.</div></div>
+          <div class="q"><h4>3. Suggest one limitation of counting heart beats by eye.</h4>
+            <button class="linkbtn" data-r="g3">show answer</button>
+            <div class="rev" id="g3">The heart beats fast, so <strong>miscounting is easy</strong> (human error). Better: video the Daphnia and count in slow motion, or repeat and average.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ ES 15.2 ALCOHOL ============ -->
+<div class="es">
+  <div class="esbar">EXPERIMENTAL SKILLS 15.2</div>
+  <div class="esbody">
+    <p class="estitle">Alcohol and reaction time</p>
+    <p>Alcohol is a <strong>depressant</strong> — it slows down the nervous system. Test yourself: wait for the light to turn green, then click as fast as you can. Try it “sober”, then simulate 2 and 4 units of alcohol (the simulator slows the signal reaching your eyes — like alcohol slows real processing).</p>
+    <div class="cols">
+      <div>
+        <div id="lightbox" style="background:#7F1D1D">press start</div>
+        <div style="text-align:center;margin-top:8px">
+          <select id="units">
+            <option value="0">0 units (sober)</option>
+            <option value="2">2 units of alcohol</option>
+            <option value="4">4 units of alcohol</option>
+          </select>
+          <button class="btn" id="startReact">▶ start</button>
+        </div>
+        <div class="big" style="text-align:center" id="reactRead">— ms</div>
+        <p class="tip" style="text-align:center">Do 3 trials at each level and compare your averages.</p>
+      </div>
+      <div>
+        <div class="card">
+          <h4 style="margin:2px 0 8px;color:var(--acc)">Results</h4>
+          <table id="alcTable"><tr><th>Units</th><th>Reaction time (ms)</th></tr></table>
+          <p class="fb" id="alcFb"></p>
+        </div>
+        <div class="qs">
+          <div class="q"><h4>1. What is the effect of alcohol on reaction time — and why is it dangerous for drivers?</h4>
+            <button class="linkbtn" data-r="h1">show answer</button>
+            <div class="rev" id="h1">Reaction time gets <strong>longer (slower)</strong>. A driver with slowed reactions brakes later — at 70 km/h, an extra 200 ms means the car travels about <strong>4 more metres</strong> before braking even starts.</div></div>
+          <div class="q"><h4>2. Alcohol is called a <em>depressant</em>. Does that mean it makes people sad?</h4>
+            <button class="linkbtn" data-r="h2">show answer</button>
+            <div class="rev" id="h2">No — “depressant” means it <strong>slows nerve signal transmission</strong> in the brain and spinal cord, slowing reactions and reducing coordination and judgement.</div></div>
+          <div class="q"><h4>3. Which organ breaks down alcohol, and what can long-term heavy drinking cause?</h4>
+            <button class="linkbtn" data-r="h3">show answer</button>
+            <div class="rev" id="h3">The <strong>liver</strong>. Long-term heavy drinking can cause <strong>cirrhosis</strong> (scarring of the liver). Alcohol is also addictive and damages judgement and coordination.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+<footer>IGCSE Biology 0610 · Chapter 15 virtual practical · all simulation runs locally in this file</footer>
+
+<script>
+/* ---------- ES 15.1 Daphnia ---------- */
+const dsvg=document.getElementById('daphSvg');
+let conc=0,beats=[],beatInt=null,counting=false,userCount=0;
+const BPM={0:72,0.1:88,0.5:110,1:132};
+function drawDaph(scale){
+ dsvg.innerHTML=`
+ <g transform="translate(170,130)">
+  <ellipse rx="72" ry="95" fill="rgba(224,242,254,.55)" stroke="#7DD3FC" stroke-width="3"/>
+  <path d="M-20 -80 q-30 -30 -60 -26 M-14 -86 q-20 -34 -48 -36" stroke="#7DD3FC" stroke-width="4" fill="none"/>
+  <path d="M40 40 q30 20 34 55 M30 55 q22 24 20 58" stroke="#7DD3FC" stroke-width="4" fill="none"/>
+  <ellipse cx="8" cy="-10" rx="26" ry="40" fill="rgba(254,243,199,.8)"/>
+  <circle cx="8" cy="-12" r="${10*scale}" fill="#DC2626" style="transition:r .06s"/>
+  <circle cx="-30" cy="-58" r="7" fill="#1F2937"/>
+  <text y="118" font-size="12" text-anchor="middle" font-family="Segoe UI" fill="#57534E">Daphnia · caffeine ${conc}% · red dot = heart</text>
+ </g>`;
+}
+drawDaph(1);
+document.querySelectorAll('.concbtn').forEach(b=>b.onclick=()=>{
+ document.querySelectorAll('.concbtn').forEach(x=>x.classList.remove('on'));
+ b.classList.add('on');conc=+b.dataset.c;
+});
+document.getElementById('startCount').onclick=()=>{
+ if(counting)return;
+ counting=true;userCount=0;beats=[];
+ document.getElementById('countRead').textContent='0';
+ document.getElementById('beatBtn').disabled=false;
+ document.getElementById('daphFb').textContent='';
+ const bpm=BPM[conc]+(Math.random()-0.5)*8;
+ const interval=60000/bpm;
+ const t0=performance.now();
+ beats=[];
+ beatInt=setInterval(()=>{
+  beats.push(performance.now()-t0);
+  drawDaph(1.5);setTimeout(()=>drawDaph(1),90);
+ },interval);
+ const timeLeft=setInterval(()=>{
+  const left=15-(performance.now()-t0)/1000;
+  document.getElementById('timerRead').textContent=Math.max(0,left).toFixed(1)+' s';
+  if(left<=0){
+   clearInterval(timeLeft);clearInterval(beatInt);counting=false;
+   document.getElementById('beatBtn').disabled=true;
+   const trueBeats=beats.length;
+   const fb=document.getElementById('daphFb');
+   const diff=Math.abs(userCount-trueBeats);
+   fb.textContent=`time! you counted ${userCount}, actual ${trueBeats} beats`+(diff<=2?' — ✓ great counting!':' — tricky, right? repeat and average in the real lab');
+   fb.className='fb '+(diff<=2?'good':'bad');
+   const rate=userCount*4;
+   const t=document.getElementById('daphTable');
+   const tr=document.createElement('tr');
+   tr.innerHTML=`<td>${conc}</td><td>${userCount}</td><td><strong>${rate}</strong></td>`;
+   t.appendChild(tr);
+   drawDaphGraph();
+  }
+ },100);
+};
+document.getElementById('beatBtn').onclick=()=>{
+ if(!counting)return;
+ userCount++;document.getElementById('countRead').textContent=userCount;
+};
+function drawDaphGraph(){
+ const cv=document.getElementById('daphGraph'),c=cv.getContext('2d');
+ const rows=[...document.querySelectorAll('#daphTable tr')].slice(1)
+  .map(r=>({x:+r.cells[0].textContent,y:+r.cells[2].textContent}));
+ c.clearRect(0,0,480,280);c.fillStyle='#fff';c.fillRect(0,0,480,280);
+ c.strokeStyle='#111827';c.lineWidth=1.5;
+ c.beginPath();c.moveTo(45,15);c.lineTo(45,240);c.lineTo(460,240);c.stroke();
+ c.font='12px Segoe UI';c.fillStyle='#111827';c.textAlign='center';
+ c.fillText('caffeine concentration (%)',250,268);
+ c.save();c.translate(14,130);c.rotate(-Math.PI/2);c.fillText('heart rate (beats/min)',0,0);c.restore();
+ [0,0.5,1].forEach(x=>c.fillText(x,45+x*410,254));
+ for(let y=0;y<=160;y+=40){c.textAlign='right';c.fillText(y,40,244-(y/160)*220);c.textAlign='center'}
+ if(rows.length<2)return;
+ c.strokeStyle='#B45309';c.lineWidth=2.5;c.beginPath();
+ rows.forEach((p,i)=>{const x=45+p.x*410,y=240-(p.y/160)*220;
+  i===0?c.moveTo(x,y):c.lineTo(x,y)});
+ c.stroke();
+ rows.forEach(p=>{const x=45+p.x*410,y=240-(p.y/160)*220;
+  c.beginPath();c.arc(x,y,5,0,7);c.fillStyle='#DC2626';c.fill()});
+}
+/* ---------- ES 15.2 alcohol reaction ---------- */
+const lb=document.getElementById('lightbox');
+let rWaiting=false,rGreen=false,rT0=0;
+document.getElementById('startReact').onclick=()=>{
+ if(rWaiting||rGreen)return;
+ rWaiting=true;
+ lb.style.background='#7F1D1D';lb.textContent='wait for green…';
+ const units=+document.getElementById('units').value;
+ const delay=1000+Math.random()*2500;
+ setTimeout(()=>{
+  rWaiting=false;rGreen=true;
+  /* with alcohol the green fades in slowly — the signal reaches you more slowly */
+  if(units===0){lb.style.transition='background .05s'}
+  else{lb.style.transition=`background ${units*0.22}s ease-in`}
+  lb.style.background='#15803D';lb.textContent='CLICK NOW!';
+  rT0=performance.now();
+ },delay);
+};
+lb.addEventListener('pointerdown',()=>{
+ if(rWaiting){
+  rWaiting=false;
+  document.getElementById('reactRead').textContent='too soon! 😅';
+  lb.style.background='#57534E';lb.textContent='false start — press start again';
+  return;
+ }
+ if(!rGreen)return;
+ rGreen=false;
+ const units=+document.getElementById('units').value;
+ let ms=Math.round(performance.now()-rT0);
+ document.getElementById('reactRead').textContent=ms+' ms';
+ lb.style.background='#57534E';lb.textContent='press start for another trial';
+ const t=document.getElementById('alcTable');
+ const tr=document.createElement('tr');
+ tr.innerHTML=`<td>${units}</td><td><strong>${ms}</strong></td>`;
+ t.appendChild(tr);
+ /* running averages */
+ const rows=[...document.querySelectorAll('#alcTable tr')].slice(1)
+  .map(r=>({u:+r.cells[0].textContent,ms:+r.cells[1].textContent}));
+ const groups={};
+ rows.forEach(r=>{(groups[r.u]=groups[r.u]||[]).push(r.ms)});
+ const parts=Object.keys(groups).map(u=>u+' units: avg '+Math.round(groups[u].reduce((a,b)=>a+b)/groups[u].length)+' ms ('+groups[u].length+' trials)');
+ document.getElementById('alcFb').textContent=parts.join(' · ');
+});
+document.querySelectorAll('.linkbtn[data-r]').forEach(b=>b.onclick=()=>document.getElementById(b.dataset.r).classList.toggle('on'));
+</script>
+</body></html>
