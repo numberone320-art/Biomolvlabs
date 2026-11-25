@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Respiration – virtual practical: respirometer and yeast fermentation</title>
+<style>
+:root{--acc:#65A30D;--acc2:#4D7C0F;--pale:#F7FEE7;--navy:#0B2161;--ink:#1A1A1A;--mute:#5E5E6E;--line:#E2EBCB;--bg:#FBFCF6}
+*{box-sizing:border-box}html,body{margin:0}
+body{font-family:Georgia,"Times New Roman","Songti SC",serif;background:var(--bg);color:var(--ink);line-height:1.5;font-size:16px}
+.sans,nav,header,.btn,.chip,table,.pill,.tag,button,select,input{font-family:"Segoe UI",Calibri,"PingFang SC",system-ui,sans-serif}
+header{background:#fff;border-bottom:4px solid var(--acc);padding:12px 20px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+header h1{margin:0;font-size:22px;color:var(--acc);font-weight:normal}
+header p{margin:2px 0 0;font-size:13px;color:var(--mute)}
+.pill{background:var(--navy);color:#fff;border-radius:999px;padding:6px 14px;font-weight:700;font-size:14px}
+main{max-width:1180px;margin:0 auto;padding:16px}
+.es{background:#fff;border-left:3px solid var(--acc);border-right:3px solid var(--acc);border-bottom:3px solid var(--acc);margin-bottom:16px}
+.esbar{background:var(--acc);color:#fff;padding:9px 16px;font-size:19px;letter-spacing:.3px}
+.esbody{padding:14px 18px}
+.estitle{color:var(--acc);font-weight:bold;font-size:17px;margin:2px 0 8px}
+.safety{border-left:4px solid var(--acc);background:#F7FBEB;padding:8px 12px;margin:10px 0;font-size:15px}
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:18px}@media(max-width:900px){.cols{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:14px}
+.btn{display:inline-block;border:none;border-radius:8px;padding:10px 18px;font-size:15px;font-weight:700;cursor:pointer;background:var(--acc);color:#fff;margin:4px 6px 4px 0}
+.btn:hover{background:var(--acc2)}
+.btn:disabled{background:#CBD3C0;cursor:not-allowed}
+.btn.sec{background:#fff;color:var(--acc);border:2px solid var(--acc)}
+.btn.sec:hover{background:var(--pale)}
+.btn.navy{background:var(--navy)}
+select,input[type=text],input[type=number]{font-size:15px;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:#fff}
+.big{font-size:40px;font-weight:700;color:var(--acc);font-family:"Segoe UI",Calibri,sans-serif}
+.tag{display:inline-block;background:var(--pale);border:1px solid #E2EBCB;color:var(--acc2);border-radius:999px;padding:3px 12px;font-size:13px;font-weight:600}
+table{border-collapse:collapse;width:100%;font-size:14.5px}
+th{background:var(--navy);color:#fff;padding:7px 10px;text-align:left;font-weight:600}
+td{border:1px solid var(--line);padding:6px 10px}
+tr:nth-child(even) td{background:#F9FBF1}
+.qs .q{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 16px;margin-bottom:12px}
+.q h4{margin:2px 0 6px;color:var(--navy);font-size:15.5px}
+.rev{margin-top:8px;background:var(--pale);border-left:4px solid var(--acc);padding:8px 12px;font-size:14.5px;display:none}
+.rev.on{display:block}
+.linkbtn{border:none;background:none;color:var(--acc);font-weight:700;cursor:pointer;font-size:13.5px;text-decoration:underline;padding:0}
+.tip{font-size:13.5px;color:var(--mute);font-style:italic}
+footer{padding:16px 20px;color:var(--mute);font-size:12.5px;text-align:center}
+.fb{font-size:13.5px;font-weight:700;margin-top:4px;font-family:"Segoe UI",sans-serif}
+.fb.good{color:#15803D}.fb.bad{color:#B91C1C}
+.tbtn{border:2px solid var(--acc);background:#fff;color:var(--acc2);border-radius:8px;padding:6px 12px;font-weight:700;cursor:pointer;font-family:"Segoe UI",sans-serif;margin:2px}
+.tbtn.on{background:var(--acc);color:#fff}
+.eqn{background:#fff;border:1.5px dashed var(--acc);border-radius:8px;padding:8px 12px;margin:6px 0;font-size:15.5px;text-align:center}
+</style></head>
+<body>
+<header>
+  <div style="flex:1;min-width:220px">
+    <h1>Respiration — virtual practical</h1>
+    <p>Cambridge IGCSE Biology 0610 · Chapter 12 · works offline · Eko Febriadi</p>
+  </div>
+  <span class="pill">0610 · Ch 12</span>
+</header>
+<main>
+
+<!-- ============ ES 12.1 RESPIROMETER ============ -->
+<div class="es">
+  <div class="esbar">EXPERIMENTAL SKILLS 12.1</div>
+  <div class="esbody">
+    <p class="estitle">Measuring the rate of respiration with a respirometer</p>
+    <p>Germinating seeds respire fast. They take in <strong>oxygen</strong> and release carbon dioxide — but the <strong>potassium hydroxide (KOH)</strong> absorbs the CO₂, so the gas volume inside falls and the coloured droplet creeps along the capillary tube. Measure how far it moves and calculate the rate.</p>
+    <div class="safety"><strong>Real-lab safety:</strong> KOH is corrosive — handle the pellets with forceps and wear eye protection.</div>
+    <div class="cols">
+      <div style="text-align:center">
+        <svg id="respiSvg" width="460" height="260" viewBox="0 0 460 260" style="max-width:100%"></svg>
+        <div>
+          <button class="btn" id="loadLive">🌱 germinating seeds</button>
+          <button class="btn sec" id="loadDead">♨ boiled seeds (control)</button>
+          <button class="btn navy" id="runRespi" disabled>▶ run 5 minutes</button>
+        </div>
+        <div style="margin-top:8px">
+          droplet start: <input type="number" id="dStart" style="width:64px"> mm
+          end: <input type="number" id="dEnd" style="width:64px"> mm
+          <button class="btn" id="calcRate">calculate rate</button>
+        </div>
+        <span class="fb" id="rateFb"></span>
+      </div>
+      <div>
+        <div class="card">
+          <h4 style="margin:2px 0 8px;color:var(--acc)">Results</h4>
+          <table id="respiTable"><tr><th>Seeds</th><th>Distance (mm)</th><th>Time (min)</th><th>Rate (mm/min)</th></tr></table>
+          <p class="tip">rate = distance moved ÷ time. (Multiplying by the capillary’s cross-section area would give volume of O₂ per minute.)</p>
+        </div>
+        <div class="qs">
+          <div class="q"><h4>1. Why does the droplet move towards the flask?</h4>
+            <button class="linkbtn" data-r="r1">show answer</button>
+            <div class="rev" id="r1">The seeds remove O₂ from the air and release CO₂, but the <strong>KOH absorbs the CO₂</strong>. Total gas volume falls → pressure falls → air (and the droplet) is drawn towards the flask.</div></div>
+          <div class="q"><h4>2. Why use boiled seeds as a control?</h4>
+            <button class="linkbtn" data-r="r2">show answer</button>
+            <div class="rev" id="r2">Boiling kills the seeds, so <strong>no respiration</strong> — the droplet should not move. If it does move slightly, that change is due to temperature or pressure changes, and you <strong>subtract it</strong> from the live-seed result.</div></div>
+          <div class="q"><h4>3. Predict: what happens to the rate if you warm the respirometer from 20 °C to 30 °C? Why?</h4>
+            <button class="linkbtn" data-r="r3">show answer</button>
+            <div class="rev" id="r3">It <strong>increases</strong> (roughly doubles). Respiration is controlled by <strong>enzymes</strong>, and enzyme reactions speed up with temperature — up to the optimum.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ ES 12.2 YEAST ============ -->
+<div class="es">
+  <div class="esbar">EXPERIMENTAL SKILLS 12.2</div>
+  <div class="esbody">
+    <p class="estitle">Anaerobic respiration in yeast: effect of temperature</p>
+    <p>Yeast can respire <strong>without oxygen</strong> (anaerobically): it breaks down glucose into <strong>ethanol and carbon dioxide</strong>. Count the CO₂ bubbles produced in 30 seconds at each temperature, then decide what temperature yeast likes best.</p>
+    <div class="eqn">aerobic: glucose + oxygen → carbon dioxide + water (+ lots of energy released)</div>
+    <div class="eqn">anaerobic in yeast: glucose → ethanol + carbon dioxide (+ less energy released)</div>
+    <div class="eqn">anaerobic in muscles: glucose → lactic acid (+ less energy released)</div>
+    <div class="cols">
+      <div style="text-align:center">
+        <svg id="yeastSvg" width="260" height="280" viewBox="0 0 260 280"></svg>
+        <div style="margin:6px 0">
+          <button class="tbtn on" data-t="10">10 °C</button>
+          <button class="tbtn" data-t="20">20 °C</button>
+          <button class="tbtn" data-t="30">30 °C</button>
+          <button class="tbtn" data-t="40">40 °C</button>
+          <button class="tbtn" data-t="50">50 °C</button>
+        </div>
+        <button class="btn" id="runYeast">▶ run 30 s (fast-forward)</button>
+        <div class="big" id="bubCount">–</div>
+        <div class="tip">bubbles of CO₂ in 30 s at <span id="curT">10 °C</span></div>
+        <button class="btn navy" id="recBub" disabled>record in table</button>
+      </div>
+      <div>
+        <div class="card">
+          <h4 style="margin:2px 0 8px;color:var(--acc)">Results</h4>
+          <table id="yeastTable"><tr><th>Temperature (°C)</th><th>Bubbles in 30 s</th></tr></table>
+          <canvas id="yeastGraph" width="480" height="300" style="width:100%;height:auto;margin-top:8px"></canvas>
+          <p class="fb" id="yeastFb"></p>
+        </div>
+        <div class="qs">
+          <div class="q"><h4>1. Describe and explain the shape of your graph.</h4>
+            <button class="linkbtn" data-r="y1">show answer</button>
+            <div class="rev" id="y1">Bubbles increase from 10 °C to about 40 °C — higher temperature gives molecules more <strong>kinetic energy</strong>, so enzyme–substrate collisions are more frequent. At 50 °C the rate crashes: the yeast enzymes are <strong>denatured</strong> — their active site shape is destroyed.</div></div>
+          <div class="q"><h4>2. Where does the energy in anaerobic respiration come from, if there is no oxygen?</h4>
+            <button class="linkbtn" data-r="y2">show answer</button>
+            <div class="rev" id="y2">From the <strong>glucose</strong> itself — it is only partially broken down (ethanol still contains lots of chemical energy). That is why anaerobic respiration releases <em>less</em> energy per glucose molecule than aerobic respiration.</div></div>
+          <div class="q"><h4>3. Give one human use of yeast’s anaerobic respiration.</h4>
+            <button class="linkbtn" data-r="y3">show answer</button>
+            <div class="rev" id="y3"><strong>Bread-making</strong> (CO₂ makes the dough rise) and <strong>brewing/biofuel</strong> (ethanol production).</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+<footer>IGCSE Biology 0610 · Chapter 12 virtual practical · all simulation runs locally in this file</footer>
+
+<script>
+/* ---------- ES 12.1 respirometer ---------- */
+const rsvg=document.getElementById('respiSvg');
+const RULER_X0=150,RULER_Y=108,PXMM=5; /* capillary: 5px per mm, from x=150 (0mm) to x=400 (50mm) */
+let seeds=null,dropletX=RULER_X0+30*PXMM,trueMove=0,running=false;
+function drawRespi(){
+ let ruler='';
+ for(let m=0;m<=50;m+=5){const x=RULER_X0+m*PXMM;
+  ruler+=`<line x1="${x}" y1="${RULER_Y-8}" x2="${x}" y2="${RULER_Y+8}" stroke="#334155" stroke-width="${m%10===0?2:1}"/><text x="${x}" y="${RULER_Y-14}" font-size="9" text-anchor="middle" font-family="Segoe UI" fill="#334155">${m}</text>`}
+ let seedArt='';
+ if(seeds==='live')seedArt=[...Array(8)].map((_,i)=>`<g transform="translate(${55+(i%4)*22},${196+Math.floor(i/4)*20})"><ellipse rx="9" ry="6" fill="#A3E635" stroke="#4D7C0F" stroke-width="1.5"/><path d="M0 -6 q4 -8 8 -6" stroke="#4D7C0F" stroke-width="2" fill="none"/></g>`).join('');
+ if(seeds==='dead')seedArt=[...Array(8)].map((_,i)=>`<g transform="translate(${55+(i%4)*22},${196+Math.floor(i/4)*20})"><ellipse rx="9" ry="6" fill="#A8A29E" stroke="#57534E" stroke-width="1.5"/></g>`).join('');
+ rsvg.innerHTML=`
+ <!-- flask -->
+ <path d="M30 130 h100 l8 90 a18 18 0 0 1 -18 16 h-74 a18 18 0 0 1 -18 -16 z" fill="rgba(255,255,255,.6)" stroke="#64748B" stroke-width="3"/>
+ <rect x="52" y="118" width="56" height="14" rx="4" fill="#78716C"/>
+ <!-- KOH pellet -->
+ <rect x="38" y="136" width="18" height="12" rx="3" fill="#E7E5E4" stroke="#78716C"/><text x="47" y="145" font-size="7" text-anchor="middle" font-family="Segoe UI">KOH</text>
+ ${seedArt}
+ <text x="80" y="250" font-size="12" text-anchor="middle" font-family="Segoe UI" fill="#334155">${seeds?(seeds==='live'?'germinating seeds':'boiled seeds (dead)'):'empty flask — choose seeds above'}</text>
+ <!-- capillary -->
+ <line x1="130" y1="${RULER_Y}" x2="420" y2="${RULER_Y}" stroke="#64748B" stroke-width="10" stroke-linecap="round" opacity=".35"/>
+ <line x1="130" y1="${RULER_Y}" x2="420" y2="${RULER_Y}" stroke="#93C5FD" stroke-width="5" stroke-linecap="round"/>
+ ${ruler}
+ <!-- droplet -->
+ <ellipse id="dropEl" cx="${dropletX}" cy="${RULER_Y}" rx="6" ry="9" fill="#DC2626" style="transition:cx 4.5s linear"/>
+ <text x="430" y="${RULER_Y+4}" font-size="11" font-family="Segoe UI" fill="#334155">to air</text>`;
+}
+drawRespi();
+document.getElementById('loadLive').onclick=()=>{seeds='live';dropletX=RULER_X0+30*PXMM;drawRespi();document.getElementById('runRespi').disabled=false};
+document.getElementById('loadDead').onclick=()=>{seeds='dead';dropletX=RULER_X0+30*PXMM;drawRespi();document.getElementById('runRespi').disabled=false};
+document.getElementById('runRespi').onclick=()=>{
+ if(running||!seeds)return;running=true;
+ trueMove=seeds==='live'?18+Math.random()*6:0; /* mm in 5 min */
+ const start=dropletX,end=dropletX-trueMove*PXMM;
+ const el=document.getElementById('dropEl');
+ requestAnimationFrame(()=>{el.setAttribute('cx',end)});
+ setTimeout(()=>{dropletX=end;running=false;
+  document.getElementById('rateFb').textContent='5 minutes up! Read the droplet positions on the ruler (start was 30 mm) and calculate.';
+  document.getElementById('rateFb').className='fb';
+ },4800);
+};
+document.getElementById('calcRate').onclick=()=>{
+ const s=+document.getElementById('dStart').value,e=+document.getElementById('dEnd').value;
+ const fb=document.getElementById('rateFb');
+ if(isNaN(s)||isNaN(e)){fb.textContent='enter both ruler readings';fb.className='fb bad';return}
+ const dist=Math.abs(s-e),rate=dist/5;
+ const t=document.getElementById('respiTable');
+ const tr=document.createElement('tr');
+ tr.innerHTML=`<td>${seeds==='live'?'germinating':'boiled (control)'}</td><td>${dist}</td><td>5</td><td><strong>${rate.toFixed(2)}</strong></td>`;
+ t.appendChild(tr);
+ const ok=Math.abs(dist-trueMove)<=1.5;
+ fb.textContent=ok?'✓ recorded! ('+(seeds==='live'?'live seeds respire — droplet moves':'control: no movement')+')':'⚠ expected about '+trueMove.toFixed(0)+' mm — read the ruler at the centre of the red droplet';
+ fb.className='fb '+(ok?'good':'bad');
+};
+/* ---------- ES 12.2 yeast ---------- */
+const ysvg=document.getElementById('yeastSvg');
+let yT=10,yBubbles=[],yRunning=false,yCounted=null;
+const RATE={10:4,20:8,30:15,40:22,50:2};
+function drawYeast(){
+ ysvg.innerHTML=`
+ <path d="M60 60 h140 v150 a30 30 0 0 1 -30 30 h-80 a30 30 0 0 0 -30 30 z" fill="rgba(255,255,255,.5)" stroke="#64748B" stroke-width="3"/>
+ <path d="M66 110 h128 v100 a24 24 0 0 1 -24 24 h-80 a24 24 0 0 1 -24 -24 z" fill="#FEF3C7" opacity=".85"/>
+ <path d="M60 110 h140" stroke="#D97706" stroke-width="2"/>
+ <text x="130" y="48" font-size="14" text-anchor="middle" font-family="Segoe UI" fill="#334155">yeast + glucose at ${yT} °C</text>
+ <text x="130" y="268" font-size="12" text-anchor="middle" font-family="Segoe UI" fill="#57534E">${yT===50?'⚠ enzymes denaturing…':'fermenting…'}</text>
+ <g id="bubs"></g>`;
+}
+drawYeast();
+document.querySelectorAll('.tbtn').forEach(b=>b.onclick=()=>{
+ document.querySelectorAll('.tbtn').forEach(x=>x.classList.remove('on'));
+ b.classList.add('on');yT=+b.dataset.t;yCounted=null;
+ document.getElementById('curT').textContent=yT+' °C';
+ document.getElementById('bubCount').textContent='–';
+ drawYeast();
+});
+document.getElementById('runYeast').onclick=()=>{
+ if(yRunning)return;yRunning=true;
+ document.getElementById('recBub').disabled=true;
+ const target=RATE[yT]+Math.round((Math.random()-0.5)*2);
+ let n=0;
+ document.getElementById('bubCount').textContent='0';
+ const g=document.getElementById('bubs');
+ const iv=setInterval(()=>{
+  n++;
+  const c=document.createElementNS('http://www.w3.org/2000/svg','circle');
+  c.setAttribute('cx',80+Math.random()*100);c.setAttribute('cy',200);
+  c.setAttribute('r',3+Math.random()*4);c.setAttribute('fill','#FDE68A');c.setAttribute('stroke','#D97706');
+  g.appendChild(c);
+  const y0=200,t0=Date.now();
+  const rise=setInterval(()=>{
+   const dy=(Date.now()-t0)/8;
+   c.setAttribute('cy',y0-dy);
+   if(y0-dy<112){clearInterval(rise);c.remove()}
+  },30);
+  document.getElementById('bubCount').textContent=n;
+  if(n>=target){clearInterval(iv);yCounted=target;yRunning=false;
+   document.getElementById('recBub').disabled=false}
+ },Math.max(120,3000/target));
+};
+document.getElementById('recBub').onclick=()=>{
+ if(yCounted===null)return;
+ const t=document.getElementById('yeastTable');
+ if(![...t.rows].some(r=>r.cells[0].textContent==yT)){
+  const tr=document.createElement('tr');
+  tr.innerHTML=`<td>${yT}</td><td>${yCounted}</td>`;
+  t.appendChild(tr);
+  [...t.rows].slice(1).sort((a,b)=>+a.cells[0].textContent-+b.cells[0].textContent)
+   .forEach(r=>t.appendChild(r));
+ }
+ document.getElementById('recBub').disabled=true;
+ drawYeastGraph();
+};
+function drawYeastGraph(){
+ const cv=document.getElementById('yeastGraph'),c=cv.getContext('2d');
+ const rows=[...document.querySelectorAll('#yeastTable tr')].slice(1)
+  .map(r=>({t:+r.cells[0].textContent,n:+r.cells[1].textContent}));
+ c.clearRect(0,0,480,300);c.fillStyle='#fff';c.fillRect(0,0,480,300);
+ c.strokeStyle='#111827';c.lineWidth=1.5;
+ c.beginPath();c.moveTo(45,15);c.lineTo(45,260);c.lineTo(460,260);c.stroke();
+ c.font='12px Segoe UI';c.fillStyle='#111827';c.textAlign='center';
+ c.fillText('temperature (°C)',250,285);
+ c.save();c.translate(14,140);c.rotate(-Math.PI/2);c.fillText('bubbles in 30 s',0,0);c.restore();
+ for(let t=10;t<=50;t+=10){c.fillText(t,45+((t-10)/40)*400,274)}
+ for(let n=0;n<=24;n+=6){const y=260-(n/24)*235;c.textAlign='right';c.fillText(n,40,y+4);c.textAlign='center'}
+ if(rows.length<2)return;
+ c.strokeStyle='#65A30D';c.lineWidth=2.5;c.beginPath();
+ rows.forEach((p,i)=>{const x=45+((p.t-10)/40)*400,y=260-(p.n/24)*235;
+  i===0?c.moveTo(x,y):c.lineTo(x,y)});
+ c.stroke();
+ rows.forEach(p=>{const x=45+((p.t-10)/40)*400,y=260-(p.n/24)*235;
+  c.beginPath();c.arc(x,y,5,0,7);c.fillStyle='#F59E0B';c.fill()});
+ if(rows.length>=4){
+  const fb=document.getElementById('yeastFb');
+  fb.textContent='✓ Optimum ≈ 40 °C — then enzymes denature and the rate falls.';
+  fb.className='fb good';
+ }
+}
+document.querySelectorAll('.linkbtn[data-r]').forEach(b=>b.onclick=()=>document.getElementById(b.dataset.r).classList.toggle('on'));
+</script>
+</body></html>
